@@ -1,9 +1,9 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
-import '../../../../assets/scss/Customer/Home/HomeBody_customer.scss'
+import '../../../../assets/scss/Customer/HomePage/HomeBody_customer.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import OwlCarousel from 'react-owl-carousel';
-import 'owl.carousel/dist/assets/owl.carousel.css';
+// import OwlCarousel from 'react-owl-carousel';
+// import 'owl.carousel/dist/assets/owl.carousel.css';
 // import 'owl.carousel/dist/assets/owl.theme.default.css';
 const HomeBody = () => {
     return (
@@ -79,12 +79,12 @@ const HomeBody = () => {
                                                                 </a>
                                                                 <div className="button-head">
                                                                     <div className="product-action">
-                                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
+                                                                        <a data-toggle="modal" data-target="!#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
                                                                         <a title="Wishlist" href="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
                                                                         <a title="Compare" href="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
                                                                     </div>
                                                                     <div className="product-action-2">
-                                                                        <a title="Add to cart" href="!#" >Add to cart</a>
+                                                                        <a title="Add to cart" href="!#" />Add to cart<a />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -105,12 +105,12 @@ const HomeBody = () => {
                                                                 </a>
                                                                 <div className="button-head">
                                                                     <div className="product-action">
-                                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
+                                                                        <a data-toggle="modal" data-target="!#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
                                                                         <a title="Wishlist" href="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
                                                                         <a title="Compare" href="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
                                                                     </div>
                                                                     <div className="product-action-2">
-                                                                        <a title="Add to cart" href="!#" >Add to cart</a>
+                                                                        <a title="Add to cart" href="!#" />Add to cart<a />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -131,12 +131,12 @@ const HomeBody = () => {
                                                                 </a>
                                                                 <div className="button-head">
                                                                     <div className="product-action">
-                                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
+                                                                        <a data-toggle="modal" data-target="!#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
                                                                         <a title="Wishlist" href="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
                                                                         <a title="Compare" href="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
                                                                     </div>
                                                                     <div className="product-action-2">
-                                                                        <a title="Add to cart" href="!#" >Add to cart</a>
+                                                                        <a title="Add to cart" href="!#" />Add to cart<a />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -158,12 +158,12 @@ const HomeBody = () => {
                                                                 </a>
                                                                 <div className="button-head">
                                                                     <div className="product-action">
-                                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
+                                                                        <a data-toggle="modal" data-target="!#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
                                                                         <a title="Wishlist" href="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
                                                                         <a title="Compare" href="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
                                                                     </div>
                                                                     <div className="product-action-2">
-                                                                        <a title="Add to cart" href="!#" >Add to cart</a>
+                                                                        <a title="Add to cart" href="!#" />Add to cart<a />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -184,12 +184,12 @@ const HomeBody = () => {
                                                                 </a>
                                                                 <div className="button-head">
                                                                     <div className="product-action">
-                                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
+                                                                        <a data-toggle="modal" data-target="!#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
                                                                         <a title="Wishlist" href="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
                                                                         <a title="Compare" href="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
                                                                     </div>
                                                                     <div className="product-action-2">
-                                                                        <a title="Add to cart" href="!#" >Add to cart</a>
+                                                                        <a title="Add to cart" href="!#" />Add to cart<a />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -211,12 +211,12 @@ const HomeBody = () => {
                                                                 </a>
                                                                 <div className="button-head">
                                                                     <div className="product-action">
-                                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
+                                                                        <a data-toggle="modal" data-target="!#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
                                                                         <a title="Wishlist" href="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
                                                                         <a title="Compare" href="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
                                                                     </div>
                                                                     <div className="product-action-2">
-                                                                        <a title="Add to cart" href="!#" >Add to cart</a>
+                                                                        <a title="Add to cart" href="!#" />Add to cart<a />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -237,12 +237,12 @@ const HomeBody = () => {
                                                                 </a>
                                                                 <div className="button-head">
                                                                     <div className="product-action">
-                                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
+                                                                        <a data-toggle="modal" data-target="!#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
                                                                         <a title="Wishlist" href="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
                                                                         <a title="Compare" href="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
                                                                     </div>
                                                                     <div className="product-action-2">
-                                                                        <a title="Add to cart" href="!#" >Add to cart</a>
+                                                                        <a title="Add to cart" href="!#" />Add to cart<a />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -264,12 +264,12 @@ const HomeBody = () => {
                                                                 </a>
                                                                 <div className="button-head">
                                                                     <div className="product-action">
-                                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
+                                                                        <a data-toggle="modal" data-target="!#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
                                                                         <a title="Wishlist" href="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
                                                                         <a title="Compare" href="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
                                                                     </div>
                                                                     <div className="product-action-2">
-                                                                        <a title="Add to cart" href="!#" >Add to cart</a>
+                                                                        <a title="Add to cart" href="!#" />Add to cart<a />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -327,193 +327,7 @@ const HomeBody = () => {
                 {/* /End Midium Banner  */}
 
 
-                <div className="product-area most-popular section">
-                    <Container>
-                        <Row>
-                            <Col xs={12}>
-                                <div className="section-title">
-                                    <h2>Hot Item</h2>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs={12}>
-                                <OwlCarousel className='owl-theme' loop nav dots autoPlay items={4} >
-                                    <div class='item'>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-
-                                                </a>
-                                                <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><i className=" ti-eye"></i><span>Quick Shop</span></a>
-                                                        <a title="Wishlist" href="!#"><i className=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                        <a title="Compare" href="!#"><i className="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Black Sunglass For Women</a></h3>
-                                                <div className="product-price">
-                                                    <span className="old">$60.00</span>
-                                                    <span>$50.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class='item'>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-
-                                                </a>
-                                                <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><i className=" ti-eye"></i><span>Quick Shop</span></a>
-                                                        <a title="Wishlist" href="!#"><i className=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                        <a title="Compare" href="!#"><i className="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Black Sunglass For Women</a></h3>
-                                                <div className="product-price">
-                                                    <span className="old">$60.00</span>
-                                                    <span>$50.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class='item'>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <span className="out-of-stock">Hot</span>
-                                                </a>
-                                                <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><i className=" ti-eye"></i><span>Quick Shop</span></a>
-                                                        <a title="Wishlist" href="!#"><i className=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                        <a title="Compare" href="!#"><i className="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Black Sunglass For Women</a></h3>
-                                                <div className="product-price">
-                                                    <span className="old">$60.00</span>
-                                                    <span>$50.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class='item'>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <span className="out-of-stock">Hot</span>
-                                                </a>
-                                                <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><i className=" ti-eye"></i><span>Quick Shop</span></a>
-                                                        <a title="Wishlist" href="!#"><i className=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                        <a title="Compare" href="!#"><i className="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Black Sunglass For Women</a></h3>
-                                                <div className="product-price">
-                                                    <span className="old">$60.00</span>
-                                                    <span>$50.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class='item'>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <span className="out-of-stock">Hot</span>
-                                                </a>
-                                                <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><i className=" ti-eye"></i><span>Quick Shop</span></a>
-                                                        <a title="Wishlist" href="!#"><i className=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                        <a title="Compare" href="!#"><i className="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Black Sunglass For Women</a></h3>
-                                                <div className="product-price">
-                                                    <span className="old">$60.00</span>
-                                                    <span>$50.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class='item'>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <span className="out-of-stock">Hot</span>
-                                                </a>
-                                                <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#"><i className=" ti-eye"></i><span>Quick Shop</span></a>
-                                                        <a title="Wishlist" href="!#"><i className=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                        <a title="Compare" href="!#"><i className="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Black Sunglass For Women</a></h3>
-                                                <div className="product-price">
-                                                    <span className="old">$60.00</span>
-                                                    <span>$50.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>                                  
-                                </OwlCarousel>
-
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
-
+               
                 {/* <!-- Start Shop Home List  --> */}
                 <section className="shop-home-list section">
                     <Container>
@@ -838,11 +652,11 @@ const HomeBody = () => {
                 {/* <!-- End Shop Services Area --> */}
 
                 {/* <!-- Start Shop Newsletter  --> */}
-                <section className="shop-newsletter section">
+                <section className="shop-newsletter section py-5">
                     <Container>
                         <div className="inner-top">
                             <Row>
-                                <Col xs={12} lg={8} className="offset-lg-2">
+                                <Col xs={12} md={{offset: 2}} lg={8}>
                                     {/* <!-- Start Newsletter Inner --> */}
                                     <div className="inner">
                                         <h4>Newsletter</h4>

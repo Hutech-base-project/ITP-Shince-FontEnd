@@ -1,34 +1,35 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
+import '../../assets/scss/Customer/Footer_customer.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const CustomerFooter = () => {
     return (
         <>
             {/* Start Footer Area */}
-            <footer class="footer">
+            <footer className="footer">
                 {/* Footer Top */}
-                <div class="footer-top section">
+                <div className="footer-top section">
                     <Container>
                         <Row>
                             <Col xs={12} md={6} lg={6}>
                                 {/* Single Widget */}
-                                <div class="single-footer about">
-                                    <div class="logo">
+                                <div className="single-footer about">
+                                    <div className="logo">
                                         <a href="index.html"><img src={require("../../assets/template/images/logo2.png")} alt="!#" /></a>
                                     </div>
-                                    <p class="text">483 Dien Bien Phu, Ward 25, Binh Thanh, Ho Chi Minh city, Viet Nam</p>
-                                    <p class="text">Business Certificate Number: 010.7467.693</p>
-                                    <p class="text">License Date: 08/06/2016</p>
-                                    <p class="text">Issued by: Investment Planning Department Ho Chi Minh </p>
-                                    <img class="moit-icon" src="https://storage.30shine.com/ResourceWeb/data/images/congthuongicon.png" alt="cong-thuong-icon"></img>
-                                    <img class="dmca-icon" src="https://images.dmca.com/Badges/dmca_protected_26_120.png?ID=1e720659-fbd3-461e-858a-89ef9307260a" alt="dmca-icon" />
+                                    <p className="text">483 Dien Bien Phu, Ward 25, Binh Thanh, Ho Chi Minh city, Viet Nam</p>
+                                    <p className="text">Business Certificate Number: 010.7467.693</p>
+                                    <p className="text">License Date: 08/06/2016</p>
+                                    <p className="text">Issued by: Investment Planning Department Ho Chi Minh </p>
+                                    <img className="moit-icon" src="https://storage.30shine.com/ResourceWeb/data/images/congthuongicon.png" alt="cong-thuong-icon"></img>
+                                    <img className="dmca-icon" src="https://images.dmca.com/Badges/dmca_protected_26_120.png?ID=1e720659-fbd3-461e-858a-89ef9307260a" alt="dmca-icon" />
                                 </div>
                                 {/* End Single Widget */}
                             </Col>
                             <Col xs={12} md={3} lg={3}>
                                 {/* Single Widget */}
-                                <div class="single-footer links">
+                                <div className="single-footer links">
                                     <h4>Information</h4>
                                     <ul>
                                         <li><a href="!#">About Us</a></li>
@@ -42,10 +43,10 @@ const CustomerFooter = () => {
 
                             <Col xs={12} md={3} lg={3}>
                                 {/* Single Widget */}
-                                <div class="single-footer social">
+                                <div className="single-footer social">
                                     <h4>Get In Tuch</h4>
                                     {/* Single Widget */}
-                                    <div class="contact">
+                                    <div className="contact">
                                         <ul>
                                             <li>Monday to Sunday(8: am - 8:30 pm).</li>
                                             <li>hutech@hutech.edu.vn.</li>
@@ -53,7 +54,7 @@ const CustomerFooter = () => {
                                         </ul>
                                     </div>
                                     {/* End Single Widget */}
-                                    <div class="icon">
+                                    <div className="icon">
                                     <ul>
                                         <li><a href="!#"><FontAwesomeIcon icon={['fab', 'facebook']} /></a></li>
                                         <li><a href="!#"><FontAwesomeIcon icon={['fab', 'google']} /></a></li>
@@ -69,17 +70,17 @@ const CustomerFooter = () => {
                     </Container>
                 </div>
                 {/* End Footer Top  */}
-                <div class="copyright">
+                <div className="copyright">
                     <Container>
-                        <div class="inner">
+                        <div className="inner">
                             <Row>
                                 <Col xs={12} md={6} lg={6}>
-                                    <div class="left">
+                                    <div className="left">
                                         <p>Copyright © 2020 <a href="!#" target="_blank">Wpthemesgrid</a>  -  All Rights Reserved.</p>
                                     </div>
                                 </Col>
                                 <Col xs={12} md={6} lg={6}>
-                                    <div class="right">
+                                    <div className="right">
                                         <img src={require("../../assets/template/images/payments.png")} alt="logo" />
                                     </div>
                                 </Col>
