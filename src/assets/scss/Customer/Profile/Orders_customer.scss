@@ -1,0 +1,23 @@
+.container-fluid{
+    background-color: #f9f9f9;
+    margin-bottom: 400px;
+
+    .row{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .table{
+            .line{
+                .btn{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 76px;
+                    height: 34px;
+                    margin-top: 2.5px;
+                    margin-left: 20px;
+                }
+            }      
+    }
+}

@@ -1,458 +1,270 @@
-import React from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
-import '../../../../assets/scss/Customer/Product/ProductBody_customer.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React from 'react'
+import { Accordion, Col, Container, Form, Pagination, Row, ToastContainer } from 'react-bootstrap'
+import "../../../../assets/scss/Customer/ProductPage/shop_body.scss"
 const ProductBody = () => {
-    return (
-        <>
-            <div className="product-body">
-                {/* Breadcrumbs */}
-                <div className="breadcrumbs">
-                    <Container>
-                        <Row>
-                            <Col xs={12}>
-                                <div className="bread-inner">
-                                    <ul className="bread-list">
-                                        <li><a href="/">Home<span className="icon"><FontAwesomeIcon icon={['fas', 'arrow-right']} /></span></a></li>
-                                        <li className="active"><a href="blog-single.html">Shop Grid</a></li>
-                                    </ul>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Container>
+  return (
+    <>
+      <section className='shop'>
+        <Container>
+          <Row>
+            <Col md={3} sm={12} xs={12}>
+              <div className='shop-siderbar'>
+                <div className="shop-sidebar-search">
+                  <Form className='form' as={Col} >
+                    <Form.Group>
+                      <Col className='form-item'>
+                        <Form.Control className='form-item-input' type="text" placeholder="Search product" />
+                        <FontAwesomeIcon className='form-item-icon' icon={['fa', 'search']} />
+                      </Col>
+                    </Form.Group>
+                  </Form>
                 </div>
-                {/* /Breadcrumbs */}
+                <div className='shop-sidebar-accordion'>
+                  <div className="accordion" id="accordionExample">
+                    <div className="card">
+                      <span className="title">Categories</span>
+                      <Accordion defaultActiveKey={['0']} >
+                        <>
+                          <Accordion.Item eventKey='0'>
+                            <Accordion.Header>Dau goi dau</Accordion.Header>
+                            <Accordion.Body>
+                              <div className="card-body">
+                                <div className="shop__sidebar__categories">
+                                  <ul className="nice-scroll">
+                                    <li><a href="">Clearmen</a></li>
+                                    <li><a href="">Sunsilk</a></li>
+                                    <li><a href="">Romano</a></li>
 
-                {/* Product Style */}
-                <section className="product-area shop-sidebar shop section">
-                    <Container>
-                        <Row>
-                            <Col xs={12} md={4} lg={3}>
-                                <div className="shop-sidebar">
-                                    {/* Single Widget */}
-                                    <div className="single-widget category">
-                                        <h3 className="title">Categories</h3>
-                                        <ul className="categor-list">
-                                            <li><a href="!#">T-shirts</a></li>
-                                            <li><a href="!#">jacket</a></li>
-                                            <li><a href="!#">jeans</a></li>
-                                            <li><a href="!#">sweatshirts</a></li>
-                                            <li><a href="!#">trousers</a></li>
-                                            <li><a href="!#">kitwears</a></li>
-                                            <li><a href="!#">accessories</a></li>
-                                        </ul>
-                                    </div>
-                                    {/* End Single Widget */}
-                                    {/* Shop By Price */}
-                                    <div className="single-widget range">
-                                        <h3 className="title">Shop by Price</h3>
-                                        <ul className="check-box-list">
-                                            <li>
-                                                <label className="checkbox-inline" for="1"><input name="news" id="1" type="checkbox" />$20 - $50<span className="count">(3)</span></label>
-                                            </li>
-                                            <li>
-                                                <label className="checkbox-inline" for="2"><input name="news" id="2" type="checkbox" />$50 - $100<span className="count">(5)</span></label>
-                                            </li>
-                                            <li>
-                                                <label className="checkbox-inline" for="3"><input name="news" id="3" type="checkbox" />$100 - $250<span className="count">(8)</span></label>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    {/* End Shop By Price */}
-                                    {/* Single Widget */}
-                                    <div className="single-widget recent-post">
-                                        <h3 className="title">Recent post</h3>
-                                        {/* Single Post */}
-                                        <div className="single-post first">
-                                            <div className="image">
-                                                <img src="https://via.placeholder.com/75x75" alt="!#" />
-                                            </div>
-                                            <div className="content">
-                                                <h5><a href="!#">Girls Dress</a></h5>
-                                                <p className="price">$99.50</p>
-                                                <ul className="reviews">
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li><i className="ti-star"></i></li>
-                                                    <li><i className="ti-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        {/* End Single Post */}
-                                        {/* Single Post */}
-                                        <div className="single-post first">
-                                            <div className="image">
-                                                <img src="https://via.placeholder.com/75x75" alt="!#" />
-                                            </div>
-                                            <div className="content">
-                                                <h5><a href="!#">Women Clothings</a></h5>
-                                                <p className="price">$99.50</p>
-                                                <ul className="reviews">
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li><i className="ti-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        {/* End Single Post */}
-                                        {/* Single Post */}
-                                        <div className="single-post first">
-                                            <div className="image">
-                                                <img src="https://via.placeholder.com/75x75" alt="!#" />
-                                            </div>
-                                            <div className="content">
-                                                <h5><a href="!#">Man Tshirt</a></h5>
-                                                <p className="price">$99.50</p>
-                                                <ul className="reviews">
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                    <li className="yellow"><i className="ti-star"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        {/* End Single Post */}
-                                    </div>
-                                    {/* End Single Widget */}
-                                    {/* Shop By Price */}
-                                    <div className="single-widget category">
-                                        <h3 className="title">Manufacturers</h3>
-                                        <ul className="categor-list">
-                                            <li><a href="!#">Forever</a></li>
-                                            <li><a href="!#">giordano</a></li>
-                                            <li><a href="!#">abercrombie</a></li>
-                                            <li><a href="!#">ecko united</a></li>
-                                            <li><a href="!#">zara</a></li>
-                                        </ul>
-                                    </div>
-                                    {/* End Single Widget */}
+                                  </ul>
                                 </div>
-                            </Col>
-                            <Col xs={12} md={8} lg={9}>
-                                <Row>
-                                    <Col xs={12}>
-                                        {/* Shop Top */}
-                                        <div className="shop-top">
-                                            <div className="shop-shorter">
-                                                <div className="single-shorter">
-                                                    <label>Show :</label>
-                                                    <select>
-                                                        <option className="a" value={"09"} selected="selected">09</option>
-                                                        <option className="a" value={"15"}>15</option>
-                                                        <option className="a" value={"25"}>25</option>
-                                                        <option className="a" value={"30"}>30</option>
-                                                    </select>
-                                                </div>
-                                                <div className="single-shorter">
-                                                    <label>Sort By :</label>
-                                                    <select>
-                                                        <option selected="selected">Name</option>
-                                                        <option>Price</option>
-                                                        <option>Size</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col xs={12} md={6} lg={4}>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                </a>
-                                                <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'eye']} />
-                                                            <span>Quick Shop</span>
-                                                        </a>
-                                                        <a title="Wishlist" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'heart']} />
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
-                                                        <a title="Compare" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'bar-chart']} />
-                                                                <span>Add to Compare</span>
-                                                        </a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Women Hot Collection</a></h3>
-                                                <div className="product-price">
-                                                    <span>$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                    <Col xs={12} md={6} lg={4}>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                </a>
-                                             <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'eye']} />
-                                                            <span>Quick Shop</span>
-                                                        </a>
-                                                        <a title="Wishlist" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'heart']} />
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
-                                                        <a title="Compare" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'bar-chart']} />
-                                                                <span>Add to Compare</span>
-                                                        </a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Awesome Pink Show</a></h3>
-                                                <div className="product-price">
-                                                    <span>$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                    <Col xs={12} md={6} lg={4}>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                </a>
-                                             <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'eye']} />
-                                                            <span>Quick Shop</span>
-                                                        </a>
-                                                        <a title="Wishlist" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'heart']} />
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
-                                                        <a title="Compare" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'bar-chart']} />
-                                                                <span>Add to Compare</span>
-                                                        </a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Awesome Bags Collection</a></h3>
-                                                <div className="product-price">
-                                                    <span>$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                    <Col xs={12} md={6} lg={4}>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <span className="new">New</span>
-                                                </a>
-                                             <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'eye']} />
-                                                            <span>Quick Shop</span>
-                                                        </a>
-                                                        <a title="Wishlist" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'heart']} />
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
-                                                        <a title="Compare" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'bar-chart']} />
-                                                                <span>Add to Compare</span>
-                                                        </a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Women Pant Collectons</a></h3>
-                                                <div className="product-price">
-                                                    <span>$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                    <Col xs={12} md={6} lg={4}>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                </a>
-                                             <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'eye']} />
-                                                            <span>Quick Shop</span>
-                                                        </a>
-                                                        <a title="Wishlist" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'heart']} />
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
-                                                        <a title="Compare" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'bar-chart']} />
-                                                                <span>Add to Compare</span>
-                                                        </a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Awesome Bags Collection</a></h3>
-                                                <div className="product-price">
-                                                    <span>$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                    <Col xs={12} md={6} lg={4}>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <span className="price-dec">30% Off</span>
-                                                </a>
-                                             <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'eye']} />
-                                                            <span>Quick Shop</span>
-                                                        </a>
-                                                        <a title="Wishlist" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'heart']} />
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
-                                                        <a title="Compare" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'bar-chart']} />
-                                                                <span>Add to Compare</span>
-                                                        </a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Awesome Cap For Women</a></h3>
-                                                <div className="product-price">
-                                                    <span>$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                    <Col xs={12} md={6} lg={4}>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                </a>
-                                             <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'eye']} />
-                                                            <span>Quick Shop</span>
-                                                        </a>
-                                                        <a title="Wishlist" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'heart']} />
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
-                                                        <a title="Compare" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'bar-chart']} />
-                                                                <span>Add to Compare</span>
-                                                        </a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Polo Dress For Women</a></h3>
-                                                <div className="product-price">
-                                                    <span>$29.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                    <Col xs={12} md={6} lg={4}>
-                                        <div className="single-product">
-                                            <div className="product-img">
-                                                <a href="product-details.html">
-                                                    <img className="default-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <img className="hover-img" src="https://via.placeholder.com/550x750" alt="!#" />
-                                                    <span className="out-of-stock">Hot</span>
-                                                </a>
-                                             <div className="button-head">
-                                                    <div className="product-action">
-                                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'eye']} />
-                                                            <span>Quick Shop</span>
-                                                        </a>
-                                                        <a title="Wishlist" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'heart']} />
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
-                                                        <a title="Compare" href="!#">
-                                                            <FontAwesomeIcon icon={['fas', 'bar-chart']} />
-                                                                <span>Add to Compare</span>
-                                                        </a>
-                                                    </div>
-                                                    <div className="product-action-2">
-                                                        <a title="Add to cart" href="!#">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="product-content">
-                                                <h3><a href="product-details.html">Black Sunglass For Women</a></h3>
-                                                <div className="product-price">
-                                                    <span className="old">$60.00</span>
-                                                    <span>$50.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Container>
-                </section>
-                {/* End Product Style 1 */}
-            </div>
-        </>
-    )
+                              </div>
+                            </Accordion.Body>
+                          </Accordion.Item>
+                          <Accordion.Item eventKey='1'>
+                            <Accordion.Header>Thuoc</Accordion.Header>
+                            <Accordion.Body>
+                              <div className="card-body">
+                                <div className="shop__sidebar__categories">
+                                  <ul className="nice-scroll">
+                                    <li><a href="">Clearmen</a></li>
+                                    <li><a href="">Sunsilk</a></li>
+                                    <li><a href="">Romano</a></li>
+
+                                  </ul>
+                                </div>
+                              </div>
+                            </Accordion.Body>
+                          </Accordion.Item>
+                          <Accordion.Item eventKey='2'>
+                            <Accordion.Header>may say toc</Accordion.Header>
+                            <Accordion.Body>
+                              <div className="card-body">
+                                <div className="shop__sidebar__categories">
+                                  <ul className="nice-scroll">
+                                    <li><a href="">Clearmen</a></li>
+                                    <li><a href="">Sunsilk</a></li>
+                                    <li><a href="">Romano</a></li>
+
+                                  </ul>
+                                </div>
+                              </div>
+                            </Accordion.Body>
+                          </Accordion.Item>
+                        </>
+                      </Accordion>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Col>
+            <Col md={9} sm={12} xs={12}>
+              <Row className='demo' >
+                <Col sx={12} md={'auto'} sm={'auto'}>
+                  <Col className='product-grid2'>
+                    <div className="product-image2">
+                      <div className='product-image2-item'>
+                        <a href="!#">
+                          <img className="pic-1" src={
+                            require("../../../../assets/images/clearmen.jpg")} alt='pic-1' />
+                          <img className="pic-2" src={
+                            require("../../../../assets/images/clearmen2.jpg")} alt='pic-2' />
+                        </a>
+                      </div>
+                      <ul className="social">
+                        <li><a href="#!" data-tip="Quick View"><FontAwesomeIcon icon={['fa', 'eye']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Wishlist"><FontAwesomeIcon icon={['fa', 'heart']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Cart"><FontAwesomeIcon icon={['fa', 'cart-shopping']} /></a></li>
+                      </ul>
+                      <a className="add-to-cart" href="#!" >Add to cart</a>
+                    </div>
+                    <div className="product-content">
+                      <h3 className="title"><a href="#!">Clearmen</a></h3>
+                      <span className="price">50.000VND /</span>
+                    </div>
+                  </Col>
+                </Col>
+                <Col sx={12} md={'auto'} sm={'auto'}>
+                  <Col className='product-grid2'>
+                    <div className="product-image2">
+                      <div className='product-image2-item'>
+                        <a href="!#">
+                          <img className="pic-1" src={
+                            require("../../../../assets/images/clearmen.jpg")} alt='pic-1' />
+                          <img className="pic-2" src={
+                            require("../../../../assets/images/clearmen2.jpg")} alt='pic-2' />
+                        </a>
+                      </div>
+                      <ul className="social">
+                        <li><a href="#!" data-tip="Quick View"><FontAwesomeIcon icon={['fa', 'eye']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Wishlist"><FontAwesomeIcon icon={['fa', 'heart']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Cart"><FontAwesomeIcon icon={['fa', 'cart-shopping']} /></a></li>
+                      </ul>
+                      <a className="add-to-cart" href="#!" >Add to cart</a>
+                    </div>
+                    <div className="product-content">
+                      <h3 className="title"><a href="#!">Clearmen</a></h3>
+                      <span className="price">50.000VND /</span>
+                    </div>
+                  </Col>
+                </Col>
+                <Col sx={12} md={'auto'} sm={'auto'}>
+                  <Col className='product-grid2'>
+                    <div className="product-image2">
+                      <div className='product-image2-item'>
+                        <a href="!#">
+                          <img className="pic-1" src={
+                            require("../../../../assets/images/clearmen.jpg")} alt='pic-1' />
+                          <img className="pic-2" src={
+                            require("../../../../assets/images/clearmen2.jpg")} alt='pic-2' />
+                        </a>
+                      </div>
+                      <ul className="social">
+                        <li><a href="#!" data-tip="Quick View"><FontAwesomeIcon icon={['fa', 'eye']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Wishlist"><FontAwesomeIcon icon={['fa', 'heart']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Cart"><FontAwesomeIcon icon={['fa', 'cart-shopping']} /></a></li>
+                      </ul>
+                      <a className="add-to-cart" href="#!" >Add to cart</a>
+                    </div>
+                    <div className="product-content">
+                      <h3 className="title"><a href="#!">Clearmen</a></h3>
+                      <span className="price">50.000VND /</span>
+                    </div>
+                  </Col>
+                </Col>
+                <Col sx={12} md={'auto'} sm={'auto'}>
+                  <Col className='product-grid2'>
+                    <div className="product-image2">
+                      <div className='product-image2-item'>
+                        <a href="!#">
+                          <img className="pic-1" src={
+                            require("../../../../assets/images/clearmen.jpg")} alt='pic-1' />
+                          <img className="pic-2" src={
+                            require("../../../../assets/images/clearmen2.jpg")} alt='pic-2' />
+                        </a>
+                      </div>
+                      <ul className="social">
+                        <li><a href="#!" data-tip="Quick View"><FontAwesomeIcon icon={['fa', 'eye']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Wishlist"><FontAwesomeIcon icon={['fa', 'heart']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Cart"><FontAwesomeIcon icon={['fa', 'cart-shopping']} /></a></li>
+                      </ul>
+                      <a className="add-to-cart" href="#!" >Add to cart</a>
+                    </div>
+                    <div className="product-content">
+                      <h3 className="title"><a href="#!">Clearmen</a></h3>
+                      <span className="price">50.000VND /</span>
+                    </div>
+                  </Col>
+                </Col>
+                <Col sx={12} md={'auto'} sm={'auto'}>
+                  <Col className='product-grid2'>
+                    <div className="product-image2">
+                      <div className='product-image2-item'>
+                        <a href="!#">
+                          <img className="pic-1" src={
+                            require("../../../../assets/images/clearmen.jpg")} alt='pic-1' />
+                          <img className="pic-2" src={
+                            require("../../../../assets/images/clearmen2.jpg")} alt='pic-2' />
+                        </a>
+                      </div>
+                      <ul className="social">
+                        <li><a href="#!" data-tip="Quick View"><FontAwesomeIcon icon={['fa', 'eye']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Wishlist"><FontAwesomeIcon icon={['fa', 'heart']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Cart"><FontAwesomeIcon icon={['fa', 'cart-shopping']} /></a></li>
+                      </ul>
+                      <a className="add-to-cart" href="#!" >Add to cart</a>
+                    </div>
+                    <div className="product-content">
+                      <h3 className="title"><a href="#!">Clearmen</a></h3>
+                      <span className="price">50.000VND /</span>
+                    </div>
+                  </Col>
+                </Col>
+                <Col sx={12} md={'auto'} sm={'auto'}>
+                  <Col className='product-grid2'>
+                    <div className="product-image2">
+                      <div className='product-image2-item'>
+                        <a href="!#">
+                          <img className="pic-1" src={
+                            require("../../../../assets/images/clearmen.jpg")} alt='pic-1' />
+                          <img className="pic-2" src={
+                            require("../../../../assets/images/clearmen2.jpg")} alt='pic-2' />
+                        </a>
+                      </div>
+                      <ul className="social">
+                        <li><a href="#!" data-tip="Quick View"><FontAwesomeIcon icon={['fa', 'eye']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Wishlist"><FontAwesomeIcon icon={['fa', 'heart']} /></a></li>
+                        <li><a href="#!" data-tip="Add to Cart"><FontAwesomeIcon icon={['fa', 'cart-shopping']} /></a></li>
+                      </ul>
+                      <a className="add-to-cart" href="#!" >Add to cart</a>
+                    </div>
+                    <div className="product-content">
+                      <h3 className="title"><a href="#!">Clearmen</a></h3>
+                      <span className="price">50.000VND /</span>
+                    </div>
+                  </Col>
+                </Col>
+                {/* <Col sx={12} md={'auto'} sm={'auto'}>
+                  <Col className='product-grid2'>
+                    <div className="product-image2">
+                      <div className='product-image2-item'>
+                        <a href="#!">
+                          <img className="pic-1" src={
+                           require("../../../../assets/images/sunsilk.jpg")} alt='' />
+                        </a>
+                      </div>
+                    </div>
+                    <div className="product-content">
+                      <h3 className="title"><a href="#!">Sunsilk</a></h3>
+                      <span className="price" style={{ color: "red" }}>Out of stock</span>
+                    </div>
+                  </Col>
+                </Col> */}
+                <Pagination>
+                  <Pagination.First />
+                  <Pagination.Prev />
+                  <Pagination.Item>{1}</Pagination.Item>
+                  <Pagination.Ellipsis />
+
+                  <Pagination.Item>{10}</Pagination.Item>
+                  <Pagination.Item>{11}</Pagination.Item>
+                  <Pagination.Item active>{12}</Pagination.Item>
+                  <Pagination.Item>{13}</Pagination.Item>
+                  <Pagination.Item disabled>{14}</Pagination.Item>
+
+                  <Pagination.Ellipsis />
+                  <Pagination.Item>{20}</Pagination.Item>
+                  <Pagination.Next />
+                  <Pagination.Last />
+                </Pagination>
+              </Row>
+            </Col>
+          </Row>
+          <ToastContainer />
+        </Container>
+      </section>
+    </>
+  )
 }
 
 export default ProductBody

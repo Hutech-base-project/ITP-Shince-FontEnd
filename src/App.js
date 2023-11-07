@@ -1,55 +1,72 @@
-import './App.css';
+import "./App.css";
 // React Bootstrap
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 // Font Awesome
-import "./fontawesome.js"
-import "./assets/scss/Customer/Header_customer.scss"
-import "./assets/scss/Customer/Carousel_customer.scss"
-import "./assets/scss/Customer/Footer_customer.scss"
-import HomeIndex from './pages/Customer/HomePage/Home_index';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import ProductIndex from './pages/Customer/ProductPage/Product_index';
-import { useEffect, useState } from 'react';
-import ContactIndex from './pages/Customer/ContactPage/Contact_index';
+import "./fontawesome.js";
+// ReactToastify
+import 'react-toastify/dist/ReactToastify.css';
+import "./assets/scss/Admin/Admin.scss"
+import './assets/scss/Customer/Header_customer.scss'
+import "react-big-calendar/lib/css/react-big-calendar.css"
+import HomeIndex from "./pages/Customer/HomePage/Home_index";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ProductIndex from "./pages/Customer/ProductPage/Product_index";
+import AdminIndex from "./pages/Admin/Admin_index";
+import ServiceIndex from "./pages/Customer/ServicePage/Service_index";
+import CategoryPage from "./pages/Admin/Category/category_page";
+import CheckoutIndex from "./pages/Customer/CheckoutPage/Checkout_index";
+import ProfileIndex from "./pages/Customer/ProfilePage/Profile_index";
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { getSession } from "./redux/Auth/auth_page_thunk.js";
+import Page404 from './pages/Error/404.jsx';
 
 
 function App() {
-  const [isLoading, setLoading] = useState(true);
-
-  function someRequest() { //Simulates a request; makes a "promise" that'll run for 2.5 seconds
-    return new Promise(resolve => setTimeout(() => resolve(), 800));
-  }
-
+  const dispatch = useDispatch();
+  const [role,setRole] = useState([]);
   useEffect(() => {
-    someRequest().then(() => {
-      const loaderElement = document.querySelector(".preloader");
-      if (loaderElement) {
-        loaderElement.remove();
-        setLoading(!isLoading);
-      }
-    });
-  });
-
+    if(sessionStorage.getItem("id") != null){
+      let id = sessionStorage.getItem("id");
+      dispatch(getSession({id:id})).then((res) => {
+        if(!res.error){
+          setRole(res.payload.responseData.roles);
+        }
+      });
+    }
+  }, [dispatch]);
   return (
-    <>
-      <div className="preloader">
-        <div className="preloader-inner">
-          <div className="preloader-icon">
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      </div>
-
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomeIndex />} />
-          <Route path="/product" element={<ProductIndex />} />
-          <Route path="/contact" element={<ContactIndex />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={
+           role?.some((rol)=>rol !=="ROLE_USER") === false ?
+              <HomeIndex /> :<Page404 path={"/system_itp_shine"}/>
+        } />
+        <Route path="/product" element={
+           role.some((rol)=>rol !=="ROLE_USER") === false ?
+           <ProductIndex/>:<Page404 path={"/"}/>
+        }/>
+        <Route path="/profile" element={
+            role.some((rol)=>rol ==="ROLE_USER") === true ?
+            <ProfileIndex/>:<Page404 path={"/"}/>
+        }/>
+        <Route path="/service" element={
+            role.some((rol)=>rol !=="ROLE_USER") === false ?
+            <ServiceIndex/>:<Page404 path={"/"}/>
+        }/>
+        <Route path="/system_itp_shine" element={
+           role?.some((rol)=>rol !=="ROLE_USER") === true ?
+            <AdminIndex/>:<Page404 path={"/"}/>
+        }/>
+        {/* <Route path="/category" element={<CategoryPage/>}></Route> */}
+        <Route path="/checkout" element={
+          role?.some((rol)=>rol !=="ROLE_USER") === null ?
+          <CheckoutIndex/>:<Page404 path={"/"}/>
+          }/>
+      </Routes>
+    </BrowserRouter>
   );
 }
+
 
 export default App;

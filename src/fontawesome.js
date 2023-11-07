@@ -1,34 +1,41 @@
 //Khởi tạo thư viện icon của riêng bạn
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFacebook, faGoogle, faInstagram, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import {  faBell, faCalendarAlt, faEnvelope, faEyeSlash, faStarHalfAlt  } from "@fortawesome/free-regular-svg-icons";
 
 //Import các icon mà bạn muốn sử dụng trong từng 
 
 
 import {
-  faArrowRight,
-  faBarChart,
+  faBars,
+  faBellConcierge,
+  faCartShopping,
+  faChartLine,
   faChartSimple,
   faChevronDown,
   faChevronUp,
-  faEnvelopeOpen,
+  faExclamationTriangle,
   faEye,
+  faFileInvoice,
+  faGauge,
+  faGift,
   faHeart,
-  faLocationArrow,
+  faList,
   faLock,
-  faPhone,
   faRocket,
   faRotate,
   faSearch,
+  faShare,
   faShoppingBag,
+  faStar,
   faTag,
+  faUser,
   faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 //Add các icon đã được import vào trong thư viện của bạn
 library.add(
     faSearch,
-    faHeart,
     faUserCircle,
     faChevronUp,
     faChevronDown,
@@ -37,16 +44,29 @@ library.add(
     faGoogle,
     faTwitter,
     faInstagram,
-    faArrowRight,
     faEye,
     faHeart,
-    faBarChart,
     faChartSimple,
     faRocket,
     faRotate,
     faTag,
     faLock,
-    faPhone,
-    faEnvelopeOpen,
-    faLocationArrow,
+    faStar,
+    faShare,
+    faStarHalfAlt,
+    faGauge,
+    faGift,
+    faFileInvoice,
+    faUser,
+    faChartLine,
+    faBars,
+    faBell,
+    faEnvelope,
+    faList,
+    faBellConcierge,
+    faCartShopping,
+    faCalendarAlt,
+    faEye,
+    faEyeSlash,
+    faExclamationTriangle
 );

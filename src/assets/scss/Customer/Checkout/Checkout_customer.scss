@@ -1,0 +1,412 @@
+.checkout-body{
+    /*======================================
+   Start Checkout Form CSS
+========================================*/
+.shop.checkout {
+	padding: 0;
+	background: #fff;
+	padding-top: 20px;
+	padding-bottom: 50px;
+
+    .checkout-form {
+        margin-top: 30px;
+
+        h2 {
+            font-size: 25px;
+            color: #333;
+            font-weight: 700;
+            line-height: 27px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333;
+            font-weight: 400;
+            margin-top: 12px;
+            margin-bottom: 30px;
+        }
+    }
+
+    .form{
+        .form-group {
+            margin-bottom: 25px;
+
+            label{
+                color:#333;
+                position:relative;
+
+                span {
+                    color: #ff2c18;
+                    display: inline-block;
+                    position: absolute;
+                    right: -12px;
+                    top: 4px;
+                    font-size: 16px;
+                }
+            }
+
+            input {
+                width: 100%;
+                height: 45px;
+                line-height: 50px;
+                padding: 0 20px;
+                border-radius: 3px;
+                border-radius: 0px;
+                color: #333 !important;
+                border: none;
+                background: #F6F7FB;
+            }
+
+            input:hover{
+                color:#fff;
+            }
+        }
+
+        .address{
+            input {
+                margin-bottom: 15px;
+            }
+
+            input:last-child{
+                margin:0;
+            }
+        }
+
+        .create-account {
+            margin: 0;
+
+            input {
+                width: auto;
+                display: inline-block;
+                height: auto;
+                border-radius: 100%;
+                margin-right: 3px;
+            }
+
+            label {
+                display: inline-block;
+                margin: 0;
+            }
+        }
+    }
+
+    .nice-select {
+        width: 100%;
+        height: 45px;
+        line-height: 50px;
+        margin-bottom: 25px;
+        background: #F6F7FB;
+        border-radius: 0px;
+        border:none;
+
+        .list {
+            width: 100%;
+            height: 300px;
+            overflow: scroll;
+
+            li.option{
+                color:#333;
+            }
+
+            li.option:hover{
+                background:#F6F7FB;
+                color:#333;
+            }
+        }
+    }
+
+    .order-details {
+        margin-top: 30px;
+        background: #fff;
+        padding: 15px 0 30px 0;
+        border: 1px solid #eee;
+    }
+
+    .single-widget {
+        margin-bottom: 30px;
+
+        h2 {
+            position:relative;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 10px 30px;
+            line-height: 24px;
+            text-transform: uppercase;
+            color: #333;
+            padding-bottom: 5px;
+        }
+
+        h2:before{
+            position:absolute;
+            content:"";
+            left:30px;
+            bottom:0;
+            height:2px;
+            width:50px;
+            background:#F7941D;
+        }
+
+        .content ul{
+            margin-top:30px;
+
+            li {
+                display: block;
+                padding: 0px 30px;
+                font-size: 15px;
+                font-weight: 400;
+                color: #333;
+                margin-bottom: 12px;
+
+                span{
+                    display:inline-block;
+                    float:right;
+                }
+            }
+
+            li.last {
+                padding-top: 12px;
+                border-top: 1px solid #ebebeb;
+                display: block;
+                font-size: 15px;
+                font-weight: 400;
+                color: #333;
+            }
+        }
+
+        .checkbox {
+            text-align: left;
+            margin: 0;
+            padding: 0px 30px;
+            margin-top:30px;
+
+            label {
+                color: #555555;
+                position: relative;
+                font-size: 14px;
+                padding-left: 20px;
+                margin-top: -5px;
+                font-weight: 400;
+                display: block;
+                margin-bottom: 15px;
+
+                input{
+                    display:none;
+            }
+            }
+
+            
+            label:last-child{
+                margin-bottom:0;
+            }
+
+            label:hover{
+                cursor:pointer;
+            }
+
+            label::before {
+                position: absolute;
+                content: "";
+                left: 0;
+                top: 7px;
+                width: 12px;
+                height: 12px;
+                line-height: 16px;
+                border: 1px solid #666;
+                border-radius: 100%;
+            }
+
+            label::after {
+                position: absolute;
+                content: "";
+                left: 0;
+                top: 7px;
+                width: 12px;
+                height: 12px;
+                line-height: 16px;
+                border-radius: 100%;
+                display:block;
+                background:#666;
+                transform:scale(0);
+                -webkit-transition:all 0.4s ease;
+                -moz-transition:all 0.4s ease;
+                transition:all 0.4s ease;
+            }
+
+            label.checked::after{
+                opacity:1;
+                visibility:visible;
+                transform:scale(1);
+            }
+        }
+    }
+
+    .single-widget:last-child{
+        margin:0;
+    }
+
+    .single-widget.payement {
+        padding: 0px 38px;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .single-widget.get-button {
+        text-align: center;
+        padding:0px 35px;
+
+        .btn {
+            height: 46px;
+            width: 100%;
+            line-height: 19px;
+            text-align: center;
+            border-radius: 0;
+            text-transform: uppercase;
+            color: #fff;
+            background-color: #333;
+            padding-top: 13px;
+        }
+        .btn:hover{
+            background-color: #F7941D;
+
+        }
+    }
+    }
+
+
+/*======================================
+   End Checkout Form CSS
+========================================*/
+
+.shop-services.section {
+        padding: 80px 0 0px 0;
+        background: #fff;
+    }
+
+.shop-services.home{
+        padding:60px 0;
+        background:#F6F7FB;
+    }
+    .shop-services{
+        .single-service {
+            position: relative;
+            padding-left: 65px;
+    
+            i {
+                height: 50px;
+                width: 50px;
+                line-height: 50px;
+                text-align: center;
+                color: #333;
+                background: transparent;
+                border-radius: 100%;
+                display: block;
+                font-size: 32px;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+    
+            h4 {
+                font-size: 14px;
+                font-weight: 600;
+                text-transform: uppercase;
+                line-height: 22px;
+                color: #333;
+            }
+    
+            p {
+                color: #898989;
+                line-height: 28px;
+                font-size:14px;
+            }
+        }
+    }
+
+    
+
+
+/*======================================
+   End Shop Services CSS
+========================================*/
+
+/*======================================
+   Start Shop Newsletter CSS
+========================================*/
+.shop-newsletter{
+	background:#fff;
+    padding: 60px;
+
+    .inner{
+        text-align:center;
+
+        h4 {
+            color: #333;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        p{
+            color:#777;
+            font-size:14px;
+            font-weight:400;
+            margin-bottom:30px;
+
+            span{
+                color:#F7941D;
+            }
+        }
+    }
+
+    .newsletter-inner{
+        position:relative;
+        display: inline-block;
+
+        input {
+            width: 480px;
+            height: 55px;
+            border-radius: 0px;
+            padding: 0px 30px;
+            font-weight: 400;
+            display: inline-block;
+            text-shadow: none;
+            box-shadow: none;
+            border-radius: 0;
+            border: none;
+            border: 1px solid #ececec;
+            border-radius: 30px 0 0 30px;
+        }
+
+        button{
+            border:none;
+            text-shadow:none;
+            box-shadow:none;
+            border-radius:0;
+        }
+
+        .btn {
+            display: inline-block;
+            height: 55px;
+            padding: 10px 30px;
+            position: relative;
+            top: 0;
+            background: #F7941D;
+            color: #fff;
+            left: -4px;
+            border-radius: 0 30px 30px 0;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .btn:hover{
+            background:#333;
+            color:#fff;
+        }
+    }
+}
+/*======================================
+   End Shop Newsletter CSS
+========================================*/
+}
