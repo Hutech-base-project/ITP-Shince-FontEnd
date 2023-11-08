@@ -2,13 +2,22 @@ import React from 'react'
 import "../../../assets/scss/Admin/Order/OrderPage.scss"
 import { Button, Container, Row, Tab, Tabs } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useState } from 'react'
+import OrdersProWaiting from './components/orders_pro_waiting'
+import OrdersProDelivered from './components/orders_pro_delivered'
+import OrdersProCancelled from './components/orders_pro_cancelled'
 
 const OrderPage = () => {
+    const [search, setSearch] = useState("");
+
+    const hanldeSearch = (e) => {
+        setSearch(e.target.value);
+    }
     return (
         <>
             <Container fluid>
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 className="h3 mb-0 text-gray-800">Order</h1>
+                    <h1 className="h3 mb-0 text-gray-800">Order Product</h1>
                 </div>
                 <Row>
                     <div className="input-group input-order">
@@ -18,6 +27,7 @@ const OrderPage = () => {
                             placeholder="search by order_id"
                             aria-label="Search"
                             aria-describedby="basic-addon2"
+                            onChange={hanldeSearch}
                         />
                         <div className="input-group-append">
                             <button className="btn btn-primary" type="button">
@@ -28,144 +38,28 @@ const OrderPage = () => {
                 </Row>
 
                 <Row>
-                <Tabs
-                    defaultActiveKey="Waiting"
-                    id="fill-tab-example"
-                    className="mb-3"
-                    fill
-                >
-                    <Tab eventKey="Waiting" title="Waiting">
-                        <Wating />
-                    </Tab>
-                    <Tab eventKey="Delivered" title="Delivered">
-                        <Delivered />
-                    </Tab>
-                    <Tab eventKey="Cancelled" title="Cancelled">
-                        <Cancelled />
-                    </Tab>
-                </Tabs>
+                    <Tabs
+                        defaultActiveKey="Waiting"
+                        id="fill-tab-example"
+                        className="mb-3"
+                        fill
+                    >
+                        <Tab eventKey="Waiting" title="Waiting">
+                            <OrdersProWaiting search={search} />
+                        </Tab>
+                        <Tab eventKey="Delivered" title="Delivered">
+                            <OrdersProDelivered search={search} />
+                        </Tab>
+                        <Tab eventKey="Cancelled" title="Cancelled">
+                            <OrdersProCancelled search={search} />
+                        </Tab>
+                    </Tabs>
                 </Row>
             </Container>
         </>
     )
 }
 
-function Wating() {
-    return (
-        <div className="container-fluid">
-            <div className="card shadow mb-4">
-                <div className="card-body">
-                    <div className="table-responsive">
-                        <table className="table table-bordered" id="dataTable" width="100%" >
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>User Name</th>
-                                    <th>Address</th>
-                                    <th>Status</th>
-                                    <th>Time order</th>
-                                    <th>Function</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>USER1</td>
-                                    <td>Thien</td>
-                                    <td>Thu Duc city</td>
-                                    <td>Waiting for comfirmation</td>
-                                    <td>02/11/2023</td>
-                                    <td><Button variant="primary">Manage</Button>{' '}
-                                        <Button variant="success">Detail</Button>{' '}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
-        </div>
-    );
-}
-
-function Delivered() {
-    return (
-        <div className="container-fluid">
-            <div className="card shadow mb-4">
-                <div className="card-body">
-                    <div className="table-responsive">
-                        <table className="table table-bordered" id="dataTable" width="100%" >
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>User Name</th>
-                                    <th>Address</th>
-                                    <th>Status</th>
-                                    <th>Payment</th>
-                                    <th>Pay status</th>
-                                    <th>Total</th>
-                                    <th>ship</th>
-                                    <th>Function</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>USER1</td>
-                                    <td>Thien</td>
-                                    <td>Thu Duc city</td>
-                                    <td>Completed</td>
-                                    <td>Pay by paypal</td>
-                                    <td>paid</td>
-                                    <td>100000 VND</td>
-                                    <td>10000 VND</td>
-                                    <td><Button variant="primary">Manage</Button>{' '}
-                                        <Button variant="success">Detail</Button>{' '}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    );
-}
-
-function Cancelled() {
-    return (
-        <div className="container-fluid">
-            <div className="card shadow mb-4">
-                <div className="card-body">
-                    <div className="table-responsive">
-                        <table className="table table-bordered" id="dataTable" width="100%" >
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>User Name</th>
-                                    <th>Address</th>
-                                    <th>Status</th>
-                                    <th>Function</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>USER1</td>
-                                    <td>Thien</td>
-                                    <td>Thu Duc city</td>
-                                    <td>Cancelled</td>
-                                    <td><Button variant="primary">Manage</Button>{' '}
-                                        <Button variant="success">Detail</Button>{' '}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    );
-}
 
 export default OrderPage

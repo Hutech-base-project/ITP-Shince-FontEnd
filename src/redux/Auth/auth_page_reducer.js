@@ -1,5 +1,5 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
-import {checkLogin, getSession, login, register } from "./auth_page_thunk";
+import {checkLogin, checkRegister, getSession, login, register } from "./auth_page_thunk";
 
 
 const initialState = {
@@ -15,16 +15,7 @@ export const AuthPage = createSlice({
     reducers: {
         logout: (state, action) => {
             state.user = null;
-            if(localStorage.getItem("ck") === null){
-                sessionStorage.removeItem("token");
-                sessionStorage.removeItem("refreshToken");
-                sessionStorage.removeItem("uId");
-            }else{
-                localStorage.removeItem("ck");
-                localStorage.removeItem("uId");
-                localStorage.removeItem("token");
-                localStorage.removeItem("refreshToken");
-            }         
+           sessionStorage.removeItem("id")     
         },
         turnOffRegisterSuccess: (state, ) => {
             state.alertSuccess = false;
@@ -52,6 +43,12 @@ export const AuthPage = createSlice({
             state.isLoading = false;
             state.error = true;
         });
+
+        builder.addCase(checkRegister.rejected, (state,)=> {
+            state.isLoading = false;
+            state.error = true;
+        });
+
         builder.addMatcher(
             isAnyOf(login.fulfilled),
             (state, action) => {
@@ -83,12 +80,21 @@ export const AuthPage = createSlice({
                 state.error = false;
             }
         );
+
+        builder.addMatcher(
+            isAnyOf(checkRegister.fulfilled),
+            (state,) => {
+                state.isLoading = false;
+                state.error = false;
+            }
+        );
         builder.addMatcher(
             isAnyOf(
                 register.pending,
                 login.pending,
                 getSession.pending,
-                checkLogin.pending
+                checkLogin.pending,
+                checkRegister.pending,
             ),(state ) => {
                 state.isLoading = true;
             }

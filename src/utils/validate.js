@@ -100,7 +100,7 @@ export const BookingPagevalidate = {
     },
 }
 export const RegisterPageValidate = {
-    username: {
+    userName: {
         presence: {
             allowEmpty: false,
             message: "^First and last name cannot be left blank",
@@ -142,13 +142,24 @@ export const RegisterPageValidate = {
         },
     },
 
-    email: {
+    phoneNumber: {
         presence: {
             allowEmpty: false,
-            message: "^Email cannot be empty",
+            message: "^Phone number cannot be empty",
         },
-        email: {
-            message: "^Invalid email format (xxx@xx.xxx)",
+        numericality: {
+            notInteger: true,
+            message: "^Phone number does not include characters or letters",
+        },
+        length: {
+            minimum: 10,
+            maximum: 10,
+            message: "^Phone number must have 10 digits",
+        },
+        format: {
+            pattern: validPhone,
+            ags: "i",
+            message: '^This phone number is incorrect',
         },
     },
 };
@@ -286,6 +297,30 @@ export const ProductPageValidatePost = {
 
     },
     featureImgPath: {
+        presence: {
+            allowEmpty: false,
+            message: "^Please choose a photo",
+        },
+    },
+    img1: {
+        presence: {
+            allowEmpty: false,
+            message: "^Please choose a photo",
+        },
+    },
+    img2: {
+        presence: {
+            allowEmpty: false,
+            message: "^Please choose a photo",
+        },
+    },
+    img3: {
+        presence: {
+            allowEmpty: false,
+            message: "^Please choose a photo",
+        },
+    },
+    img4: {
         presence: {
             allowEmpty: false,
             message: "^Please choose a photo",
