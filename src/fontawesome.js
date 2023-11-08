@@ -14,12 +14,14 @@ import {
   faChartSimple,
   faChevronDown,
   faChevronUp,
+  faDollarSign,
   faExclamationTriangle,
   faEye,
   faFileInvoice,
   faGauge,
   faGift,
   faHeart,
+  faIdCard,
   faList,
   faLock,
   faRocket,
@@ -27,10 +29,12 @@ import {
   faSearch,
   faShare,
   faShoppingBag,
+  faSignOutAlt,
   faStar,
   faTag,
   faUser,
   faUserCircle,
+  faUserCog,
 } from "@fortawesome/free-solid-svg-icons";
 
 //Add các icon đã được import vào trong thư viện của bạn
@@ -68,5 +72,9 @@ library.add(
     faCalendarAlt,
     faEye,
     faEyeSlash,
-    faExclamationTriangle
+    faExclamationTriangle,
+    faIdCard,
+    faSignOutAlt,
+    faUserCog,
+    faDollarSign,
 );

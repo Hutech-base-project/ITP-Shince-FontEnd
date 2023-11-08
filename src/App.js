@@ -5,15 +5,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./fontawesome.js";
 // ReactToastify
 import 'react-toastify/dist/ReactToastify.css';
-import "./assets/scss/Admin/Admin.scss"
-import './assets/scss/Customer/Header_customer.scss'
-import "react-big-calendar/lib/css/react-big-calendar.css"
+import "./assets/scss/Admin/Admin.scss";
+import './assets/scss/Customer/Header_customer.scss';
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import HomeIndex from "./pages/Customer/HomePage/Home_index";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProductIndex from "./pages/Customer/ProductPage/Product_index";
 import AdminIndex from "./pages/Admin/Admin_index";
 import ServiceIndex from "./pages/Customer/ServicePage/Service_index";
-import CategoryPage from "./pages/Admin/Category/category_page";
 import CheckoutIndex from "./pages/Customer/CheckoutPage/Checkout_index";
 import ProfileIndex from "./pages/Customer/ProfilePage/Profile_index";
 import { useDispatch } from "react-redux";
@@ -54,11 +53,12 @@ function App() {
             role.some((rol)=>rol !=="ROLE_USER") === false ?
             <ServiceIndex/>:<Page404 path={"/"}/>
         }/>
-        <Route path="/system_itp_shine" element={
+        {/* <Route path="/system_itp_shine" element={
            role?.some((rol)=>rol !=="ROLE_USER") === true ?
             <AdminIndex/>:<Page404 path={"/"}/>
-        }/>
-        {/* <Route path="/category" element={<CategoryPage/>}></Route> */}
+        }/> */}
+        <Route path="/system_itp_shine" element={
+            <AdminIndex/>}/>
         <Route path="/checkout" element={
           role?.some((rol)=>rol !=="ROLE_USER") === null ?
           <CheckoutIndex/>:<Page404 path={"/"}/>

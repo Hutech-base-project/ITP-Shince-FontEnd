@@ -185,6 +185,26 @@
                         color:#F7941D;
                     }
                 }
+
+                .drop-down{
+                    margin-top: 6px;
+                    .dropdown-item{
+                        font-size: 18px;
+                        .drop-down-icon{
+                            font-size: 17px;
+                            margin-right: 8px;
+                        }
+                    }
+
+                    .dropdown-item:hover{
+                        background-color: #F7941D;
+                        color: #ffffff;
+                    }
+
+                    .dropdown-menu {
+                        margin-left: -20px;
+                    }
+                }
             }
 
             .shopping{

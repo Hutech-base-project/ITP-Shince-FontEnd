@@ -6,10 +6,12 @@ import { persistStore } from "redux-persist";
 import AuthPage  from './Auth/auth_page_reducer';
 import CategoriesPage  from './Category/category_page_reducer';
 import OtpPage  from './Otp/otp_page_reducer';
+import ProductPage  from './Product/product_page_reducer';
 const rootReducer = combineReducers({
     AuthPage,
     CategoriesPage,
     OtpPage,
+    ProductPage,
 });
 
 

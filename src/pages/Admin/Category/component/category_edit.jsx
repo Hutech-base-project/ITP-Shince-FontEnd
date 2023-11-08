@@ -30,7 +30,7 @@ const EditCategory = (props) => {
 
     useEffect(() => {
         dispatch(getCategories()).then((res) => {
-            setDataListCate(res.payload.responseData);
+            setDataListCate(res.payload.responseData.filter((cate) => cate?.isDelete === false));
         });
     }, [dispatch]);
 

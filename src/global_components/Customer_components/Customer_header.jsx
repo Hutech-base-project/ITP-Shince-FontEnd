@@ -1,23 +1,29 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useRef, useState } from 'react'
-import { Alert, Col, Container, Form, Modal, Nav, Navbar, Spinner, Row, Tab, Tabs } from 'react-bootstrap'
+import { Alert, Col, Container, Form, Modal, Nav, Navbar, Spinner, Row, Tab, Tabs, NavDropdown } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { validate } from 'validate.js'
 import { LoginPageValidate, RegisterPageValidate } from '../../utils/validate'
-import { checkLogin, getSession, login, register } from "../../redux/Auth/auth_page_thunk";
+import { checkLogin, checkRegister, getSession, login, register } from "../../redux/Auth/auth_page_thunk";
 import { selectError, selectLoading } from '../../redux/Auth/auth_page_selecter'
-import { logout, turnOffError } from '../../redux/Auth/auth_page_reducer';
+import {turnOffError } from '../../redux/Auth/auth_page_reducer';
 import OTPInput from 'react-otp-input';
 import { generateOTP, validateOtp } from '../../redux/Otp/otp_page_thunk';
 import { selectErrorOtp } from '../../redux/Otp/otp_page_selecter';
+import { ToastContainer, toast } from 'react-toastify';
+
+const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+
 // /* eslint-disable */ 
 const CustomerHeader = () => {
     const dispatch = useDispatch();
     const [niceSelcet, setNiceSelect] = useState(false);
     const [sizeScreen, setSizeScreen] = useState(window.innerWidth);
     const [show, setShow] = useState(false);
-    const [user,setUser] = useState([]);
+    const [user, setUser] = useState([]);
 
 
     function handleNiceSelect() {
@@ -31,16 +37,16 @@ const CustomerHeader = () => {
         }
     }
 
-    
+
     useEffect(() => {
-      if(sessionStorage.getItem("id") !== null){
-        console.log(XMLHttpRequest)
-        dispatch(getSession({id:sessionStorage.getItem("id")})).then((res) => {
-          if(!res.error){
-            setUser(res.payload.responseData);
-          }
-        });
-      }
+
+        if (sessionStorage.getItem("id") !== null) {
+            dispatch(getSession({ id: sessionStorage.getItem("id") })).then((res) => {
+                if (!res.error) {
+                    setUser(res.payload.responseData);
+                }
+            });
+        }
     }, [dispatch]);
     useEffect(() => {
         if (sizeScreen <= 991) {
@@ -116,7 +122,6 @@ const CustomerHeader = () => {
                                             <Col md={9} className='search-bar-input'>
                                                 <input name="search" placeholder="Search Products Here....." type="text" />
                                                 <button className="btnn">
-
                                                     <FontAwesomeIcon icon={['fas', 'search']} size='lg' />
                                                 </button>
                                             </Col>
@@ -131,11 +136,6 @@ const CustomerHeader = () => {
                                         <div className="sinlge-bar">
                                             <a hrefLang='!#' className="single-icon">
                                                 <FontAwesomeIcon icon={['fas', 'heart']} size='lg' />
-                                            </a>
-                                        </div>
-                                        <div className="sinlge-bar">
-                                            <a role='button' className="single-icon" href='/profile'>
-                                                <FontAwesomeIcon icon={['fa', 'user-circle']} size='lg' />
                                             </a>
                                         </div>
                                         <div className="sinlge-bar shopping">
@@ -174,18 +174,35 @@ const CustomerHeader = () => {
                                             {/* <!--/ End Shopping Item --> */}
                                         </div>
                                         <div className="sinlge-bar">
-                                            {user.length > 0?
-                                                <h1>Hoang</h1>
+                                            {user.length !== 0 ?
+                                                (
+                                                    <div className="drop-down">
+                                                        <NavDropdown title={user.userName} id="basic-nav-dropdown">
+                                                            <NavDropdown.Item href="/profile">
+                                                                <FontAwesomeIcon className="drop-down-icon" icon={['fa', 'id-card']} size='lg' /> Profile
+                                                            </NavDropdown.Item>
+                                                            <NavDropdown.Item href="#action/3.2">
+                                                                Another action
+                                                            </NavDropdown.Item>
+                                                            <NavDropdown.Divider />
+                                                            <NavDropdown.Item href="#action/3.4" style={{ color: 'red' }}>
+                                                                <FontAwesomeIcon className="drop-down-icon" icon={['fa', 'sign-out-alt']} size='lg' /> Logout
+                                                            </NavDropdown.Item>
+                                                        </NavDropdown>
+                                                    </div>
+                                                )
+                                                // <h1>{user.userName}</h1>
                                                 :
                                                 <a role='button' className="single-icon" onClick={handleShow} hrefLang='!#' title='login'>
                                                     <FontAwesomeIcon icon={['fa', 'user']} size='lg' />
                                                 </a>
-                                            }                               
+                                            }
                                         </div>
                                     </Row>
                                 </div>
                             </Col>
                         </Row>
+                        <ToastContainer />
                     </Container>
                 </div>
                 {/* <!-- Header Inner --> */}
@@ -196,12 +213,11 @@ const CustomerHeader = () => {
                             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                             <Navbar.Collapse id="responsive-navbar-nav">
                                 <Nav className="me-auto">
-                                    <Nav.Link href="#features">Home</Nav.Link>
+                                    <Nav.Link href="/">Home</Nav.Link>
                                     <Nav.Link href="/product">Product</Nav.Link>
                                     <Nav.Link href="/service">Service</Nav.Link>
                                     <Nav.Link href="#pricing">About us</Nav.Link>
                                     <Nav.Link href="#pricing">Contact</Nav.Link>
-                                    <Nav.Link href="/admin">Admin</Nav.Link>
                                 </Nav>
                                 {sizeScreen <= 991 ? <Nav>
                                     <Nav.Link href="#deets">More deets</Nav.Link>
@@ -258,12 +274,12 @@ const CustomerHeader = () => {
         const navigate = useNavigate();
         const loading = useSelector(selectLoading);
         const errorLogin = useSelector(selectError);
-        const errorOtp = useSelector(selectErrorOtp); 
-        const [errorLoginCount,setErrorLoginCount] = useState(false);
-        const [errorCountOtp,setErrorCountOtp] = useState(false);
+        const errorOtp = useSelector(selectErrorOtp);
+        const [errorLoginCount, setErrorLoginCount] = useState(false);
+        const [errorCountOtp, setErrorCountOtp] = useState(false);
         const [timeOtp, setTimeOtp] = useState(300);
         const [checkAccount, setCheckAccount] = useState(false);
-        const [openSubmit,setOpenSubmit]= useState(true);
+        const [openSubmit, setOpenSubmit] = useState(true);
         const countRef = useRef(null);
         const [dataLogin, setDataLogin] = useState({
             phoneNumber: "",
@@ -279,13 +295,13 @@ const CustomerHeader = () => {
             dispatch(turnOffError())
         }, [dispatch])
         useEffect(() => {
-            if(otp.length === 5 ){
+            if (otp.length === 5) {
                 setOpenSubmit(false);
-            }else{
+            } else {
                 setOpenSubmit(true);
             }
         }, [otp])
-        
+
 
         useEffect(() => {
             const errors = validate.validate({ phoneNumber: dataLogin.phoneNumber, password: dataLogin.password }, LoginPageValidate);
@@ -324,47 +340,47 @@ const CustomerHeader = () => {
                 },
             }));
             if (validationLogin.isvalid === true) {
-                dispatch(checkLogin({dataLogin}))
+                dispatch(checkLogin({ dataLogin }))
                     .then((res) => {
                         if (!res.error) {
-                            dispatch(generateOTP({phoneNumber:dataLogin.phoneNumber})).then((res)=> {
-                                if(!res.error){
+                            dispatch(generateOTP({ phoneNumber: dataLogin.phoneNumber })).then((res) => {
+                                if (!res.error) {
                                     setTimeOtp(300);
                                     countRef.current = setInterval(() => {
                                         setTimeOtp((timer) => timer - 1)
                                     }, 1000)
                                     setCheckAccount(true);
-                                }else{
+                                } else {
                                     setErrorLoginCount(true);
                                 }
                             });
-                           
+
                         }
-                    })              
+                    })
             }
         };
 
         const handleCheckOtp = () => {
-            if(openSubmit === false){
-                let dataOtp ={
+            if (openSubmit === false) {
+                let dataOtp = {
                     otp: otp,
-                    phoneNumber:dataLogin.phoneNumber
+                    phoneNumber: dataLogin.phoneNumber
                 }
-                dispatch(validateOtp({dataOtp}))
+                dispatch(validateOtp({ dataOtp }))
                     .then((res) => {
                         if (!res.error) {
-                            let data ={
+                            let data = {
                                 phoneNumber: dataLogin.phoneNumber,
                                 password: dataLogin.password,
-                                otp : otp,
+                                otp: otp,
                             }
-                            dispatch(login({data})).then((ress)=> {
+                            dispatch(login({ data })).then((ress) => {
                                 console.log(ress);
                                 if (!ress.error) {
-                                    sessionStorage.setItem("id",ress.payload.responseData.id +ress.payload.responseData.userName);
-                                    if(ress.payload.responseData.roles.some((rol) => rol !== "ROLE_USER") === false){
+                                    sessionStorage.setItem("id", ress.payload.responseData.id + ress.payload.responseData.userName);
+                                    if (ress.payload.responseData.roles.some((rol) => rol !== "ROLE_USER") === false) {
                                         navigate(0);
-                                    }else{
+                                    } else {
                                         window.location = '/system_itp_shine';
                                     }
                                 }
@@ -374,22 +390,26 @@ const CustomerHeader = () => {
             }
         }
 
-        const handleSentOtp= () => {
+        const handleSentOtp = () => {
             errorOtp = false;
-            if(timeOtp <= 0){
-                dispatch(generateOTP({phoneNumber:dataLogin.phoneNumber})).then((res)=> {
-                    if(!res.error){
+            if (timeOtp <= 0) {
+                dispatch(generateOTP({ phoneNumber: dataLogin.phoneNumber })).then((res) => {
+                    if (!res.error) {
                         setTimeOtp(3000);
                         countRef.current = setInterval(() => {
                             setTimeOtp((timer) => timer - 1)
                         }, 1000)
-                    }else{
+                    } else {
                         setErrorCountOtp(true);
                     }
                 });
             }
         }
 
+        const handleBack = () => {
+            setCheckAccount(false);
+            setOtp("");
+        }
         return (
             <>
                 {!checkAccount ?
@@ -413,7 +433,7 @@ const CustomerHeader = () => {
                                         type="text"
                                         placeholder="Phone number"
                                         name="phoneNumber"
-                                        value={dataLogin.phoneNumber === null? null : dataLogin.phoneNumber}
+                                        value={dataLogin.phoneNumber === null ? null : dataLogin.phoneNumber}
                                         onChange={handleChangeLogin}
                                         isInvalid={hasErrorLogin("phoneNumber")}
                                     />
@@ -427,7 +447,7 @@ const CustomerHeader = () => {
                                         type="password"
                                         placeholder="Password"
                                         name="password"
-                                        value={dataLogin.password === null? null : dataLogin.password}
+                                        value={dataLogin.password === null ? null : dataLogin.password}
                                         onChange={handleChangeLogin}
                                         isInvalid={hasErrorLogin("password")}
                                     />
@@ -453,7 +473,7 @@ const CustomerHeader = () => {
                     :
                     <Col sx={12} sm={12} md={12}>
                         <h3 className="register-heading">Verify Your Account</h3>
-                        <h6  className="register-span">Sent to: {dataLogin.phoneNumber.toString()}</h6>
+                        <h6 className="register-span">Sent to: {dataLogin.phoneNumber.toString()}</h6>
                         <Row className='register-form'>
                             {errorOtp === true ? (
                                 <Alert key={'warning'} variant={'warning'}>
@@ -476,7 +496,7 @@ const CustomerHeader = () => {
                                             renderSeparator={<span>-</span>}
                                             renderInput={(props) => <input {...props} />}
                                         />
-                                        <h6>Resend the otp code: <span className='otp-time'>{timeOtp> 0?timeOtp : <a hrefLang="#!" type='button' onClick={handleSentOtp}>Sent again?</a>}</span></h6>
+                                        <h6>Resend the otp code: <span className='otp-time'>{timeOtp > 0 ? timeOtp : <a hrefLang="#!" type='button' onClick={handleSentOtp}>Sent again?</a>}</span></h6>
                                     </Container>
                                 </Form.Group>
                                 <Form.Group className="mb-3" >
@@ -488,14 +508,13 @@ const CustomerHeader = () => {
                                         className="btnRegister"
                                         type="submit"
                                         onClick={handleCheckOtp}
-                                        disabled={openSubmit?true:false}
+                                        disabled={openSubmit ? true : false}
                                     />}
                                 </Form.Group>
                             </Form>
-                            
-                            <a hrefLang="#!" className="btn-back" type='button' onClick={(e)=>setCheckAccount(false)}>Back</a>
+
+                            <a hrefLang="#!" className="btn-back" type='button' onClick={handleBack}>Back</a>
                         </Row>
-                       
                     </Col>
                 }
             </>
@@ -503,53 +522,285 @@ const CustomerHeader = () => {
     }
     /*Register Form*/
     function Register() {
+        const [otp, setOtp] = useState('');
+        const dispatch = useDispatch();
+        const navigate = useNavigate();
+        const loading = useSelector(selectLoading);
+        const errorOtp = useSelector(selectErrorOtp);
+        const [errorCountOtp, setErrorCountOtp] = useState(false);
+        const [timeOtp, setTimeOtp] = useState(300);
+        const [checkAccount, setCheckAccount] = useState(false);
+        const [errorResgisterCount, setErrorResgisterCount] = useState(false);
+        const [openSubmit, setOpenSubmit] = useState(true);
+        const countRef = useRef(null);
+        const errorRegister = useSelector(selectError);
+        const [dataRegister, setDataRegister] = useState({
+            userName: "",
+            password: "",
+            confirmPassword: "",
+            phoneNumber: "",
+        });
+        const [validationRegister, setValidationRegister] = useState({
+            touched: {},
+            errors: {},
+            isvalid: false,
+        });
+
+        useEffect(() => {
+            dispatch(turnOffError())
+        }, [dispatch])
+        useEffect(() => {
+            if (otp.length === 5) {
+                setOpenSubmit(false);
+            } else {
+                setOpenSubmit(true);
+            }
+        }, [otp])
+        useEffect(() => {
+            const errors = validate.validate({ userName: dataRegister.userName, password: dataRegister.password, confirmPassword: dataRegister.confirmPassword, phoneNumber: dataRegister.phoneNumber }, RegisterPageValidate);
+            setValidationRegister((pre) => ({
+                ...pre,
+                isvalid: errors ? false : true,
+                errors: errors || {},
+            }));
+        }, [dataRegister]);
+
+        const hasErrorRegister = (field) => {
+            return validationRegister.touched[field] && validationRegister.errors[field] ? true : false;
+        };
+
+        const handleChangeRegister = (event) => {
+            setDataRegister((preState) => ({
+                ...preState,
+                [event.target.name]: event.target.value,
+            }));
+            setValidationRegister((pre) => ({
+                ...pre,
+                touched: {
+                    ...pre.touched,
+                    [event.target.name]: true,
+                },
+            }));
+        };
+
+        const handleRegister = async () => {
+            setValidationRegister((pre) => ({
+                ...pre,
+                touched: {
+                    ...pre.touched,
+                    password: true,
+                    email: true,
+                },
+            }));
+            if (validationRegister.isvalid === true) {
+                dispatch(checkRegister({ phoneNumber:dataRegister.phoneNumber }))
+                    .then(async (res) => {
+                        if (!res.error) {
+                            dispatch(generateOTP({ phoneNumber: dataRegister.phoneNumber })).then((res) => {
+                                if (!res.error) {
+                                    setTimeOtp(300);
+                                    countRef.current = setInterval(() => {
+                                        setTimeOtp((timer) => timer - 1)
+                                    }, 1000)
+                                    setCheckAccount(true);
+                                } else {
+                                    setErrorResgisterCount(true);
+                                }
+                            });                      }
+                    })
+            }
+        };
+
+        
+        const handleCheckOtp = () => {
+            if (openSubmit === false) {
+                let dataOtp = {
+                    otp: otp,
+                    phoneNumber: dataRegister.phoneNumber
+                }
+                dispatch(validateOtp({ dataOtp }))
+                    .then((res) => {
+                        if (!res.error) {
+                            let data = {
+                                userName:dataRegister.userName,
+                                phoneNumber: dataRegister.phoneNumber,
+                                password: dataRegister.password,
+                                otp: otp,
+                            }
+                            console.log(data);
+                            dispatch(register({ data })).then(async (ress) => {
+                                if (!ress.error) {
+                                    toast.success('Resgister success !', {
+                                        position: toast.POSITION.TOP_RIGHT
+                                      });
+                                      await delay(700)
+                                      navigate(0);
+                                }
+                            });
+                        }
+                    })
+            }
+        }
+
+        const handleSentOtp = () => {
+            errorOtp = false;
+            if (timeOtp <= 0) {
+                dispatch(generateOTP({ phoneNumber: dataRegister.phoneNumber })).then((res) => {
+                    if (!res.error) {
+                        setTimeOtp(3000);
+                        countRef.current = setInterval(() => {
+                            setTimeOtp((timer) => timer - 1)
+                        }, 1000)
+                    } else {
+                        setErrorCountOtp(true);
+                    }
+                });
+            }
+        }
+
+        const handleBack = () => {
+            setCheckAccount(false);
+            setOtp("");
+        }
         return (
-            <Col sx={12} sm={12} md={12}>
-                <h3 className="register-heading">Register</h3>
-                <Row className='register-form'>
-                    <Form as={Col}>
-                        <Form.Group className="mb-3" controlId="formRegisterUserName">
-                            <Form.Control
-                                className='input-form'
-                                type="text"
-                                name="username"
-                                placeholder="Enter user name"
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formRegisterEmail">
-                            <Form.Control
-                                className='input-form'
-                                type="email"
-                                name="email"
-                                placeholder="Enter email"
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formRegisterformPassword">
-                            <Form.Control
-                                className='input-form'
-                                type="password"
-                                name="password"
-                                placeholder="Enter password"
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" >
-                            <Form.Control
-                                className='input-form'
-                                type="password"
-                                name="confirmPassword"
-                                placeholder="Enter confirm password"
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" >
-                            <Form.Control
-                                className="btnRegister"
-                                type="submit"
-                                value="Register"
-                            />
-                        </Form.Group>
-                    </Form>
-                </Row>
-            </Col>
+            <>
+                {!checkAccount ?
+                    <Col sx={12} sm={12} md={12}>
+                        <h3 className="register-heading">Register</h3>
+                        <Row className='register-form'>
+                            {errorRegister === true ? (
+                                <Alert key={'warning'} variant={'warning'}>
+                                    Phone number has been registered!
+                                </Alert>
+                            ) : null}
+                             {errorResgisterCount === true ? (
+                                <Alert key={'warning'} variant={'warning'}>
+                                    You have logged in multiple times, please try again later!
+                                </Alert>
+                            ) : null}
+                            <Form as={Col}>
+                                <Form.Group className="mb-3" controlId="formRegisterUserName">
+                                    <Form.Control
+                                        className='input-form'
+                                        type="text"
+                                        name="userName"
+                                        placeholder="Enter user name"
+                                        value={dataRegister.userName === null ? null : dataRegister.userName}
+                                        onChange={handleChangeRegister}
+                                        isInvalid={hasErrorRegister("userName")}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {hasErrorRegister("userName") ? validationRegister.errors.userName?.[0] : null}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formRegisterPhoneNumber">
+                                    <Form.Control
+                                        className='input-form'
+                                        type="text"
+                                        name="phoneNumber"
+                                        placeholder="Enter phone number"
+                                        value={dataRegister.phoneNumber === null ? null : dataRegister.phoneNumber}
+                                        onChange={handleChangeRegister}
+                                        isInvalid={hasErrorRegister("phoneNumber")}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {hasErrorRegister("phoneNumber") ? validationRegister.errors.phoneNumber?.[0] : null}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formRegisterformPassword">
+                                    <Form.Control
+                                        className='input-form'
+                                        type="password"
+                                        name="password"
+                                        placeholder="Enter password"
+                                        value={dataRegister.password === null ? null : dataRegister.password}
+                                        onChange={handleChangeRegister}
+                                        isInvalid={hasErrorRegister("password")}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {hasErrorRegister("password") ? validationRegister.errors.password?.[0] : null}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" >
+                                    <Form.Control
+                                        className='input-form'
+                                        type="password"
+                                        name="confirmPassword"
+                                        placeholder="Enter confirm password"
+                                        value={dataRegister.confirmPassword === null ? null : dataRegister.confirmPassword}
+                                        onChange={handleChangeRegister}
+                                        isInvalid={hasErrorRegister("confirmPassword")}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {hasErrorRegister("confirmPassword") ? validationRegister.errors.confirmPassword?.[0] : null}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" >
+                                    {loading === true ? (
+                                        <Spinner animation="border" role="status" style={{ marginLeft: "48%" }}>
+                                            <span className="visually-hidden">Loading...</span>
+                                        </Spinner>
+                                    ) :
+                                        <Form.Control
+                                            className="btnRegister"
+                                            type="submit"
+                                            value="Register"
+                                            onClick={handleRegister}
+                                        />
+                                    }
+                                </Form.Group>
+                            </Form>
+                        </Row>
+                    </Col>
+                    :
+                    <Col sx={12} sm={12} md={12}>
+                        <h3 className="register-heading">Verify Your Account</h3>
+                        <h6 className="register-span">Sent to: {dataRegister.phoneNumber.toString()}</h6>
+                        <Row className='register-form'>
+                            {errorOtp === true ? (
+                                <Alert key={'warning'} variant={'warning'}>
+                                    Otp is incorrect or expired!
+                                </Alert>
+                            ) : null}
+                            {errorCountOtp === true ? (
+                                <Alert key={'warning'} variant={'warning'}>
+                                    You have requested to resend otp multiple times, please try again later!
+                                </Alert>
+                            ) : null}
+                            <Form as={Col}>
+                                <Form.Group className="mb-3" controlId="formLoginUserName">
+                                    <Container>
+                                        <OTPInput
+                                            containerStyle={'otp'}
+                                            value={otp}
+                                            onChange={setOtp}
+                                            numInputs={5}
+                                            renderSeparator={<span>-</span>}
+                                            renderInput={(props) => <input {...props} />}
+                                        />
+                                        <h6>Resend the otp code: <span className='otp-time'>{timeOtp > 0 ? timeOtp : <a hrefLang="#!" type='button' onClick={handleSentOtp}>Sent again?</a>}</span></h6>
+                                    </Container>
+                                </Form.Group>
+                                <Form.Group className="mb-3" >
+                                    {loading === true ? (
+                                        <Spinner animation="border" role="status" style={{ marginLeft: "48%" }}>
+                                            <span className="visually-hidden">Loading...</span>
+                                        </Spinner>
+                                    ) : <Form.Control
+                                        className="btnRegister"
+                                        type="submit"
+                                        onClick={handleCheckOtp}
+                                        disabled={openSubmit ? true : false}
+                                    />}
+                                </Form.Group>
+                            </Form>
+
+                            <a hrefLang="#!" className="btn-back" type='button' onClick={handleBack}>Back</a>
+                        </Row>
+
+                    </Col>
+                }
+            </>
         )
     }
 }

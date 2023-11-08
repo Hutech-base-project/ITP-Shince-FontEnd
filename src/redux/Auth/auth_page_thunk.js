@@ -28,11 +28,24 @@ export const checkLogin = createAsyncThunk(
     }
 )
 
+export const checkRegister = createAsyncThunk(
+    "auth/checkRegister",
+    async (data, {rejectWithValue})=>{
+        try{
+            const response_auth = await api.post('/auth/checkRegister/' + data.phoneNumber);
+            return response_auth.data;
+        }catch (err){
+            return rejectWithValue(err.message); 
+        }    
+    }
+)
+
 export const register = createAsyncThunk(
     "auth/register",
     async (data, {rejectWithValue})=>{
         try{
-            const response_auth = await api.post('/login/signup', data.dataRegister);
+            console.log(data.data);
+            const response_auth = await api.post('/auth/signup', data.data);
             return response_auth.status;
         }catch (err){
             return rejectWithValue(err.message); 
