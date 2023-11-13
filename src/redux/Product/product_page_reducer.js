@@ -1,5 +1,5 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit"
-import { postProduct, deleteProducts, getProducts, putProducts, blockProducts  } from "./product_page_thunk.js"
+import { get_all_products, get_product_by_id, post_product, put_product, delete_product, block_product } from "./product_page_thunk.js"
 
 
 const initialState = {
@@ -15,20 +15,41 @@ const ProductPage = createSlice({
 
     },
     extraReducers: (builder) => {
-        builder.addCase(getProducts.fulfilled, (state, action) => {
+        builder.addCase(get_all_products.fulfilled,get_product_by_id.fulfilled, (state, action) => {
             state.isLoading = false;
             state.products = action.payload
         })
-        builder.addMatcher(isAnyOf(postProduct.fulfilled, putProducts.fulfilled,blockProducts.fulfilled), (state,) => {
-            state.isLoading = false;
-        })
-        builder.addMatcher(isAnyOf(getProducts.pending, postProduct.pending, putProducts.pending,deleteProducts.pending,blockProducts.pending), (state,) => {
-            state.isLoading = true;
-        })
-        builder.addMatcher(isAnyOf(getProducts.rejected, postProduct.rejected, putProducts.rejected,deleteProducts.rejected,blockProducts.rejected), (state, action) => {
-            state.isLoading = false;
-            state.error = action.payload
-        })
+        builder.addMatcher(
+            isAnyOf(
+                post_product.fulfilled,
+                put_product.fulfilled,
+                block_product.fulfilled
+            ), (state,) => {
+                state.isLoading = false;
+            })
+        builder.addMatcher(
+            isAnyOf(
+                get_all_products.pending,
+                get_product_by_id.pending,
+                post_product.pending,
+                put_product.pending,
+                delete_product.pending,
+                block_product.pending
+            ), (state,) => {
+                state.isLoading = true;
+            })
+        builder.addMatcher(
+            isAnyOf(
+                get_all_products.rejected,
+                get_product_by_id.rejected,
+                post_product.rejected,
+                put_product.rejected,
+                delete_product.rejected,
+                block_product.rejected)
+            , (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload
+            })
     }
 })
 

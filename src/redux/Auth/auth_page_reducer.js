@@ -1,9 +1,8 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
-import {checkLogin, checkRegister, getSession, login, register } from "./auth_page_thunk";
+import {login,register,check_login,check_register,get_session} from "./auth_page_thunk";
 
 
 const initialState = {
-    auth: null,
     isLoading: false,
     error: false,
     alertSuccess: false,
@@ -30,35 +29,26 @@ export const AuthPage = createSlice({
             state.error = true;
             state.auth  = state.payload;
         });
-        builder.addCase(getSession.rejected, (state,action ) => {
+        builder.addCase(register.rejected ,check_login.rejected, (state,)=> {
+            state.isLoading = false;
+            state.error = true;
+        });       
+        builder.addCase(check_login.rejected, (state,)=> {
+            state.isLoading = false;
+            state.error = true;
+        });
+        builder.addCase(check_register.rejected, (state,)=> {
+            state.isLoading = false;
+            state.error = true;
+        });
+        builder.addCase(get_session.rejected, (state,action ) => {
             state.isLoading = false;
             state.error = true;
             state.auth  = state.payload;
         });
-        builder.addCase(register.rejected ,checkLogin.rejected, (state,)=> {
-            state.isLoading = false;
-            state.error = true;
-        });
-        builder.addCase(checkLogin.rejected, (state,)=> {
-            state.isLoading = false;
-            state.error = true;
-        });
-
-        builder.addCase(checkRegister.rejected, (state,)=> {
-            state.isLoading = false;
-            state.error = true;
-        });
 
         builder.addMatcher(
             isAnyOf(login.fulfilled),
-            (state, action) => {
-                state.isLoading = false;
-                state.auth = action.payload;
-                state.error = false;
-            }
-        );
-        builder.addMatcher(
-            isAnyOf(getSession.fulfilled),
             (state, action) => {
                 state.isLoading = false;
                 state.auth = action.payload;
@@ -72,9 +62,8 @@ export const AuthPage = createSlice({
                 state.error = false;
             }
         );
-
         builder.addMatcher(
-            isAnyOf(checkLogin.fulfilled),
+            isAnyOf(check_login.fulfilled),
             (state,) => {
                 state.isLoading = false;
                 state.error = false;
@@ -82,19 +71,27 @@ export const AuthPage = createSlice({
         );
 
         builder.addMatcher(
-            isAnyOf(checkRegister.fulfilled),
+            isAnyOf(check_register.fulfilled),
             (state,) => {
                 state.isLoading = false;
                 state.error = false;
             }
         );
+        builder.addMatcher(
+            isAnyOf(get_session.fulfilled),
+            (state, action) => {
+                state.isLoading = false;
+                state.auth = action.payload;
+                state.error = false;
+            }
+        );     
         builder.addMatcher(
             isAnyOf(
-                register.pending,
                 login.pending,
-                getSession.pending,
-                checkLogin.pending,
-                checkRegister.pending,
+                register.pending,                             
+                check_login.pending,
+                check_register.pending,
+                get_session.pending,
             ),(state ) => {
                 state.isLoading = true;
             }

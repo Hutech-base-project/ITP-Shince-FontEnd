@@ -1,5 +1,5 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
-import {generateOTP, validateOtp} from "./otp_page_thunk";
+import {generate_otp, validate_otp} from "./otp_page_thunk";
 
 
 const initialState = {
@@ -15,17 +15,17 @@ export const OtpPage = createSlice({
        
     },
     extraReducers: (builder) => {
-        builder.addCase(generateOTP.rejected, (state,action ) => {
+        builder.addCase(generate_otp.rejected, (state,action ) => {
             state.isLoading = false;
             state.error = true;
             state.otp = action.payload
         });
-        builder.addCase(validateOtp.rejected, (state,)=> {
+        builder.addCase(validate_otp.rejected, (state,)=> {
             state.isLoading = false;
             state.error = true;
         });
         builder.addMatcher(
-            isAnyOf(generateOTP.fulfilled),
+            isAnyOf(generate_otp.fulfilled),
             (state, action) => {
                 state.isLoading = false;
                 state.error = false;
@@ -33,7 +33,7 @@ export const OtpPage = createSlice({
         );
 
         builder.addMatcher(
-            isAnyOf(validateOtp.fulfilled),
+            isAnyOf(validate_otp.fulfilled),
             (state,) => {
                 state.isLoading = false;
                 state.error = false;
@@ -41,8 +41,8 @@ export const OtpPage = createSlice({
         );
         builder.addMatcher(
             isAnyOf(
-                generateOTP.pending,
-                validateOtp.pending,
+                generate_otp.pending,
+                validate_otp.pending,
             ),(state ) => {
                 state.isLoading = true;
             }

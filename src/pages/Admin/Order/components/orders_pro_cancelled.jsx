@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { Button, Col, Modal, Pagination, Row, Table } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
-import { getOrderProDetail, getOrderProduct } from '../../../../redux/OrderPro/order_page_thunk';
+import {  get_all_orders } from '../../../../redux/OrderPro/order_page_thunk';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -16,11 +16,11 @@ const OrdersProCancelled = (props) => {
     const [rowsPerPage,] = useState(10);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getOrderProduct()).then((res) => {
-            setDataListOrderProduct(res.payload.responseData.filter((ord) =>ord.orProStatus === "Cancelled"));
-            setDataListSearch(res.payload.responseData.filter((ord) =>ord.orProStatus === "Cancelled"));
+        dispatch(get_all_orders()).then((res) => {
+            setDataListOrderProduct(res.payload.responseData?.filter((ord) =>ord.orProStatus === "Cancelled"));
+            setDataListSearch(res.payload.responseData?.filter((ord) =>ord.orProStatus === "Cancelled"));
         });
-    }, [dispatch]);
+    }, [dispatch,,props.status]);
 
     useEffect(() => {
         if (props.search !== null) {
@@ -48,7 +48,7 @@ const OrdersProCancelled = (props) => {
     }
 
     let rows = [];
-    for (let i = 1; i < (dataListSearch.length / rowsPerPage) + 1; i++) {
+    for (let i = 1; i < (dataListSearch?.length / rowsPerPage) + 1; i++) {
         if (i - 1 === page) {
             rows.push(<Pagination.Item key={i} active onClick={() => ClickPage(i)}>{i}</Pagination.Item>);
         } else {
@@ -94,12 +94,12 @@ const OrdersProCancelled = (props) => {
                     </Table>
                 </Col>
                 <Row className='category-bottom'>
-                    {Math.floor(dataListOrderProduct.length / rowsPerPage) !== 0 ?
+                    {Math.floor(dataListOrderProduct?.length / rowsPerPage) !== 0 ?
                         <Col md={{ span: 10, offset: 10 }}>
                             <Pagination>
                                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                                 {rows}
-                                {page === Math.floor(dataListOrderProduct.length / rowsPerPage) ? <Pagination.Next onClick={NextPage} disabled /> : <Pagination.Next onClick={NextPage} />}
+                                {page === Math.floor(dataListOrderProduct?.length / rowsPerPage) ? <Pagination.Next onClick={NextPage} disabled /> : <Pagination.Next onClick={NextPage} />}
                             </Pagination>
                         </Col> : null
                     }
@@ -110,16 +110,6 @@ const OrdersProCancelled = (props) => {
 }
 
 function OrdersDetail(props) {
-    const [dataListOrderProDel, setDataListProDel] = useState([]);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (props.order.orProId !== undefined) {
-            dispatch(getOrderProDetail(props.order.orProId)).then((res) => {
-                setDataListProDel(res.payload);
-            });
-        }
-    }, [props, dispatch]);
     return (
         <Modal
             {...props}
@@ -162,15 +152,15 @@ function OrdersDetail(props) {
                     </Row>
                 </div>
                 <div className="pricing">
-                    {React.Children.toArray(dataListOrderProDel?.map((data) => {
+                    {React.Children.toArray(props.order.listPro?.map((data) => {
                         return (
                             <>
                                 <Row>
                                     <Col xs={9}>
-                                        <span id="name" >{data.ordProProductName}</span>
+                                        <span id="name" >{data.proProductName}</span>
                                     </Col>
                                     <Col xs={3}>
-                                        <span id="price" style={{ marginRight: 6 }}>{data.ordProProductPrice}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
+                                        <span id="price" style={{ marginRight: 6 }}>{data.proQuantity} x {data.proProductPrice}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
                                     </Col>
                                 </Row>
                             </>

@@ -432,7 +432,31 @@ export const ServicePageValidatePost = {
           allowEmpty: false,
           message: "^Please choose a photo",
         },
-    }
+    },
+    img1: {
+        presence: {
+            allowEmpty: false,
+            message: "^Please choose a photo",
+        },
+    },
+    img2: {
+        presence: {
+            allowEmpty: false,
+            message: "^Please choose a photo",
+        },
+    },
+    img3: {
+        presence: {
+            allowEmpty: false,
+            message: "^Please choose a photo",
+        },
+    },
+    img4: {
+        presence: {
+            allowEmpty: false,
+            message: "^Please choose a photo",
+        },
+    },
 };
 
 export const ServicePageValidatePut = {
@@ -553,6 +577,12 @@ export const AccountPageValidate = {
         },
         email: {
             message: "^Invalid email format (xxx@xx.xxx)",
+        },
+    },
+    usImage:{
+        presence: {
+            allowEmpty: false,
+            message: "^Please choose a photo",
         },
     }
 };

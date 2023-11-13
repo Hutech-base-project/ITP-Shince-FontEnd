@@ -5,8 +5,8 @@ import { ProductPageValidatePost } from '../../../../utils/validate';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { selectListPro, selectStatusPro } from '../../../../redux/Product/product_page_selecter';
-import { postProduct } from '../../../../redux/Product/product_page_thunk';
-import { getCategories } from '../../../../redux/Category/category_page_thunk';
+import { post_product } from '../../../../redux/Product/product_page_thunk';
+import { get__all_categories } from '../../../../redux/Category/category_page_thunk';
 
 const AddProduct = (props) => {
     const [checkDuplicatePost, setCheckDuplicatePost] = useState(false);
@@ -63,15 +63,15 @@ const AddProduct = (props) => {
 
 
     useEffect(() => {
-        dispatch(getCategories()).then((res) => {
+        dispatch(get__all_categories()).then((res) => {
             setDataListCate(res.payload.responseData);
         });
     }, [dispatch]);
 
     useEffect(() => {
-        if (dataListProduct.length !== 0) {
+        if (dataListProduct?.length !== 0) {
             if (
-                dataListProduct.responseData.some((pro) => pro?.proName === dataPost?.proName.trim() && pro?.category_id === dataPost?.category_id && pro?.isDelete === false) === true
+                dataListProduct?.responseData.some((pro) => pro?.proName === dataPost?.proName.trim() && pro?.category_id === dataPost?.category_id && pro?.isDelete === false) === true
             ) {
                 setCheckDuplicatePost(true);
             } else {
@@ -151,7 +151,7 @@ const AddProduct = (props) => {
                     category_id: false,
                 },
             }));
-            dispatch(postProduct(dataPost)).then((res1) => {
+            dispatch(post_product(dataPost)).then((res1) => {
                 if (res1.payload === 201) {
                     toast.success('Create product success !', {
                         position: toast.POSITION.TOP_RIGHT,
@@ -189,11 +189,11 @@ const AddProduct = (props) => {
                             placeholder="Enter Product name"
                             name="proName"
                             onChange={hanldeChangePost}
-                            isInvalid={hasErrorPost("proName")}
+                            isInvalid={hasErrorPost("proName")|| checkDuplicatePost}
                         />
                         <Form.Control.Feedback type="invalid">
                             {hasErrorPost("proName") ? validationPost.errors.proName?.[0] : null
-                                || checkDuplicatePost === true ? "Genre name already exists" : null}
+                                || checkDuplicatePost === true ? "Porudcut name already exists" : null}
                         </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicProPrice">
@@ -309,7 +309,7 @@ const AddProduct = (props) => {
                             onChange={hanldeSelectPost}
                         >
                             <option value={0} >Not selected</option>
-                            {React.Children.toArray(dataListCate.map((item) => {
+                            {React.Children.toArray(dataListCate?.map((item) => {
                                 let id = 0;
                                 if (item.cateIdParent === 0) {
                                     id = item.cateId;

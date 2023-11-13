@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { ToastContainer } from 'react-toastify';
-import { getCategories } from '../../../redux/Category/category_page_thunk';
+import { get__all_categories } from '../../../redux/Category/category_page_thunk';
 import AddCategory from "./component/category_add";
 import EditCategory from "./component/category_edit";
 import DeleteCategory from "./component/category_delete";
@@ -25,9 +25,9 @@ const CategoryPage = () => {
   const [rowsPerPage,] = useState(10);
 
   useEffect(() => {
-    dispatch(getCategories()).then((res) => {
-      setDataListCate(res.payload.responseData.filter((cate) => cate?.isDelete === false));
-      setDataListSearch(res.payload.responseData.filter((cate) => cate?.isDelete === false));
+    dispatch(get__all_categories()).then((res) => {
+      setDataListCate(res.payload.responseData?.filter((cate) => cate?.isDelete === false));
+      setDataListSearch(res.payload.responseData?.filter((cate) => cate?.isDelete === false));
     });
   }, [dispatch, createShow, editShow,deleteshow]);
 
@@ -72,7 +72,7 @@ const CategoryPage = () => {
 
 
   let rows = [];
-  for (let i = 1; i < (dataListSearch.length / rowsPerPage) + 1; i++) {
+  for (let i = 1; i < (dataListSearch?.length / rowsPerPage) + 1; i++) {
     if (i - 1 === page) {
       rows.push(<Pagination.Item key={i} active onClick={() => ClickPage(i)}>{i}</Pagination.Item>);
     } else {
@@ -196,12 +196,12 @@ const CategoryPage = () => {
           <ToastContainer />
         </Row>
         <Row className='category-bottom'>
-          {Math.floor(dataListSearch.length / rowsPerPage) !== 0 ?
+          {Math.floor(dataListSearch?.length / rowsPerPage) !== 0 ?
             <Col md={{ span: 10, offset: 10 }}>
               <Pagination>
                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                 {rows}
-                {page === Math.floor(dataListSearch.length / rowsPerPage) ? <Pagination.Next onClick={NextPage} disabled /> : <Pagination.Next onClick={NextPage} />}
+                {page === Math.floor(dataListSearch?.length / rowsPerPage) ? <Pagination.Next onClick={NextPage} disabled /> : <Pagination.Next onClick={NextPage} />}
               </Pagination>
             </Col> : null
           }

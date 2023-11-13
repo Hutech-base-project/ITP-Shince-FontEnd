@@ -2,14 +2,14 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectStatusCate } from '../../../../redux/Category/category_page_selecter';
 import { toast } from 'react-toastify';
-import { deleteCategories } from '../../../../redux/Category/category_page_thunk';
+import { delete_category } from '../../../../redux/Category/category_page_thunk';
 import { Button, Modal, Spinner, } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const DeleteCategory = (props) =>{
     const dispatch = useDispatch();
     const isLoading = useSelector(selectStatusCate);
     const hanldeDel = () => {
-      dispatch(deleteCategories(props.cateid)).then((res1) => {
+      dispatch(delete_category(props.cateid)).then((res1) => {
         if (res1.payload === 200) {
           toast.success('Delete category success !', {
             position: toast.POSITION.TOP_RIGHT,

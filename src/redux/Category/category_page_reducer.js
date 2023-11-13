@@ -1,5 +1,5 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit"
-import { deleteCategories, getCategories, postCategories, putCategories } from "./category_page_thunk"
+import { get__all_categories, post_category, put_category, delete_category } from "./category_page_thunk"
 
 const initialState = {
     categories: [],
@@ -14,20 +14,34 @@ const CategoriesPage = createSlice({
 
     },
     extraReducers: (builder) => {
-        builder.addCase(getCategories.fulfilled, (state, action) => {
+        builder.addCase(get__all_categories.fulfilled, (state, action) => {
             state.isLoading = false;
             state.categories = action.payload
         })
-        builder.addMatcher(isAnyOf(postCategories.fulfilled, putCategories.fulfilled), (state,) => {
-            state.isLoading = false;
-        })
-        builder.addMatcher(isAnyOf(getCategories.pending, postCategories.pending, putCategories.pending,deleteCategories.pending), (state,) => {
-            state.isLoading = true;
-        })
-        builder.addMatcher(isAnyOf(getCategories.rejected, postCategories.rejected, putCategories.rejected,deleteCategories.rejected), (state, action) => {
-            state.isLoading = false;
-            state.error = action.payload
-        })
+        builder.addMatcher(
+            isAnyOf(
+                post_category.fulfilled,
+                put_category.fulfilled
+            ), (state,) => {
+                state.isLoading = false;
+            })
+        builder.addMatcher(
+            isAnyOf(
+                get__all_categories.pending,
+                post_category.pending,
+                put_category.pending,
+                delete_category.pending), (state,) => {
+                    state.isLoading = true;
+                })
+        builder.addMatcher(
+            isAnyOf(
+                get__all_categories.rejected,
+                post_category.rejected,
+                put_category.rejected,
+                delete_category.rejected), (state, action) => {
+                    state.isLoading = false;
+                    state.error = action.payload
+                })
     }
 })
 

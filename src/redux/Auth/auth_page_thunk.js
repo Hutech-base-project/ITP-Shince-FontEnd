@@ -8,7 +8,6 @@ export const login = createAsyncThunk(
     async (data, {rejectWithValue})=>{
         try{
             const response_auth = await api.post('/auth/signin', data.data);
-            console.log(response_auth);
             return response_auth.data;
         }catch (err){
             return rejectWithValue(err.message); 
@@ -16,7 +15,20 @@ export const login = createAsyncThunk(
     }
 )
 
-export const checkLogin = createAsyncThunk(
+
+export const register = createAsyncThunk(
+    "auth/register",
+    async (data, {rejectWithValue})=>{
+        try{
+            const response_auth = await api.post('/auth/signup', data.data);
+            return response_auth.status;
+        }catch (err){
+            return rejectWithValue(err.message); 
+        }    
+    }
+)
+
+export const check_login = createAsyncThunk(
     "auth/checkLogin",
     async (data, {rejectWithValue})=>{
         try{
@@ -28,7 +40,7 @@ export const checkLogin = createAsyncThunk(
     }
 )
 
-export const checkRegister = createAsyncThunk(
+export const check_register = createAsyncThunk(
     "auth/checkRegister",
     async (data, {rejectWithValue})=>{
         try{
@@ -40,20 +52,8 @@ export const checkRegister = createAsyncThunk(
     }
 )
 
-export const register = createAsyncThunk(
-    "auth/register",
-    async (data, {rejectWithValue})=>{
-        try{
-            console.log(data.data);
-            const response_auth = await api.post('/auth/signup', data.data);
-            return response_auth.status;
-        }catch (err){
-            return rejectWithValue(err.message); 
-        }    
-    }
-)
 
-export const getSession = createAsyncThunk(
+export const get_session = createAsyncThunk(
     "auth/getSession",
     async (data, {rejectWithValue})=>{
         try{

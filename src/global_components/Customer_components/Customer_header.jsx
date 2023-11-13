@@ -1,30 +1,35 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useEffect, useRef, useState } from 'react'
-import { Alert, Col, Container, Form, Modal, Nav, Navbar, Spinner, Row, Tab, Tabs, NavDropdown } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Col, Container, Form, Modal, Nav, Navbar, Spinner, Row, Tab, Tabs, NavDropdown } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { validate } from 'validate.js'
-import { LoginPageValidate, RegisterPageValidate } from '../../utils/validate'
-import { checkLogin, checkRegister, getSession, login, register } from "../../redux/Auth/auth_page_thunk";
-import { selectError, selectLoading } from '../../redux/Auth/auth_page_selecter'
-import {turnOffError } from '../../redux/Auth/auth_page_reducer';
+import { validate } from 'validate.js';
+import { LoginPageValidate, RegisterPageValidate } from '../../utils/validate';
+import { check_login, check_register, get_session, login, register } from "../../redux/Auth/auth_page_thunk";
+import { selectError, selectLoading } from '../../redux/Auth/auth_page_selecter';
+import { turnOffError } from '../../redux/Auth/auth_page_reducer';
 import OTPInput from 'react-otp-input';
-import { generateOTP, validateOtp } from '../../redux/Otp/otp_page_thunk';
+import { generate_otp, validate_otp } from '../../redux/Otp/otp_page_thunk';
 import { selectErrorOtp } from '../../redux/Otp/otp_page_selecter';
 import { ToastContainer, toast } from 'react-toastify';
+import { selectCartPro } from '../../redux/Cart/cart_page_selecter';
+import { get_all_products } from '../../redux/Product/product_page_thunk';
+import { removeCart } from '../../redux/Cart/cart_page_reducer';
+import { OnChekOut } from '../../redux/Storage/storage_page_reducer';
 
 const delay = ms => new Promise(
     resolve => setTimeout(resolve, ms)
-  );
+);
 
 // /* eslint-disable */ 
 const CustomerHeader = () => {
     const dispatch = useDispatch();
+    const cartList = useSelector(selectCartPro);
     const [niceSelcet, setNiceSelect] = useState(false);
     const [sizeScreen, setSizeScreen] = useState(window.innerWidth);
     const [show, setShow] = useState(false);
     const [user, setUser] = useState([]);
-
+    const [dataListPro, setDataListPro] = useState([]);
 
     function handleNiceSelect() {
         if (niceSelcet === false) {
@@ -39,14 +44,16 @@ const CustomerHeader = () => {
 
 
     useEffect(() => {
-
         if (sessionStorage.getItem("id") !== null) {
-            dispatch(getSession({ id: sessionStorage.getItem("id") })).then((res) => {
+            dispatch(get_session({ id: sessionStorage.getItem("id") })).then((res) => {
                 if (!res.error) {
                     setUser(res.payload.responseData);
                 }
             });
         }
+        dispatch(get_all_products()).then((res) => {
+            setDataListPro(res.payload.responseData);
+        });
     }, [dispatch]);
     useEffect(() => {
         if (sizeScreen <= 991) {
@@ -74,15 +81,19 @@ const CustomerHeader = () => {
             this.document.getElementById("navbar").classList.remove("sticky")
         }
     });
-
-    const handleShow = () => {
-        setShow(true);
+    const totalPrice = () => {
+        let total = 0;
+        cartList?.forEach(cart => {
+            total = total + (cart.proProductPrice * cart.proQuantity)
+        });
+        return total.toFixed(2);
     }
 
-    const handleClose = () => {
-        setShow(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
 
-    };
+    const hanldeRemoveItem = (e) => dispatch(removeCart(e));
+    const hanldeCheckOut = () =>  dispatch(OnChekOut());
     return (
         <>
             {/* <!-- Header --> */}
@@ -141,34 +152,45 @@ const CustomerHeader = () => {
                                         <div className="sinlge-bar shopping">
                                             <a hrefLang='!#' className="single-icon">
                                                 <FontAwesomeIcon icon={['fa', 'shopping-bag']} size='lg' />
-                                                <span className="total-count">2</span>
+                                                <span className="total-count">{cartList.length}</span>
                                             </a>
                                             {/* <!-- Shopping Item --> */}
                                             <div className="shopping-item">
                                                 <div className="dropdown-cart-header">
-                                                    <span>2 Items</span>
-                                                    <a href='#!'>View Cart</a>
+                                                    <span>{cartList.length} Items</span>
                                                 </div>
-                                                <ul className="shopping-list">
-                                                    <li>
-                                                        <a hrefLang='!#' className="remove" title="Remove this item"><i className="fa fa-remove"></i></a>
-                                                        <a className="cart-img" hrefLang='!#'><img src="https://via.placeholder.com/70x70" alt="!#" /></a>
-                                                        <h4><a hrefLang='!#'>Woman Ring</a></h4>
-                                                        <p className="quantity">1x - <span className="amount">$99.00</span></p>
-                                                    </li>
-                                                    <li>
-                                                        <a hrefLang='!#' className="remove" title="Remove this item"><i className="fa fa-remove"></i></a>
-                                                        <a className="cart-img" hrefLang='!#'><img src="https://via.placeholder.com/70x70" alt="!#" /></a>
-                                                        <h4><a hrefLang='!#'>Woman Necklace</a></h4>
-                                                        <p className="quantity">1x - <span className="amount">$35.00</span></p>
-                                                    </li>
+
+                                                <ul className="shopping-list" style={{ height: cartList.length * 170, overflow: 'auto',maxHeight:400 }}>
+                                                    {cartList.length > 0 ?
+                                                        React.Children.toArray(dataListPro?.map((item) => {
+                                                            return (
+                                                                React.Children.toArray(cartList?.map((cart) => {
+                                                                    if (cart?.productId === item?.proId) {
+                                                                        return (
+                                                                            <>
+                                                                                <li style={{marginLeft:10,marginRight:10}}>
+                                                                                    <a hrefLang='!#' className="remove" title="Remove this item" onClick={()=>hanldeRemoveItem(cart?.productId)}><FontAwesomeIcon icon={['far', 'trash-alt']} /></a>
+                                                                                    <a className="cart-img" hrefLang='!#'><img src={process.env.REACT_APP_API_URL + "/image/product/" + item.featureImgPath} alt="!#" /></a>
+                                                                                    <h4><a hrefLang='!#'>{item.proName}</a></h4>
+                                                                                    <p className="quantity">{cart.proQuantity}x - <span className="amount">{item.proPrice}</span></p>
+                                                                                </li>
+                                                                            </>)
+                                                                    }
+                                                                    return null;
+                                                                }))
+                                                            )
+                                                        })) :
+                                                        <Col className='mess'>
+                                                            <span >You have no products in your cart</span>
+                                                        </Col>
+                                                    }
                                                 </ul>
                                                 <div className="bottom">
                                                     <div className="total">
                                                         <span>Total</span>
-                                                        <span className="total-amount">$134.00</span>
+                                                        <span className="total-amount">{totalPrice()}</span>
                                                     </div>
-                                                    <a href="/checkout" className="btn animate">Checkout</a>
+                                                    <a href='/cart' className="btn animate">View Cart</a>                                                 
                                                 </div>
                                             </div>
                                             {/* <!--/ End Shopping Item --> */}
@@ -340,10 +362,10 @@ const CustomerHeader = () => {
                 },
             }));
             if (validationLogin.isvalid === true) {
-                dispatch(checkLogin({ dataLogin }))
+                dispatch(check_login({ dataLogin }))
                     .then((res) => {
                         if (!res.error) {
-                            dispatch(generateOTP({ phoneNumber: dataLogin.phoneNumber })).then((res) => {
+                            dispatch(generate_otp({ phoneNumber: dataLogin.phoneNumber })).then((res) => {
                                 if (!res.error) {
                                     setTimeOtp(300);
                                     countRef.current = setInterval(() => {
@@ -366,7 +388,7 @@ const CustomerHeader = () => {
                     otp: otp,
                     phoneNumber: dataLogin.phoneNumber
                 }
-                dispatch(validateOtp({ dataOtp }))
+                dispatch(validate_otp({ dataOtp }))
                     .then((res) => {
                         if (!res.error) {
                             let data = {
@@ -375,7 +397,6 @@ const CustomerHeader = () => {
                                 otp: otp,
                             }
                             dispatch(login({ data })).then((ress) => {
-                                console.log(ress);
                                 if (!ress.error) {
                                     sessionStorage.setItem("id", ress.payload.responseData.id + ress.payload.responseData.userName);
                                     if (ress.payload.responseData.roles.some((rol) => rol !== "ROLE_USER") === false) {
@@ -393,7 +414,7 @@ const CustomerHeader = () => {
         const handleSentOtp = () => {
             errorOtp = false;
             if (timeOtp <= 0) {
-                dispatch(generateOTP({ phoneNumber: dataLogin.phoneNumber })).then((res) => {
+                dispatch(generate_otp({ phoneNumber: dataLogin.phoneNumber })).then((res) => {
                     if (!res.error) {
                         setTimeOtp(3000);
                         countRef.current = setInterval(() => {
@@ -593,10 +614,10 @@ const CustomerHeader = () => {
                 },
             }));
             if (validationRegister.isvalid === true) {
-                dispatch(checkRegister({ phoneNumber:dataRegister.phoneNumber }))
+                dispatch(check_register({ phoneNumber: dataRegister.phoneNumber }))
                     .then(async (res) => {
                         if (!res.error) {
-                            dispatch(generateOTP({ phoneNumber: dataRegister.phoneNumber })).then((res) => {
+                            dispatch(generate_otp({ phoneNumber: dataRegister.phoneNumber })).then((res) => {
                                 if (!res.error) {
                                     setTimeOtp(300);
                                     countRef.current = setInterval(() => {
@@ -606,35 +627,35 @@ const CustomerHeader = () => {
                                 } else {
                                     setErrorResgisterCount(true);
                                 }
-                            });                      }
+                            });
+                        }
                     })
             }
         };
 
-        
+
         const handleCheckOtp = () => {
             if (openSubmit === false) {
                 let dataOtp = {
                     otp: otp,
                     phoneNumber: dataRegister.phoneNumber
                 }
-                dispatch(validateOtp({ dataOtp }))
+                dispatch(validate_otp({ dataOtp }))
                     .then((res) => {
                         if (!res.error) {
                             let data = {
-                                userName:dataRegister.userName,
+                                userName: dataRegister.userName,
                                 phoneNumber: dataRegister.phoneNumber,
                                 password: dataRegister.password,
                                 otp: otp,
                             }
-                            console.log(data);
                             dispatch(register({ data })).then(async (ress) => {
                                 if (!ress.error) {
                                     toast.success('Resgister success !', {
                                         position: toast.POSITION.TOP_RIGHT
-                                      });
-                                      await delay(700)
-                                      navigate(0);
+                                    });
+                                    await delay(700)
+                                    navigate(0);
                                 }
                             });
                         }
@@ -645,7 +666,7 @@ const CustomerHeader = () => {
         const handleSentOtp = () => {
             errorOtp = false;
             if (timeOtp <= 0) {
-                dispatch(generateOTP({ phoneNumber: dataRegister.phoneNumber })).then((res) => {
+                dispatch(generate_otp({ phoneNumber: dataRegister.phoneNumber })).then((res) => {
                     if (!res.error) {
                         setTimeOtp(3000);
                         countRef.current = setInterval(() => {
@@ -673,7 +694,7 @@ const CustomerHeader = () => {
                                     Phone number has been registered!
                                 </Alert>
                             ) : null}
-                             {errorResgisterCount === true ? (
+                            {errorResgisterCount === true ? (
                                 <Alert key={'warning'} variant={'warning'}>
                                     You have logged in multiple times, please try again later!
                                 </Alert>

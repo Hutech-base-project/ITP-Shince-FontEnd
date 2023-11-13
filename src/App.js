@@ -7,6 +7,8 @@ import "./fontawesome.js";
 import 'react-toastify/dist/ReactToastify.css';
 import "./assets/scss/Admin/Admin.scss";
 import './assets/scss/Customer/Header_customer.scss';
+import './assets/scss/Customer/CartPage/cart_body.scss'
+import './assets/scss/Admin/Order/OrderPage.scss'
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import HomeIndex from "./pages/Customer/HomePage/Home_index";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -17,52 +19,56 @@ import CheckoutIndex from "./pages/Customer/CheckoutPage/Checkout_index";
 import ProfileIndex from "./pages/Customer/ProfilePage/Profile_index";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { getSession } from "./redux/Auth/auth_page_thunk.js";
+import {get_session } from "./redux/Auth/auth_page_thunk.js";
 import Page404 from './pages/Error/404.jsx';
+import CartIndex from "./pages/Customer/CartPage/cart_index.jsx";
 
 
 function App() {
+
   const dispatch = useDispatch();
-  const [role,setRole] = useState([]);
+  const [role,setRole] = useState({"isAdmin":false, "roles" : []});
   useEffect(() => {
     if(sessionStorage.getItem("id") != null){
       let id = sessionStorage.getItem("id");
-      dispatch(getSession({id:id})).then((res) => {
+      dispatch(get_session({id:id})).then((res) => {
         if(!res.error){
-          setRole(res.payload.responseData.roles);
+          setRole(res.payload.responseData);
         }
       });
     }
   }, [dispatch]);
   return (
-    <BrowserRouter>
+    <BrowserRouter> 
       <Routes>
         <Route path="/" element={
-           role?.some((rol)=>rol !=="ROLE_USER") === false ?
+           role?.isAdmin === false ?
               <HomeIndex /> :<Page404 path={"/system_itp_shine"}/>
         } />
         <Route path="/product" element={
-           role.some((rol)=>rol !=="ROLE_USER") === false ?
-           <ProductIndex/>:<Page404 path={"/"}/>
+           role?.isAdmin === false?
+           <ProductIndex/>:<Page404 path={"/system_itp_shine"}/>
         }/>
         <Route path="/profile" element={
-            role.some((rol)=>rol ==="ROLE_USER") === true ?
+            role?.isAdmin === false &&  role?.roles.some((rol)=>rol ==="ROLE_USER") === true?
             <ProfileIndex/>:<Page404 path={"/"}/>
         }/>
         <Route path="/service" element={
-            role.some((rol)=>rol !=="ROLE_USER") === false ?
-            <ServiceIndex/>:<Page404 path={"/"}/>
+             role?.isAdmin === false ?
+            <ServiceIndex/>:<Page404 path={"/system_itp_shine"}/>
         }/>
         {/* <Route path="/system_itp_shine" element={
-           role?.some((rol)=>rol !=="ROLE_USER") === true ?
+            role?.isAdmin === true ?
             <AdminIndex/>:<Page404 path={"/"}/>
         }/> */}
         <Route path="/system_itp_shine" element={
             <AdminIndex/>}/>
         <Route path="/checkout" element={
-          role?.some((rol)=>rol !=="ROLE_USER") === null ?
-          <CheckoutIndex/>:<Page404 path={"/"}/>
+          role?.isAdmin === false ?
+          <CheckoutIndex/>:<Page404 path={"/system_itp_shine"}/>
           }/>
+           <Route path="/cart" element={
+            <CartIndex/>}/>
       </Routes>
     </BrowserRouter>
   );

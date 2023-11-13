@@ -1,7 +1,8 @@
 import { createSlice ,isAnyOf} from "@reduxjs/toolkit";
- import { postOrderPro,putOrderPro, getOrderProduct, getOrderProDetail, getOrderProByUser } from "./order_page_thunk";
+ import {get_all_orders , get_order_by_user_id, post_order, put_order} from "./order_page_thunk";
 
 const initialState = {
+    orders:[],
     isLoading:false,
     error:"",
     success:false
@@ -12,38 +13,43 @@ export const OrderProPage = createSlice({
     initialState,
     reducers: {
         offSuccess: (state, action) => {
-          state.success = false
+          state.success = false;
         },
       },
     extraReducers:(builder) =>{
-     builder.addCase( postOrderPro.fulfilled,(state,action)=>{
+    builder.addCase(get_all_orders.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.success = true
+        state.orders = action.payload;
+    })
+    builder.addCase(get_order_by_user_id.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.orders = action.payload;
+  })
+     builder.addCase(post_order.fulfilled,(state,action)=>{
+        state.isLoading = false;
+        state.success = true;
      })
 
      builder.addMatcher(isAnyOf(
-      putOrderPro.fulfilled,
-      getOrderProduct.fulfilled,
-      getOrderProDetail.fulfilled,
-      getOrderProByUser.fulfilled,
+      put_order.fulfilled,
+      get_all_orders.fulfilled,
+      get_order_by_user_id.fulfilled,
       ),(state,action)=>{
       state.isLoading = false;
    })
      builder.addMatcher(isAnyOf(
-      postOrderPro.pending,
-      getOrderProduct.pending,
-      putOrderPro.pending,
-      getOrderProDetail.pending,
-      getOrderProByUser.pending,
+      get_all_orders.pending,
+      get_order_by_user_id.pending,
+      post_order.pending,    
+      put_order.pending,      
       ),(state,action)=>{
       state.isLoading = true;
    })
      builder.addMatcher(isAnyOf(
-      postOrderPro.rejected,
-      getOrderProduct.rejected,
-      putOrderPro.rejected,
-      getOrderProDetail.rejected,
-      getOrderProByUser.rejected,
+      get_all_orders.rejected,
+      get_order_by_user_id.rejected,
+      post_order.rejected,
+      put_order.rejected,   
       ),(state,action)=>{
         state.isLoading = false;
         state.error = action.payload
