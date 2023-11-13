@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AddProduct from './Component/product_add'
 import { useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify'
-import { getProducts, blockProducts } from '../../../redux/Product/product_page_thunk'
+import { get_all_products, block_product } from '../../../redux/Product/product_page_thunk'
 import EditProduct from './Component/product_edit'
 import DeleteProduct from './Component/product_delete'
 
@@ -21,11 +21,11 @@ const ProductPage = () => {
     const [search, setSearch] = useState("");
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getProducts()).then((res) => {
-            setDataListProduct(res.payload.responseData.filter((pro) => pro?.isDelete === false));
-            setDataListSearch(res.payload.responseData.filter((pro) => pro?.isDelete === false));
+        dispatch(get_all_products()).then((res) => {
+            setDataListProduct(res.payload.responseData?.filter((pro) => pro?.isDelete === false));
+            setDataListSearch(res.payload.responseData?.filter((pro) => pro?.isDelete === false));
         });
-    }, [dispatch])
+    }, [createShow, editShow, deleteshow, dispatch])
     useEffect(() => {
         if (search !== null) {
             setDataListSearch(dataListProduct?.filter((pro) => (pro?.proName.toLowerCase()).includes(search.trim().toLowerCase())));
@@ -34,12 +34,7 @@ const ProductPage = () => {
         }
     }, [search, dataListProduct])
 
-    useEffect(() => {
-        dispatch(getProducts()).then((res) => {
-            setDataListProduct(res.payload.responseData.filter((pro) => pro?.isDelete === false));
-            setDataListSearch(res.payload.responseData.filter((pro) => pro?.isDelete === false));
-        });
-    }, [createShow, editShow, deleteshow, dispatch])
+   
 
     const hanldeSearch = (e) => {
         setSearch(e.target.value);
@@ -56,9 +51,9 @@ const ProductPage = () => {
     }
 
     const hanldeStatus = (pro) => {
-        dispatch(blockProducts(pro)).then((res1) => {
+        dispatch(block_product(pro)).then((res1) => {
             if (res1.payload === 200) {
-                dispatch(getProducts()).then((res) => {
+                dispatch(get_all_products()).then((res) => {
                     setDataListProduct(res.payload.responseData.filter((pro) => pro?.isDelete === false));
                     setDataListSearch(res.payload.responseData.filter((pro) => pro?.isDelete === false));
                 });
@@ -80,7 +75,7 @@ const ProductPage = () => {
     const ClickPage = (e) => setPage(e - 1);
 
     let rows = [];
-    for (let i = 1; i < (dataListProduct.length / rowsPerPage) + 1; i++) {
+    for (let i = 1; i < (dataListProduct?.length / rowsPerPage) + 1; i++) {
         if (i - 1 === page) {
             rows.push(<Pagination.Item key={i} active onClick={() => ClickPage(i)}>{i}</Pagination.Item>);
         } else {
@@ -190,12 +185,12 @@ const ProductPage = () => {
                     <ToastContainer />
                 </Row>
                 <Row className='category-bottom'>
-                    {Math.floor(dataListProduct.length / rowsPerPage) !== 0 ?
+                    {Math.floor(dataListProduct?.length / rowsPerPage) !== 0 ?
                         <Col md={{ span: 10, offset: 10 }}>
                             <Pagination>
                                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                                 {rows}
-                                {page === Math.floor(dataListProduct.length / rowsPerPage) ? <Pagination.Next onClick={NextPage} disabled /> : <Pagination.Next onClick={NextPage} />}
+                                {page === Math.floor(dataListProduct?.length / rowsPerPage) ? <Pagination.Next onClick={NextPage} disabled /> : <Pagination.Next onClick={NextPage} />}
                             </Pagination>
                         </Col> : null
                     }

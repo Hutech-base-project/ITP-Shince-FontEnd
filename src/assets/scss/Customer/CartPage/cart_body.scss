@@ -1,0 +1,187 @@
+.shopping-cart {
+    margin: 20px 0px 20px 0px;
+
+    .card-shopping {
+        box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 1rem;
+        border: 1px solid #fd3d9b;
+
+        .cart {
+            background-color: #fff;
+            padding: 4vh 5vh;
+            border-bottom-left-radius: 1rem;
+            border-top-left-radius: 1rem;
+
+            .title {
+                margin-bottom: 5vh;
+
+                b {
+                    font-size: 1.5rem;
+                }
+            }
+
+            .main {
+                margin: 0;
+                padding: 2vh 0;
+                width: 100%;
+
+                .plus{
+                    padding: 0 1vh;
+                    color: black; 
+                    margin-right: 10px;
+                    margin-top: 20px !important;
+                }
+                .plus:hover{
+                    color: red;
+                    text-decoration: none;
+                }
+
+                .minus{
+                    padding: 0 1vh;
+                    color: black; 
+                    margin-left: 10px;
+                }
+                .minus:hover{
+                    color: red;
+                    text-decoration: none;
+                }
+                .border {
+                    color: black; 
+                    text-decoration: none;
+                    width: 20px !important;
+                    text-align: center;
+                }
+
+
+                .close {
+                    margin-left: auto;
+                    font-size: 0.7rem;
+                }
+
+                img {
+                    width: 3.5rem;
+                }
+            }
+            .mess{
+                text-align: center;
+                color: #6c757d;
+            }
+            .back-to-shop {
+                margin-top: 4.5rem;
+                a{
+                    text-decoration: none;
+                    color: #000;
+                }
+            }
+        }
+
+        .summary {
+            background-color: #fd3d9b;
+            border-top-right-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            color: #fff;
+
+            h5 {
+                margin-top: 4vh;
+            }
+            
+            hr {
+                margin-top: 1.25rem;
+            }
+
+            .row{
+                
+                margin-bottom: 10px;
+                .col-title{
+                    padding:0;
+                    margin-left: 12px;
+                }
+                .text-right{
+                    display: flex;
+                    padding: 0;
+                    float: left;
+                }
+            }
+
+            form {
+                padding: 2vh 0;
+
+                select {
+                    border: 1px solid rgba(0, 0, 0, 0.137);
+                    padding: 1.5vh 1vh;
+                    margin-bottom: 4vh;
+                    outline: none;
+                    width: 100%;
+                    background-color: rgb(247, 247, 247);
+                }
+
+                input {
+                    border: 1px solid rgba(0, 0, 0, 0.137);
+                    padding: 1vh;
+                    margin-bottom: 4vh;
+                    outline: none;
+                    width: 100%;
+                    background-color: rgb(247, 247, 247);
+                }
+                
+                input:focus::-webkit-input-placeholder {
+                    color: transparent;
+                }
+
+                #code{
+                    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253) , rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+                    background-repeat: no-repeat;
+                    background-position-x: 95%;
+                    background-position-y: center;
+                }
+            }
+
+            .row-title{
+                border-top: 1px solid #EFEFF4;
+                padding: 2vh 0;
+            }
+
+            .btn{
+                background-color: #000;
+                border-color: #000;
+                color: white;
+                width: 100%;
+                font-size: 0.7rem;
+                margin-top: 4vh;
+                padding: 1vh;
+                border-radius: 0;
+            }
+
+            .btn:focus{
+                box-shadow: none;
+                outline: none;
+                box-shadow: none;
+                color: white;
+                -webkit-box-shadow: none;
+                -webkit-user-select: none;
+                transition: none; 
+            }
+
+            .btn:hover{
+                color: white;
+            }
+        }
+    }
+
+    @media(max-width:767px) {
+        .card {
+            margin: 3vh auto;
+
+            .cart {
+                padding: 4vh;
+                border-bottom-left-radius: unset;
+                border-top-right-radius: 1rem;
+            }
+
+            .summary {
+                border-top-right-radius: unset;
+                border-bottom-left-radius: 1rem;
+            }
+        }
+    }
+}

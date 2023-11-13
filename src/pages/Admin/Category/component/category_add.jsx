@@ -4,7 +4,7 @@ import { CategoriesPageValidate } from '../../../../utils/validate';
 import { selectStatusCate } from '../../../../redux/Category/category_page_selecter';
 import { validate } from 'validate.js';
 import { toast } from 'react-toastify';
-import { getCategories, postCategories} from '../../../../redux/Category/category_page_thunk';
+import { get__all_categories, post_category} from '../../../../redux/Category/category_page_thunk';
 import { Button,Form, Modal, Spinner,} from "react-bootstrap";
 import { useEffect ,useState} from 'react';
 
@@ -25,10 +25,10 @@ const AddCategory = (props)=> {
     const [checkDuplicatePost, setCheckDuplicatePost] = useState(false);
 
     useEffect(() => {
-        dispatch(getCategories()).then((res) => {
-            setDataListCate(res.payload.responseData.filter((cate) => cate?.isDelete === false));
+        dispatch(get__all_categories()).then((res) => {
+            setDataListCate(res.payload.responseData?.filter((cate) => cate?.isDelete === false));
         });
-    }, [dispatch]);
+    }, [dispatch,props]);
 
     useEffect(() => {
         setValidationPost((pre) => ({
@@ -39,7 +39,7 @@ const AddCategory = (props)=> {
             },
         }));
         setCheckDuplicatePost(false);
-    }, [props]);
+    }, [dispatch,props]);
 
     useEffect(() => {
         if (
@@ -103,15 +103,8 @@ const AddCategory = (props)=> {
                     cateName: false,
                 },
             }));
-            dispatch(postCategories(dataPost)).then((res1) => {
+            dispatch(post_category(dataPost)).then((res1) => {
                 if (res1.payload === 201) {
-                    dispatch(getCategories()).then((res2) => {
-                        setDataListCate(res2.payload.responseData);
-                        setDataPost((preState) => ({
-                            ...preState,
-                            cateName: "",
-                        }));
-                    });
                     toast.success('Create category success !', {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 600

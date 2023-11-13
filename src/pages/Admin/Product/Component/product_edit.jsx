@@ -5,8 +5,8 @@ import { ProductPageValidatePut } from '../../../../utils/validate'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { selectListPro, selectStatusPro } from '../../../../redux/Product/product_page_selecter'
-import { putProducts } from '../../../../redux/Product/product_page_thunk'
-import { getCategories } from '../../../../redux/Category/category_page_thunk'
+import { put_product } from '../../../../redux/Product/product_page_thunk'
+import { get__all_categories } from '../../../../redux/Category/category_page_thunk'
 
 function EditProduct(props) {
     const [checkDuplicatePut, setCheckDuplicatePost] = useState(false);
@@ -17,7 +17,7 @@ function EditProduct(props) {
     const dispatch = useDispatch();
     const isLoading = useSelector(selectStatusPro);
     useEffect(() => {
-        dispatch(getCategories()).then((res) => {
+        dispatch(get__all_categories()).then((res) => {
             setDataListCate(res.payload.responseData);
         });
     }, [dispatch])
@@ -57,9 +57,9 @@ function EditProduct(props) {
     };
 
     useEffect(() => {
-        if (dataListProduct.length !== 0) {
+        if (dataListProduct?.length !== 0) {
             if (
-                dataListProduct.responseData.some((pro) => pro.proId !== dataPut?.proId && pro?.proName === dataPut?.proName && pro?.category_id === dataPut?.category_id) === true
+                dataListProduct?.responseData.some((pro) => pro.proId !== dataPut?.proId && pro?.proName === dataPut?.proName && pro?.category_id === dataPut?.category_id) === true
             ) {
                 setCheckDuplicatePost(true);
             } else {
@@ -129,7 +129,7 @@ function EditProduct(props) {
                     category_id: false,
                 },
             }));
-            dispatch(putProducts(dataPut)).then((res1) => {
+            dispatch(put_product(dataPut)).then((res1) => {
                 if (res1.payload === 200) {
                     toast.success('Create product success !', {
                         position: toast.POSITION.TOP_RIGHT,
@@ -167,10 +167,11 @@ function EditProduct(props) {
                             placeholder="Enter Product name"
                             name="proName"
                             onChange={hanldeChangePut}
-                            isInvalid={hasErrorPut("proName")}
+                            isInvalid={hasErrorPut("proName")  || checkDuplicatePut}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {hasErrorPut("proName") ? validationPut.errors.proName?.[0] : null}
+                            {hasErrorPut("proName") ? validationPut.errors.proName?.[0] : null
+                                || checkDuplicatePut === true ? "Porudcut name already exists" : null}
                         </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicProPrice">
@@ -329,7 +330,7 @@ function EditProduct(props) {
                             defaultValue={props.pro.category_id}
                         >
                             <option value={0} >Not selected</option>
-                            {React.Children.toArray(dataListCate.map((item) => {
+                            {React.Children.toArray(dataListCate?.map((item) => {
                                 let id = 0;
                                 if (item.cateIdParent === 0) {
                                     id = item.cateId;

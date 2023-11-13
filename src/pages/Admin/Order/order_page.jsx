@@ -1,6 +1,6 @@
 import React from 'react'
-import "../../../assets/scss/Admin/Order/OrderPage.scss"
-import { Button, Container, Row, Tab, Tabs } from 'react-bootstrap'
+
+import {  Container, Row, Tab, Tabs } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import OrdersProWaiting from './components/orders_pro_waiting'
@@ -9,10 +9,35 @@ import OrdersProCancelled from './components/orders_pro_cancelled'
 
 const OrderPage = () => {
     const [search, setSearch] = useState("");
-
+    const [watiting,setWaiting] = useState(true);
+    const [delivered,setDelivered] = useState(false);
+    const [cancelled,setCancelled] = useState(false);
     const hanldeSearch = (e) => {
         setSearch(e.target.value);
     }
+
+    if( document.getElementById('fill-tab-example-tab-Waiting') !== null){
+        document.getElementById('fill-tab-example-tab-Waiting').onclick = function(){
+            setWaiting(true);
+            setDelivered(false);
+            setCancelled(false);
+        };
+        document.getElementById('fill-tab-example-tab-Delivered').onclick = function(){
+            setWaiting(false);
+            setDelivered(true);
+            setCancelled(false);
+        };
+    
+        document.getElementById('fill-tab-example-tab-Cancelled').onclick = function(){
+            setWaiting(false);
+            setDelivered(false);
+            setCancelled(true);
+        };
+    }
+   
+
+
+
     return (
         <>
             <Container fluid>
@@ -44,14 +69,14 @@ const OrderPage = () => {
                         className="mb-3"
                         fill
                     >
-                        <Tab eventKey="Waiting" title="Waiting">
-                            <OrdersProWaiting search={search} />
+                        <Tab eventKey="Waiting" title="Waiting" >
+                            <OrdersProWaiting search={search} status={watiting}/>
                         </Tab>
-                        <Tab eventKey="Delivered" title="Delivered">
-                            <OrdersProDelivered search={search} />
+                        <Tab eventKey="Delivered" title="Delivered" >
+                            <OrdersProDelivered search={search} status={delivered}/>
                         </Tab>
-                        <Tab eventKey="Cancelled" title="Cancelled">
-                            <OrdersProCancelled search={search} />
+                        <Tab eventKey="Cancelled" title="Cancelled" >
+                            <OrdersProCancelled search={search} status={cancelled}/>
                         </Tab>
                     </Tabs>
                 </Row>

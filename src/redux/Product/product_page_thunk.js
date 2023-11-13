@@ -1,11 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/api';
 
-export const getProducts = createAsyncThunk(
+export const get_all_products = createAsyncThunk(
   'get/product',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await api.get("/api/Product", data)
+      const response = await api.get(`/api/Product`, data)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
+export const get_product_by_id = createAsyncThunk(
+  'get/product',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/api/Product/${data}`)
       return response.data
     } catch (error) {
       return rejectWithValue(error.message);
@@ -13,7 +24,7 @@ export const getProducts = createAsyncThunk(
   }
 )
 
-export const postProduct = createAsyncThunk(
+export const post_product = createAsyncThunk(
   "post/product",
   async (data, { rejectWithValue }) => {
     try {
@@ -45,7 +56,8 @@ export const postProduct = createAsyncThunk(
     }
   }
 );
-export const putProducts = createAsyncThunk(
+
+export const put_product = createAsyncThunk(
   "put/products",
   async (data, { rejectWithValue }) => {
     try {
@@ -104,7 +116,7 @@ export const putProducts = createAsyncThunk(
   }
 );
 
-export const deleteProducts = createAsyncThunk(
+export const delete_product = createAsyncThunk(
   'delete/product',
   async (data, { rejectWithValue }) => {
     try {
@@ -116,7 +128,7 @@ export const deleteProducts = createAsyncThunk(
   }
 );
 
-export const blockProducts = createAsyncThunk(
+export const block_product = createAsyncThunk(
   "block/products",
   async (data, { rejectWithValue }) => {
     try {

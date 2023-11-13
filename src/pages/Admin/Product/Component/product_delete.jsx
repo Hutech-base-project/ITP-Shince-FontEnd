@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { selectStatusPro } from '../../../../redux/Product/product_page_selecter'
-import {  deleteProducts } from '../../../../redux/Product/product_page_thunk'
+import {  delete_product } from '../../../../redux/Product/product_page_thunk'
 function DeleteProduct(props) {
     const dispatch = useDispatch();
     const isLoading = useSelector(selectStatusPro);
     const hanldeDel = () => {
-        dispatch(deleteProducts(props.proid)).then((res1) => {
+        dispatch(delete_product(props.proid)).then((res1) => {
             if (res1.payload === 200) {
                 toast.success('Delete product success !', {
                     position: toast.POSITION.TOP_RIGHT,
@@ -19,6 +19,7 @@ function DeleteProduct(props) {
             } else {
                 toast.error('Delete product fail!\n This product is not locked or still shipping!!!', {
                     position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 600
                 });
                 props.onHide();
             }

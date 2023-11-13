@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Button, Col, Form, Modal, Pagination, Row, Table } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify'
-import { getOrderProDetail, getOrderProduct, putOrderPro } from '../../../../redux/OrderPro/order_page_thunk';
+import { get_all_orders, put_order } from '../../../../redux/OrderPro/order_page_thunk';
 // import "../../../../assets/scss/admin_css/order.scss"
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,11 +19,11 @@ const OrdersProWaiting = (props) => {
     const [rowsPerPage,] = useState(10);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getOrderProduct()).then((res) => {
-            setDataListOrderProduct(res.payload.responseData.filter((ord) => ord.orProStatus !== "Delivered" && ord.orProStatus !== "Cancelled"));
-            setDataListSearch(res.payload.responseData.filter((ord) => ord.orProStatus !== "Delivered" && ord.orProStatus !== "Cancelled"));
+        dispatch(get_all_orders()).then((res) => {
+            setDataListOrderProduct(res.payload.responseData?.filter((ord) => ord.orProStatus !== "Delivered" && ord.orProStatus !== "Cancelled"));
+            setDataListSearch(res.payload.responseData?.filter((ord) => ord.orProStatus !== "Delivered" && ord.orProStatus !== "Cancelled"));
         });
-    }, [dispatch,manageShow]);
+    }, [dispatch,manageShow,props.status]);
 
     useEffect(() => {
         if (props.search !== null) {
@@ -56,7 +56,7 @@ const OrdersProWaiting = (props) => {
     }
 
     let rows = [];
-    for (let i = 1; i < (dataListSearch.length / rowsPerPage) + 1; i++) {
+    for (let i = 1; i < (dataListSearch?.length / rowsPerPage) + 1; i++) {
         if (i - 1 === page) {
             rows.push(<Pagination.Item key={i} active onClick={() => ClickPage(i)}>{i}</Pagination.Item>);
         } else {
@@ -113,12 +113,12 @@ const OrdersProWaiting = (props) => {
                 </Col>
                 <ToastContainer />
                 <Row className='category-bottom'>
-                    {Math.floor(dataListOrderProduct.length / rowsPerPage) !== 0 ?
+                    {Math.floor(dataListOrderProduct?.length / rowsPerPage) !== 0 ?
                         <Col md={{ span: 10, offset: 10 }}>
                             <Pagination>
                                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                                 {rows}
-                                {page === Math.floor(dataListOrderProduct.length / rowsPerPage) ? <Pagination.Next onClick={NextPage} disabled /> : <Pagination.Next onClick={NextPage} />}
+                                {page === Math.floor(dataListOrderProduct?.length / rowsPerPage) ? <Pagination.Next onClick={NextPage} disabled /> : <Pagination.Next onClick={NextPage} />}
                             </Pagination>
                         </Col> : null
                     }
@@ -129,8 +129,6 @@ const OrdersProWaiting = (props) => {
 }
 
 function OrdersDetail(props) {
-    const [dataListOrderProDel, setDataListProDel] = useState([]);
-    const dispatch = useDispatch();
     return (
         <Modal
             {...props}
@@ -142,7 +140,7 @@ function OrdersDetail(props) {
                     Edit Product
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body className="card">
+            <Modal.Body className="card-order">
                 <div className="title">Purchase Reciept</div>
                 <div className="info">
                     <Row>
@@ -173,15 +171,15 @@ function OrdersDetail(props) {
                     </Row>
                 </div>
                 <div className="pricing">
-                    {React.Children.toArray(dataListOrderProDel?.map((data) => {
+                    {React.Children.toArray(props.order.listPro?.map((data) => {
                         return (
                             <>
                                 <Row>
                                     <Col xs={9}>
-                                        <span id="name" >{data.ordProProductName}</span>
+                                        <span id="name" >{data.proProductName}</span>
                                     </Col>
                                     <Col xs={3}>
-                                        <span id="price" style={{ marginRight: 6 }}>{data.ordProProductPrice}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
+                                        <span id="price" style={{ marginRight: 6 }}>{data.proQuantity} x {data.proProductPrice}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
                                     </Col>
                                 </Row>
                             </>
@@ -234,9 +232,9 @@ function OrdersManage(props) {
     }
 
     const hanldePutStatus = () =>{
-        dispatch(putOrderPro(dataPut)).then((res1) => {
-            console.log(res1.payload)
+        dispatch(put_order(dataPut)).then((res1) => {
             if (res1.payload === 200) {
+                dispatch(get_all_orders());
                 toast.success('Update status success !', {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 600
@@ -313,7 +311,7 @@ function OrdersManage(props) {
                     Close
                 </Button>
                 <Button variant="primary" onClick={hanldePutStatus}>
-                    Save Changes
+                    Update
                 </Button>
             </Modal.Footer>
         </Modal>
