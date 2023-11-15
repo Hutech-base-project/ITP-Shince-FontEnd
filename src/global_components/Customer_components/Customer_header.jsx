@@ -6,8 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { validate } from 'validate.js';
 import { LoginPageValidate, RegisterPageValidate } from '../../utils/validate';
 import { check_login, check_register, get_session, login, register } from "../../redux/Auth/auth_page_thunk";
-import { selectError, selectLoading } from '../../redux/Auth/auth_page_selecter';
-import { turnOffError } from '../../redux/Auth/auth_page_reducer';
+import { selectError, selectErrorLogin, selectErrorRegister, selectLoading } from '../../redux/Auth/auth_page_selecter';
 import OTPInput from 'react-otp-input';
 import { generate_otp, validate_otp } from '../../redux/Otp/otp_page_thunk';
 import { selectErrorOtp } from '../../redux/Otp/otp_page_selecter';
@@ -238,6 +237,7 @@ const CustomerHeader = () => {
                                     <Nav.Link href="/">Home</Nav.Link>
                                     <Nav.Link href="/product">Product</Nav.Link>
                                     <Nav.Link href="/service">Service</Nav.Link>
+                                    <Nav.Link href="/booking">Booking</Nav.Link>
                                     <Nav.Link href="#pricing">About us</Nav.Link>
                                     <Nav.Link href="#pricing">Contact</Nav.Link>
                                 </Nav>
@@ -295,13 +295,14 @@ const CustomerHeader = () => {
         const dispatch = useDispatch();
         const navigate = useNavigate();
         const loading = useSelector(selectLoading);
-        const errorLogin = useSelector(selectError);
+        const errorLogin = useSelector(selectErrorLogin);
         const errorOtp = useSelector(selectErrorOtp);
         const [errorLoginCount, setErrorLoginCount] = useState(false);
         const [errorCountOtp, setErrorCountOtp] = useState(false);
         const [timeOtp, setTimeOtp] = useState(300);
         const [checkAccount, setCheckAccount] = useState(false);
         const [openSubmit, setOpenSubmit] = useState(true);
+        const [message, setMessage] = useState("");
         const countRef = useRef(null);
         const [dataLogin, setDataLogin] = useState({
             phoneNumber: "",
@@ -313,9 +314,9 @@ const CustomerHeader = () => {
             isvalid: false,
         });
 
-        useEffect(() => {
-            dispatch(turnOffError())
-        }, [dispatch])
+        // useEffect(() => {
+        //     dispatch(turnOffError())
+        // }, [dispatch])
         useEffect(() => {
             if (otp.length === 5) {
                 setOpenSubmit(false);
@@ -377,6 +378,9 @@ const CustomerHeader = () => {
                                 }
                             });
 
+                        }else{
+                            console.log(res)
+                            setMessage(res.payload);
                         }
                     })
             }
@@ -439,7 +443,7 @@ const CustomerHeader = () => {
                         <Row className='register-form'>
                             {errorLogin === true ? (
                                 <Alert key={'warning'} variant={'warning'}>
-                                    Phone number or password is incorrect!
+                                    {message} !
                                 </Alert>
                             ) : null}
                             {errorLoginCount === true ? (
@@ -554,7 +558,7 @@ const CustomerHeader = () => {
         const [errorResgisterCount, setErrorResgisterCount] = useState(false);
         const [openSubmit, setOpenSubmit] = useState(true);
         const countRef = useRef(null);
-        const errorRegister = useSelector(selectError);
+        const errorRegister = useSelector(selectErrorRegister);
         const [dataRegister, setDataRegister] = useState({
             userName: "",
             password: "",
@@ -567,9 +571,9 @@ const CustomerHeader = () => {
             isvalid: false,
         });
 
-        useEffect(() => {
-            dispatch(turnOffError())
-        }, [dispatch])
+        // useEffect(() => {
+        //     dispatch(turnOffError())
+        // }, [dispatch])
         useEffect(() => {
             if (otp.length === 5) {
                 setOpenSubmit(false);

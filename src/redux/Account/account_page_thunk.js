@@ -119,7 +119,6 @@ export const get_all_user = createAsyncThunk(
     }
   );
   
-
   export const change_password = createAsyncThunk(
     "change/password",
     async (data, { rejectWithValue }) => {
@@ -158,6 +157,34 @@ export const get_all_user = createAsyncThunk(
         formData.append("data_json", JSON.stringify(obj));
         formData.append("file", data.data.usImage);  
         const response = await api.put(`/api/Users/${data.data.usId}`, formData, config);     
+        return response.status;
+      } catch (err) {
+        return rejectWithValue(err.message);
+      }
+    }
+  );
+
+  export const block_user = createAsyncThunk(
+    "block/user",
+    async (data, { rejectWithValue }) => {
+      try {
+        let formData = new FormData();
+        const dataEdit = {
+          ...data,
+          listRole: [],
+          isBlock: data.isBlock === true ? false : true,
+        };
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+        formData.append("data_json", JSON.stringify(dataEdit));
+        const response = await api.put(
+          `/api/Users/${data.usId}`,
+          formData,
+          config
+        );
         return response.status;
       } catch (err) {
         return rejectWithValue(err.message);

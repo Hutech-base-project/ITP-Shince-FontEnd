@@ -43,7 +43,7 @@ const HomeBody = () => {
                                     <div className="content">
                                         <p>Flash Sale</p>
                                         <h3>Mid Season <br /> Up to <span>40%</span> Off</h3>
-                                        <a href="!#">Discover Now</a>
+                                        <a hrefLang="!#">Discover Now</a>
                                     </div>
                                 </div>
                             </Col>
@@ -80,11 +80,11 @@ const HomeBody = () => {
                                                                 <div className="button-head">
                                                                     <div className="product-action">
                                                                         <a data-toggle="modal" data-target="!#exampleModal" title="Quick View" href="!#"><FontAwesomeIcon icon={['fa', 'eye']} /><span>Quick Shop</span></a>
-                                                                        <a title="Wishlist" href="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
-                                                                        <a title="Compare" href="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
+                                                                        <a title="Wishlist" hrefLang="!#"><FontAwesomeIcon icon={['fa', 'heart']} /><span>Add to Wishlist</span></a>
+                                                                        <a title="Compare" hrefLang="!#"><FontAwesomeIcon icon={['fa', 'chart-simple']} /><span>Add to Compare</span></a>
                                                                     </div>
                                                                     <div className="product-action-2">
-                                                                        <a title="Add to cart" href="!#" />Add to cart<a />
+                                                                        <a title="Add to cart" hrefLang="!#" />Add to cart<a />
                                                                     </div>
                                                                 </div>
                                                             </div>

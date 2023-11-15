@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, Modal, Pagination, Row, } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { get_all_user, get_user_by_id } from '../../../../redux/Account/account_page_thunk'
+import { block_user, get_all_user, get_user_by_id } from '../../../../redux/Account/account_page_thunk'
 import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 function User(props) {
     const dispatch = useDispatch();
@@ -33,6 +34,28 @@ function User(props) {
         setDetailsShow(true);
         setDataUser(data);
     }
+
+    const hanldeStatus = (user) => {
+        dispatch(block_user(user)).then((res1) => {
+            console.log(res1.payload)
+            if (res1.payload === 200) {
+                dispatch(get_all_user()).then((res) => {
+                    setDataListUser(res.payload.responseData?.filter((user) => user?.isDelete === false && user?.isAdmin === false));
+                    setDataListSearch(res.payload.responseData?.filter((user) => user?.isDelete === false && user?.isAdmin === false));
+                });
+                toast.success('Block user success !', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 600
+                });
+            } else {
+                toast.error('Block user fail !', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 600
+                });
+            }
+        });
+    }
+
     const NextPage = () => setPage(page + 1);
     const PrevPage = () => setPage(page - 1);
     const ClickPage = (e) => setPage(e - 1);
@@ -63,6 +86,7 @@ function User(props) {
                                     <th>User Name</th>
                                     <th>Email</th>
                                     <th>Note</th>
+                                    <th>Block</th>
                                     <th>Function</th>
                                 </tr>
                             </thead>
@@ -74,6 +98,9 @@ function User(props) {
                                             <td>{data.usUserName}</td>
                                             <td>{data.usEmailNo}</td>
                                             <td>{data.usNote}</td>
+                                            <td>{
+                                                data.isBlock === true ? <Button variant="success" onClick={() => hanldeStatus(data)}>On</Button> : <Button variant="danger" onClick={() => hanldeStatus(data)}>Off</Button>
+                                            }</td>
                                             <td>
                                                 <Button className='btn-action' variant="primary" onClick={() => hanldeClickDetails(data)}>Manage</Button>
                                             </td>

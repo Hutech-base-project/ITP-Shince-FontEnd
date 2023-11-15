@@ -35,7 +35,7 @@ export const check_login = createAsyncThunk(
             const response_auth = await api.post('/auth/checkLogin', data.dataLogin);
             return response_auth.data;
         }catch (err){
-            return rejectWithValue(err.message); 
+            return rejectWithValue(err.response.data.responseMessage); 
         }    
     }
 )

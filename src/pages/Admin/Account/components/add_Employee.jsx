@@ -17,7 +17,7 @@ const AddEmployee = (props) => {
     const [checkPhoneNumber, setCheckPhoneNumber] = useState(false);
     const [checkRole, setCheckRole] = useState(false);
     const [dataListUser, setDataListUser] = useState([]);
-    const [liRole, setLiRole] = useState(["ROLE_USER"]);
+    const [liRole, setLiRole] = useState([]);
     const [dataPost, setDataPost] = useState({
         usUserName: "",
         usPassword: "",
@@ -120,12 +120,16 @@ const AddEmployee = (props) => {
                 usImage: true,
             },
         }));
+        
+        let ckRole = false;
         if(liRole.length === 0){
+            ckRole = true;
             setCheckRole(true);
         }else{
+            ckRole = false;
             setCheckRole(false);
         }
-        if (validationPost.isvalid === true && checkPhoneNumber === false && checkRole  === false) {
+        if (validationPost.isvalid === true && checkPhoneNumber === false && ckRole  === false) {
             dispatch(post_user({data:dataPost,listRole:liRole})).then((res1) => {
                 if (res1.payload === 201) {
                     toast.success('Add Employee success !', {

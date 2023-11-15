@@ -7,8 +7,14 @@ import "./fontawesome.js";
 import 'react-toastify/dist/ReactToastify.css';
 import "./assets/scss/Admin/Admin.scss";
 import './assets/scss/Customer/Header_customer.scss';
-import './assets/scss/Customer/CartPage/cart_body.scss'
-import './assets/scss/Admin/Order/OrderPage.scss'
+import './assets/scss/Customer/CartPage/cart_body.scss';
+import './assets/scss/Admin/Order/OrderPage.scss';
+import './assets/scss/Customer/BookingPage/booking_employee.scss';
+import './assets/scss/Customer/BookingPage/booking_page.scss';
+import './assets/scss/Customer/BookingPage/booking_phone.scss';
+import './assets/scss/Customer/BookingPage/booking_services.scss';
+import './assets/scss/Customer/BookingPage/booking_time.scss';
+import './assets/scss/Customer/Profile/ProfileVoucher.scss';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import HomeIndex from "./pages/Customer/HomePage/Home_index";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -22,6 +28,7 @@ import { useEffect, useState } from "react";
 import {get_session } from "./redux/Auth/auth_page_thunk.js";
 import Page404 from './pages/Error/404.jsx';
 import CartIndex from "./pages/Customer/CartPage/cart_index.jsx";
+import BookingIndex from "./pages/Customer/BookingPage/booking_index.jsx";
 
 
 function App() {
@@ -67,8 +74,8 @@ function App() {
           role?.isAdmin === false ?
           <CheckoutIndex/>:<Page404 path={"/system_itp_shine"}/>
           }/>
-           <Route path="/cart" element={
-            <CartIndex/>}/>
+           <Route path="/cart" element={<CartIndex/>}/>
+           <Route path="/booking" element={<BookingIndex/>}/>
       </Routes>
     </BrowserRouter>
   );
