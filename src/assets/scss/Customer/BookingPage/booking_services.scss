@@ -1,0 +1,38 @@
+.div_services{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10%;
+}
+.div_services_booking{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10%;
+}
+.div_service{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5%;
+}
+.div_service_booking{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 5%;
+}
+.btn-add-service{
+    border-radius: 30px;
+    border: 1px solid #fd3d9b;
+    color: #fd3d9b;
+    background-color: white;
+    &:hover{
+        scale: 1.1;
+    }
+}
+.btn-exist-service{
+    border-radius: 30px;
+    border: 1px solid #bbbbbb;
+    color: #bbbbbb;
+    background-color: white;
+}

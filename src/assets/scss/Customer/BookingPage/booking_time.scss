@@ -1,0 +1,32 @@
+.time{
+
+    .Mui-selected{
+        background-color: #fd3d9b !important;
+        color: #ffff !important;
+    }
+
+    .btn-time-disabled{
+        margin-top: 20px;
+    }
+
+    .btn-time{
+        margin-top: 20px;
+        border: 1px solid #fd3d9b;
+        color: #fd3d9b;
+
+        
+    }
+
+    .btn-time:hover{
+        background-color: #fd3d9b;
+        color: #ffff;
+        border: 1px solid #fd3d9b;
+    }
+
+    .active{
+        background-color: #fd3d9b;
+        color: #ffff;
+        border: 1px solid #fd3d9b;
+    }
+    
+}

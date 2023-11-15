@@ -5,7 +5,8 @@ import {login,register,check_login,check_register,get_session} from "./auth_page
 const initialState = {
     isLoading: false,
     error: false,
-    alertSuccess: false,
+    loginError: false,
+    registerError: false,
 };
 
 export const AuthPage = createSlice({
@@ -16,30 +17,23 @@ export const AuthPage = createSlice({
             state.user = null;
            sessionStorage.removeItem("id")     
         },
-        turnOffRegisterSuccess: (state, ) => {
-            state.alertSuccess = false;
-        },
-        turnOffError: (state, ) => {
-            state.error = false;
-        },
     },
     extraReducers: (builder) => {
-        builder.addCase(login.rejected, (state,action ) => {
+        builder.addCase(login.rejected,check_login.rejected, (state,action ) => {
             state.isLoading = false;
-            state.error = true;
-            state.auth  = state.payload;
+            state.loginError = true;
         });
-        builder.addCase(register.rejected ,check_login.rejected, (state,)=> {
+        builder.addCase(register.rejected, (state,)=> {
             state.isLoading = false;
-            state.error = true;
+            state.registerError = true;
         });       
         builder.addCase(check_login.rejected, (state,)=> {
             state.isLoading = false;
-            state.error = true;
+            state.loginError = true;
         });
         builder.addCase(check_register.rejected, (state,)=> {
             state.isLoading = false;
-            state.error = true;
+            state.registerError = true;
         });
         builder.addCase(get_session.rejected, (state,action ) => {
             state.isLoading = false;
@@ -52,21 +46,21 @@ export const AuthPage = createSlice({
             (state, action) => {
                 state.isLoading = false;
                 state.auth = action.payload;
-                state.error = false;
+                state.loginError = false;
             }
         );
         builder.addMatcher(
             isAnyOf(register.fulfilled),
             (state,) => {
                 state.isLoading = false;
-                state.error = false;
+                state.registerError = false;
             }
         );
         builder.addMatcher(
             isAnyOf(check_login.fulfilled),
             (state,) => {
                 state.isLoading = false;
-                state.error = false;
+                state.loginError = false;
             }
         );
 
@@ -74,7 +68,7 @@ export const AuthPage = createSlice({
             isAnyOf(check_register.fulfilled),
             (state,) => {
                 state.isLoading = false;
-                state.error = false;
+                state.registerError = false;
             }
         );
         builder.addMatcher(
@@ -100,7 +94,7 @@ export const AuthPage = createSlice({
     },
 });
 
-export const { logout, turnOffRegisterSuccess, turnOffError} =
+export const { logout} =
 AuthPage.actions;
 
 export default AuthPage.reducer;
