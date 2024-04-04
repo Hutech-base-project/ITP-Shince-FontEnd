@@ -1,8 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../../../assets/scss/Customer/Profile/ProfileVoucher.scss'
-import { Card, Col, Row } from 'react-bootstrap'
+import { Button, Col, Row } from 'react-bootstrap'
+import { useDispatch } from 'react-redux';
+import { get_session } from '../../../../redux/Auth/auth_page_thunk';
+import { get__vouchers_by_user_id } from '../../../../redux/Voucher/voucher_page_thunk';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ProfileVoucher = () => {
+    const dispatch = useDispatch();
+    const [listVoucher, setListVoucher] = useState([]);
+    const [session,setSession] = useState(sessionStorage.getItem("voucher-code"));
+
+    useEffect(() => {
+        let id = sessionStorage.getItem("id");
+        dispatch(get_session(id)).then((res) => {
+            if (!res.error) {
+                let userid = res.payload.responseData.id;
+                dispatch(get__vouchers_by_user_id(userid)).then((res1) => {
+                    if (!res.error) {
+                        setListVoucher(res1.payload?.responseData)
+                    }
+                })
+            }
+        });
+    }, [dispatch])
+
+    
     return (
         <>
             <div className='voucher-body'>
@@ -17,50 +40,34 @@ const ProfileVoucher = () => {
                     </Row>
                     <hr />
                     <Row>
-
-                        <Col sx={12} md={'auto'} sm={'auto'}>
-                            <Col className='voucher-grid2'>
-                                <div className="voucher-image">
-                                    <div className='voucher-image-item'>
-                                        <img className="pic-1" src={require("../../../../assets/images/ITPShince-logos_white.png")} alt='pic-1'
-                                            style={{
-                                                backgroundColor: "#F7941D",
-                                                color: "white",
-                                                padding: 6,
-                                                cursor: "pointer",
-                                                height: 300,
-                                                width: 250,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="product-content">
-                                    <h3 className="title">Discount 15%</h3>
-                                    <p className="condition">when purchasing products over $50</p>
-                                </div>
-                            </Col>
-                        </Col>
-                        <Col sx={12} md={'auto'} sm={'auto'}>
-                            <Col className='voucher-grid2'>
-                                <div className="voucher-image">
-                                    <div className='voucher-image-item'>
-                                        <img className="pic-1" src={require("../../../../assets/images/ITPShince-logos_white.png")} alt='pic-1'
-                                            style={{
-                                                backgroundColor: "#F7941D",
-                                                color: "white",
-                                                padding: 6,
-                                                height: 300,
-                                                width: 250,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="product-content">
-                                    <h3 className="title">Discount 15%</h3>
-                                    <p className="condition">when purchasing products over $50</p>
-                                </div>
-                            </Col>
-                        </Col>
+                        {listVoucher?.map((data) => {
+                            return (
+                                <Col sx={12} md={'auto'} sm={'auto'} key={data.voId}>
+                                    <Col className='voucher-grid2'>
+                                        <div className="product-content">
+                                            <div className="top">
+                                                <h3 className="title">{data.voName}</h3>
+                                            </div>
+                                            <div className="bottom">
+                                            <p className="condition">Code: {data.voId}</p>
+                                            {session !== data.voId?
+                                                <Button className="btnAdd" variant="success" onClick={()=>{
+                                                    sessionStorage.setItem('voucher-code',data.voId)
+                                                    setSession(data.voId)
+                                                }}>Use</Button>
+                                                :
+                                                <Button className="btnAdd" variant="success" onClick={()=>{
+                                                    sessionStorage.removeItem('voucher-code')
+                                                    setSession(null)
+                                                }}><FontAwesomeIcon icon={['fa', 'check']} size='lg' /></Button>
+                                            }
+                                            
+                                            </div>
+                                        </div>
+                                    </Col>
+                                </Col>
+                            )
+                        })}
                     </Row>
                 </section>
             </div>

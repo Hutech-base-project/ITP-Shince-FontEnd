@@ -2,7 +2,7 @@ import { createSlice, isAnyOf } from "@reduxjs/toolkit"
 import { get__all_categories, post_category, put_category, delete_category } from "./category_page_thunk"
 
 const initialState = {
-    categories: [],
+    listCategories: [],
     isLoading: false,
     error: ""
 }
@@ -16,7 +16,7 @@ const CategoriesPage = createSlice({
     extraReducers: (builder) => {
         builder.addCase(get__all_categories.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.categories = action.payload
+            state.listCategories = action.payload
         })
         builder.addMatcher(
             isAnyOf(

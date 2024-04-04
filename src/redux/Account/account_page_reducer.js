@@ -1,9 +1,9 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
-import { change_password, get_all_user, get_user_by_id, post_user, put_user, update_password } from "./account_page_thunk";
+import { change_password, get_all_employees, get_all_user, get_user_by_id, post_user, put_user, update_password } from "./account_page_thunk";
 
 
 const initialState = {
-    Account: null,
+    user: null,
     listUser:[],
     isLoading: false,
     error: false,
@@ -24,8 +24,14 @@ export const AccountPage = createSlice({
             state.listUser = action.payload;
             state.error = false;
           });
+          builder.addCase(get_user_by_id.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.user = action.payload;
+            state.error = false;
+          });
           builder.addMatcher(
             isAnyOf(
+              get_all_employees.rejected,
               get_user_by_id.rejected,
               get_all_user.rejected,
               post_user.rejected,
@@ -37,15 +43,8 @@ export const AccountPage = createSlice({
             }
           );
           builder.addMatcher(
-            isAnyOf(get_user_by_id.fulfilled),
-            (state, action) => {
-              state.isLoading = false;
-              state.user = action.payload;
-              state.error = false;
-            }
-          );
-          builder.addMatcher(
             isAnyOf(
+                get_all_employees.fulfilled,
                 post_user.fulfilled,
                 update_password.fulfilled,
                 change_password.fulfilled,
@@ -58,6 +57,7 @@ export const AccountPage = createSlice({
           );
           builder.addMatcher(
             isAnyOf(
+              get_all_employees.pending,
               get_user_by_id.pending,
               get_all_user.pending,
               post_user.pending,

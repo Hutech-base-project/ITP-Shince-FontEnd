@@ -2,20 +2,29 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIdActiveTime, selectTime } from '../../../../redux/Booking/booking_page_selecter';
+import { selectDate, selectIdActiveTime, selectTime } from '../../../../redux/Booking/booking_page_selecter';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { Alert, Button, Col, Row } from 'react-bootstrap';
+import { Alert, Button, Col,Row } from 'react-bootstrap';
 import momentTimezone from 'moment-timezone'
 import moment from 'moment'
-import { addDate, addIdTimeActive, addTime, clearTime } from '../../../../redux/Booking/booking_page_reducer';
+import { addDate, addEmployye, addIdTimeActive, addTime, clearEmployye, clearTime } from '../../../../redux/Booking/booking_page_reducer';
 import dayjs from 'dayjs';
+import { Avatar, Box, FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
+import { get_booking_by_emloyee } from '../../../../redux/Booking/booking_page_thunk';
 
 const BookingTime = (props) => {
-    const [dateNow] = useState(momentTimezone().utc().tz("Asia/Ho_Chi_Minh"));
+    const [dateNow] = useState(momentTimezone().utc().tz("Asia/Saigon"));
     const [timeNow] = useState(moment(new Date(dateNow)).format("HH:mm"));
+    const [bookingEmp, setBookingEmp] = useState([]);
     const idActive = useSelector(selectIdActiveTime);
-    const timeSelect = useSelector(selectTime)
+    const timeSelect = useSelector(selectTime);
+    const dateSelect = useSelector(selectDate);
+    // const [checkDate, setCheckDate] = useState(moment(new Date(dateNow)).format("YYYY-MM-DD"));
+
+    const [selectEmp, setSelectEmp] = useState('');
+
+
     const dispatch = useDispatch()
     const timeList = [
         {
@@ -126,23 +135,28 @@ const BookingTime = (props) => {
     ]
 
     useEffect(() => {
-        dispatch(addDate(moment(new Date(dateNow)).format("YYYY-MM-DD")));
-    }, [dispatch, dateNow])
+        if (selectEmp !== '') {
+            dispatch(get_booking_by_emloyee(selectEmp)).then((res) => {
+                setBookingEmp(res.payload.responseData);
+            });
+        }
+        if(dateSelect === ''){
+            dispatch(addDate(moment(new Date(dateNow)).format("YYYY-MM-DD")));
+        }      
+    }, [dispatch, dateNow, selectEmp,dateSelect])
     const _handle_date = (e) => {
         dispatch(addDate(e.format("YYYY-MM-DD")));
     }
 
-    const _handle_time = (e, id) => {
-        if (idActive !== "") {
-            document.getElementById('btn-time-' + idActive).classList.remove('active');
+    const handleChange = (event) => {
+        if (event.target.value !== "") {
+            dispatch(addEmployye(event.target.value))
+        } else {
+            dispatch(clearEmployye())
         }
-        if (timeSelect !== "") {
-            dispatch(clearTime(e.target.value));
-        }
-        document.getElementById('btn-time-' + id).classList.add('active');
-        dispatch(addTime(e.target.value));
-        dispatch(addIdTimeActive(id));
-    }
+        setSelectEmp(event.target.value);
+    };
+  
     return (
         <>
             <Row className='time'>
@@ -160,18 +174,70 @@ const BookingTime = (props) => {
                     <Row>
                         {timeList.map((time, index) => (
                             <Col md={2} key={index}>
-                                {timeNow > moment(new Date(time.time.getTime())).format("HH:mm") ?
-                                    <Button variant="outline-secondary btn-time-disabled" disabled>{moment(new Date(time.time.getTime())).format("HH:mm")}</Button>
+                                {timeNow > moment(new Date(time.time.getTime())).format("HH:mm") && dateSelect === moment(new Date(dateNow)).format("YYYY-MM-DD") ?
+                                    <Button variant="outline-secondary btn-time-disabled" disabled id={'btn-time-' + time.id}>{moment(new Date(time.time.getTime())).format("HH:mm")}</Button>
                                     :
-                                    <Button variant="outline-primary btn-time" id={'btn-time-' + time.id}
-                                        onClick={(e) => _handle_time(e, time.id)}
-                                        value={moment(new Date(time.time.getTime())).format("HH:mm")}
-                                    >
-                                        {moment(new Date(time.time.getTime())).format("HH:mm")}
-                                    </Button>
+                                    bookingEmp?.some((bo) => bo.boStartTime === (`${dateSelect}T${moment(new Date(time.time.getTime())).format("HH:mm")}:00Z`)) === true ?
+                                        <Button variant="outline-secondary btn-time-disabled" disabled id={'btn-time-' + time.id}>{moment(new Date(time.time.getTime())).format("HH:mm")}</Button>
+                                        :
+                                        <Button variant="outline-primary btn-time" id={'btn-time-' + time.id}
+                                            onClick={(e) => {
+                                                if (idActive !== "" && document.getElementById('btn-time-' + idActive).disabled === false) {
+                                                    document.getElementById('btn-time-' + idActive).classList.remove('active');
+                                                }
+                                                if (timeSelect !== "") {
+                                                    dispatch(clearTime(e.target.value));
+                                                }
+                                                document.getElementById('btn-time-' + time.id).classList.add('active');
+                                                dispatch(addTime(e.target.value));
+                                                dispatch(addIdTimeActive(time.id));
+                                            }}
+                                            value={moment(new Date(time.time.getTime())).format("HH:mm")}
+                                        >
+                                            {moment(new Date(time.time.getTime())).format("HH:mm")}
+                                        </Button>
                                 }
                             </Col>
                         ))}
+                    </Row>
+                    <Row className="select-stylist">
+                        <Box sx={{ minWidth: 120 }}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Select stylist (* optional)</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={selectEmp}
+                                    label="Select stylist (* optional)"
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value="" >
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={2} style={{ alignItems: 'center', display: 'flex' }}>
+                                                <Avatar alt="Remy Sharp" src='' style={{ marginRight: 10 }} />
+                                            </Grid>
+                                            <Grid item xs={4} style={{ alignItems: 'center', display: 'flex' }}>
+                                                Salon automatically selects stylists
+                                            </Grid>
+                                        </Grid>
+                                    </MenuItem>
+                                    {props.data?.map((emp) => {
+                                        return (
+                                            <MenuItem value={emp.usId} key={emp.usId}>
+                                                <Grid container spacing={2}>
+                                                    <Grid item xs={2} style={{ alignItems: 'center', display: 'flex' }}>
+                                                        <Avatar alt="Remy Sharp" src={emp.usImage} style={{ marginRight: 10 }} />
+                                                    </Grid>
+                                                    <Grid item xs={4} style={{ alignItems: 'center', display: 'flex' }}>
+                                                        {emp.usUserName}
+                                                    </Grid>
+                                                </Grid>
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </Box>
                     </Row>
                 </Col>
             </Row>
@@ -183,5 +249,6 @@ const BookingTime = (props) => {
         </>
     )
 }
+
 
 export default BookingTime

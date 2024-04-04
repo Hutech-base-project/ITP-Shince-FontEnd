@@ -3,7 +3,7 @@ const validPasswordUser = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 const validName = /^([a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i
 const validPhone = /((^(\+84|84|0|0084){1})(3|5|7|8|9))+([0-9]{8})$/i
 const valiDob = /^[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}$/i
-export const UserPage = {
+export const UserPageValidate = {
     usUserName: {
         presence: {
             allowEmpty: false,
@@ -16,16 +16,11 @@ export const UserPage = {
         },
     },
     usDob: {
-        presence: {
-            allowEmpty: false,
-            message: "^Date of birth cannot be empty",
-        },
         format: {
             pattern: valiDob,
             flags: "i",
             message: '^Format is incorrect',
         },
-
     },
     usPhoneNo: {
         presence: {
@@ -42,6 +37,11 @@ export const UserPage = {
             message: "^Phone number must have 10 digits",
         },
 
+    },
+    usEmailNo: {
+        email: {
+            message: "^Invalid email format (xxx@xx.xxx)",
+        },
     },
 };
 export const OrderPage = {
@@ -86,7 +86,7 @@ export const OrderPage = {
         },
     },
 }
-export const BookingPagevalidate = {
+export const BookingPageValidate = {
     phone: {  
         presence: {
             allowEmpty: false,
@@ -290,11 +290,18 @@ export const ProductPageValidatePost = {
         numericality: {
             notInteger: true,
             message: "^Price does not include characters or letters",
-
         },
-
-
-
+    },
+    proQuantity:{
+        presence: {
+            allowEmpty: false,
+            message: "^Product quantity cannot be empty",
+        },
+        numericality: {
+            greaterThan: 0,
+            lessThanOrEqualTo: 1000,
+            message: "^Product quantity greater than 0 and less than 1.000",
+        },
     },
     featureImgPath: {
         presence: {
@@ -383,9 +390,17 @@ export const ProductPageValidatePut = {
             message: "^Price does not include characters or letters",
 
         },
-
-
-
+    },
+    proQuantity:{
+        presence: {
+            allowEmpty: false,
+            message: "^Product quantity cannot be empty",
+        },
+        numericality: {
+            greaterThan: 0,
+            lessThanOrEqualTo: 1000,
+            message: "^Product quantity greater than 0 and less than 1.000",
+        },
     },
     category_id:{
         presence: {
@@ -394,6 +409,7 @@ export const ProductPageValidatePut = {
         },
     }
 };
+
 export const ServicePageValidatePost = {
     seName: {
         presence: {
@@ -512,7 +528,100 @@ export const CategoriesPageValidate = {
         },
     },
 
-} 
+};
+
+export const VoucherPageValidatePut = {
+    voName: {
+        presence: {
+            allowEmpty: false,
+            message: "^Voucher name cannot be empty",
+        },
+        length: {
+            minimum: 5,
+            maximum: 50,
+            message: "^Voucher name should not be too short or too long",
+        },
+    },
+    voDescription: {
+        presence: {
+            allowEmpty: false,
+            message: "^Description cannot be empty",
+        },
+        length: {
+            minimum:10,
+            message: "^Description should not be too short",
+        }
+
+    },
+    voCount: {
+        presence: {
+            allowEmpty: false,
+            message: "^Count cannot be empty",
+        },
+        numericality: {
+            greaterThan: 1,
+            lessThanOrEqualTo: 1000,
+            message: "^Count greater than 1 and less than 1.000",
+        },
+    },
+    voPrice: {
+        presence: {
+            allowEmpty: false,
+            message: "^Price cannot be empty",
+        },
+        numericality: {
+            greaterThan: 1,
+            lessThanOrEqualTo: 1000000,
+            message: "^Price greater than 0 and less than 1.000.000",
+        },            
+    }
+};
+
+export const VoucherPageValidatePost = {
+    voName: {
+        presence: {
+            allowEmpty: false,
+            message: "^Product name cannot be empty",
+        },
+        length: {
+            minimum: 5,
+            maximum: 50,
+            message: "^Product name should not be too short or too long",
+        },
+    },
+    voDescription: {
+        presence: {
+            allowEmpty: false,
+            message: "^Content cannot be empty",
+        },
+        length: {
+            minimum: 10,
+            message: "^Content should not be too short",
+        }
+    },
+    voCount: {
+        presence: {
+            allowEmpty: false,
+            message: "^Count cannot be empty",
+        },
+        numericality: {
+            greaterThan: 1,
+            lessThanOrEqualTo: 1000,
+            message: "^Count greater than 1 and less than 1.000",
+        },
+    },
+    voPrice: {
+        presence: {
+            allowEmpty: false,
+            message: "^Price cannot be empty",
+        },
+        numericality: {
+            greaterThan: 1,
+            lessThanOrEqualTo: 1000000,
+            message: "^Price greater than 0 and less than 1.000.000",
+        },            
+    }
+};
 
 export const AccountPageValidate = {
     usUserName: {

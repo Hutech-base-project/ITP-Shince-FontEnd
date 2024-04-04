@@ -7,8 +7,8 @@ export const get_all_products = createAsyncThunk(
     try {
       const response = await api.get(`/api/Product`, data)
       return response.data
-    } catch (error) {
-      return rejectWithValue(error.message);
+    } catch (err) {
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 )
@@ -18,8 +18,8 @@ export const get_product_by_id = createAsyncThunk(
     try {
       const response = await api.get(`/api/Product/${data}`)
       return response.data
-    } catch (error) {
-      return rejectWithValue(error.message);
+    } catch (err) {
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 )
@@ -35,6 +35,7 @@ export const post_product = createAsyncThunk(
         proContent: data.proContent,
         proName: data.proName,
         proPrice: data.proPrice,
+        proQuantity:data.proQuantity,
         proTurnOn: data.proTurnOn,
         isDelete: data.isDelete
       };
@@ -52,7 +53,7 @@ export const post_product = createAsyncThunk(
       const response = await api.post("/api/Product", formData, config)
       return response.status
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -88,6 +89,7 @@ export const put_product = createAsyncThunk(
         proContent:data.proContent,
         proName: data.proName,
         proPrice: data.proPrice,
+        proQuantity:data.proQuantity,
         proTurnOn: data.proTurnOn,
         createdAt: data.createdAt,
         isDelete:data.isDelete,
@@ -111,7 +113,7 @@ export const put_product = createAsyncThunk(
       );
       return response.status;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -123,7 +125,7 @@ export const delete_product = createAsyncThunk(
       const response = await api.delete(`/api/Product/${data}`)
       return response.status
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -158,7 +160,7 @@ export const block_product = createAsyncThunk(
       );
       return response.status;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );

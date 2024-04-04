@@ -6,9 +6,10 @@ import { ToastContainer } from 'react-toastify'
 import Employee from './components/employee_tab'
 import User from './components/user_tab'
 
-const AccountPage = () => {
+const AccountPage = (props) => {
     const [search, setSearch] = useState("");
     const hanldeSearch = (e) => setSearch(e.target.value);
+   
     return (
         <>
             <Container fluid>
@@ -20,7 +21,7 @@ const AccountPage = () => {
                         <input
                             type="text"
                             className="form-control search bg-light border-0 small"
-                            placeholder="search by order_id"
+                            placeholder="search by user name"
                             aria-label="Search"
                             aria-describedby="basic-addon2"
                             onChange={hanldeSearch}
@@ -41,10 +42,10 @@ const AccountPage = () => {
                         fill
                     >
                         <Tab eventKey="Customer" title="Customer">
-                            <User search={search}/>
+                            <User search={search} />
                         </Tab>
                         <Tab eventKey="Employee" title="Employee">
-                            <Employee search={search}/>
+                            <Employee search={search} dodertor={props.dodertor} />
                         </Tab>
                     </Tabs>
                 </Row>

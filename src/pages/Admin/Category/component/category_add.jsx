@@ -1,15 +1,15 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { CategoriesPageValidate } from '../../../../utils/validate';
-import { selectStatusCate } from '../../../../redux/Category/category_page_selecter';
+import { selectListCate, selectStatusCate } from '../../../../redux/Category/category_page_selecter';
 import { validate } from 'validate.js';
 import { toast } from 'react-toastify';
-import { get__all_categories, post_category} from '../../../../redux/Category/category_page_thunk';
+import { post_category} from '../../../../redux/Category/category_page_thunk';
 import { Button,Form, Modal, Spinner,} from "react-bootstrap";
 import { useEffect ,useState} from 'react';
 
 const AddCategory = (props)=> {
-    const [dataListCate, setDataListCate] = useState([]);
+    const dataListCate = useSelector(selectListCate);
     const isLoading = useSelector(selectStatusCate);
     const dispatch = useDispatch();
     const [dataPost, setDataPost] = useState({
@@ -25,12 +25,6 @@ const AddCategory = (props)=> {
     const [checkDuplicatePost, setCheckDuplicatePost] = useState(false);
 
     useEffect(() => {
-        dispatch(get__all_categories()).then((res) => {
-            setDataListCate(res.payload.responseData?.filter((cate) => cate?.isDelete === false));
-        });
-    }, [dispatch,props]);
-
-    useEffect(() => {
         setValidationPost((pre) => ({
             ...pre,
             touched: {
@@ -42,13 +36,15 @@ const AddCategory = (props)=> {
     }, [dispatch,props]);
 
     useEffect(() => {
-        if (
-            dataListCate?.some((cate) => cate?.cateName === dataPost?.cateName.trim() && cate?.cateIdParent === dataPost?.cateIdParent && cate?.isDelete === false) === true ||
-            dataListCate?.some((cate) => cate?.cateName === dataPost?.cateName && cate?.cateIdParent === 0 && cate?.isDelete === false) === true
-        ) {
-            setCheckDuplicatePost(true);
-        } else {
-            setCheckDuplicatePost(false);
+        if(dataListCate.responseData?.length > 0){
+            if (
+                dataListCate.responseData?.some((cate) => cate?.cateName === dataPost.cateName?.trim() && cate?.cateIdParent === dataPost?.cateIdParent) === true ||
+                dataListCate.responseData?.some((cate) => cate?.cateName === dataPost?.cateName && cate?.cateIdParent === 0) === true
+            ) {
+                setCheckDuplicatePost(true);
+            } else {
+                setCheckDuplicatePost(false);
+            }
         }
     }, [dataListCate, dataPost?.cateName, dataPost?.cateIdParent]);
 
@@ -103,17 +99,17 @@ const AddCategory = (props)=> {
                     cateName: false,
                 },
             }));
-            dispatch(post_category(dataPost)).then((res1) => {
-                if (res1.payload === 201) {
+            dispatch(post_category(dataPost)).then((res) => {
+                if (!res.error) {
                     toast.success('Create category success !', {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 600
                     });
                     props.onHide();
                 } else {
-                    toast.error('Create category fail !', {
+                    toast.error(res.payload, {
                         position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 600
+                        autoClose: 1000
                     });
                     props.onHide();
                 }
@@ -152,7 +148,7 @@ const AddCategory = (props)=> {
                         <Form.Group className="mb-3" controlId="formBasicPassword">
                             <Form.Select onChange={hanldeSelectPost}>
                                 <option value={0} >Not selected</option>
-                                {React.Children.toArray(dataListCate?.map((item) => {
+                                {React.Children.toArray(dataListCate.responseData?.map((item) => {
                                     let id = 0;
                                     if (item.cateIdParent === 0) {
                                         id = item.cateId;
@@ -160,7 +156,7 @@ const AddCategory = (props)=> {
                                             <>
                                                 <option value={item.cateId}>{item.cateName}</option>
                                                 {
-                                                    React.Children.toArray(dataListCate?.map((chilItem) => {
+                                                    React.Children.toArray(dataListCate.responseData?.map((chilItem) => {
                                                         if (chilItem.cateIdParent === id) {
                                                             return <option value={chilItem.cateId} disabled>--{chilItem.cateName}</option>;
                                                         }

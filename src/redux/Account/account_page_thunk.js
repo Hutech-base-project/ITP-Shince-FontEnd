@@ -9,7 +9,33 @@ export const get_all_user = createAsyncThunk(
         const response = await api.get("/api/Users", data);
         return response.data;
       } catch (err) {
-        return rejectWithValue(err.message);
+        return rejectWithValue(err.response.data.responseMessage);
+      }
+    }
+  );
+
+  export const get_all_employees = createAsyncThunk(
+    "get/allEmployee",
+    async (data, { rejectWithValue }) => {
+      try {
+        let listEmp = [];
+        const response = await api.get("/api/Employees", data);
+
+        response.data.responseData.forEach(async element => {
+          const img = await api.get(
+            `/image/employee/${element.usImage}`
+          );
+          const base64Response = await fetch(
+            `data:image/jpeg;base64,${img.data}`
+          );
+          const blob = await base64Response.blob();
+          const base64 = await convertBase64(blob);
+          const result = { ...element, usImage: base64 };
+          listEmp.push(result);
+        });
+        return listEmp;
+      } catch (err) {
+        return rejectWithValue(err.response.data.responseMessage);
       }
     }
   );
@@ -45,7 +71,7 @@ export const get_all_user = createAsyncThunk(
         );
         return response.status;
       } catch (err) {
-        return rejectWithValue(err.message);
+        return rejectWithValue(err.response.data.responseMessage);
       }
     }
   );
@@ -88,7 +114,7 @@ export const get_all_user = createAsyncThunk(
         const response = await api.put(`/api/Users`, formData, config);
         return response.data;
       } catch (err) {
-        return rejectWithValue(err.message);
+        return rejectWithValue(err.response.data.responseMessage);
       }
     }
   );
@@ -97,7 +123,6 @@ export const get_all_user = createAsyncThunk(
     "get/userById",
     async (data, { rejectWithValue }) => {
       try {
-        
         const responseUser = await api.get(`/api/Users/${data}`);
         if (responseUser.data.responseData.usImage === null) {
           return responseUser.data.responseData;
@@ -114,7 +139,7 @@ export const get_all_user = createAsyncThunk(
           return result;
         }
       } catch (err) {
-        return rejectWithValue(err.message);
+        return rejectWithValue(err.response.data.responseMessage);
       }
     }
   );
@@ -126,7 +151,7 @@ export const get_all_user = createAsyncThunk(
         const response = await api.put("/api/UserChangePassword", data);
         return response.status;
       } catch (err) {
-        return rejectWithValue(err.message);
+        return rejectWithValue(err.response.data.responseMessage);
       }
     }
   );
@@ -159,7 +184,7 @@ export const get_all_user = createAsyncThunk(
         const response = await api.put(`/api/Users/${data.data.usId}`, formData, config);     
         return response.status;
       } catch (err) {
-        return rejectWithValue(err.message);
+        return rejectWithValue(err.response.data.responseMessage);
       }
     }
   );
@@ -187,7 +212,7 @@ export const get_all_user = createAsyncThunk(
         );
         return response.status;
       } catch (err) {
-        return rejectWithValue(err.message);
+        return rejectWithValue(err.response.data.responseMessage);
       }
     }
   );

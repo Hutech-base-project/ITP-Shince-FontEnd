@@ -76,7 +76,7 @@
         }
 
         .summary {
-            background-color: #fd3d9b;
+            background: -webkit-linear-gradient(left, #666, #222);;
             border-top-right-radius: 1rem;
             border-bottom-right-radius: 1rem;
             color: #fff;
@@ -89,18 +89,9 @@
                 margin-top: 1.25rem;
             }
 
-            .row{
-                
-                margin-bottom: 10px;
-                .col-title{
-                    padding:0;
-                    margin-left: 12px;
-                }
-                .text-right{
-                    display: flex;
-                    padding: 0;
-                    float: left;
-                }
+            .col-title{
+                padding-left:0;
+                margin-left: 12px;
             }
 
             form {
@@ -163,7 +154,7 @@
             }
 
             .btn:hover{
-                color: white;
+                color: #F7941D;
             }
         }
     }

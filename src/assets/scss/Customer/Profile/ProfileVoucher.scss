@@ -4,65 +4,42 @@
     background: #ffffff;
     padding-top: 20px;
     padding-bottom: 50px;
-    padding-left: 20px;
+  
 
       .voucher-grid2 {
-        height: 430px;
-        width: 285px;
+        height:auto;
+        width: 300px;
         font-family: "Open Sans", sans-serif;
         position: relative;
         box-shadow: 0px 0px 0px 2px #eeee;
         margin-bottom: 25px;
         background-color: #fff;
-        border: 1px solid black;
-
-        .voucher-image {
-          overflow: hidden;
-          position: relative;
-          margin-left: 5px;
-
-          .voucher-image-item {
-            display: block;
-            height: 300px;
-            width: 285px;
-
-            a {
-              display: block;
-
-              img {
-                width: 100%;
-                height: auto;
-              }
-              .pic-1 {
-                background-color: #F7941D;
-                width: 100%;
-                height: 100%;
-                opacity: 0;
-                position: absolute;
-                top: 0;
-                left: 0;
-                transition: all 0.5s;
-                margin-left: 5px;
-              }
-            }
-          }
-        }
+      
 
         
         .product-content {
-          padding: 20px 10px;
           text-align: center;
-
-          .title {
-            font-size: 17px;
-            margin: 0 0 7px;
-            height: 50px;
+          .top{
+            background-image: url("../../../images/background-voucher.jpg");;
+            margin-left: -12px;
+            width: 300px;
+            .title {                      
+              padding-top: 15px;
+              color: #ffffff;
+              font-size: 17px;           
+              height: 50px;
+             
+            }
           }
+          
 
-          .condition {
+          .condition {   
             color: #303030;
             font-size: 20px;
-            padding-bottom: 30px;
+          }
+
+          .btnAdd{
+            margin-bottom: 10px;
           }
         }
       }  

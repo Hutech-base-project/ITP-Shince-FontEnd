@@ -9,17 +9,17 @@ function DeleteProduct(props) {
     const dispatch = useDispatch();
     const isLoading = useSelector(selectStatusPro);
     const hanldeDel = () => {
-        dispatch(delete_product(props.proid)).then((res1) => {
-            if (res1.payload === 200) {
+        dispatch(delete_product(props.proid)).then((res) => {
+            if (!res.error) {
                 toast.success('Delete product success !', {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 600
                 });
                 props.onHide();
             } else {
-                toast.error('Delete product fail!\n This product is not locked or still shipping!!!', {
+                toast.error(res.payload, {
                     position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 600
+                    autoClose: 1000
                 });
                 props.onHide();
             }
@@ -28,7 +28,7 @@ function DeleteProduct(props) {
     return (
         <Modal {...props}>
             <Modal.Header closeButton>
-                <Modal.Title className='title-modal'> <FontAwesomeIcon icon={['fa', 'exclamation-triangle']} /> Warning !!!!</Modal.Title>
+                <Modal.Title className='title-modal' style={{color:'red'}}> <FontAwesomeIcon icon={['fa', 'exclamation-triangle']} /> Warning !!!!</Modal.Title>
             </Modal.Header>
             <Modal.Body>Are you sure you want to delete this product?!</Modal.Body>
             <Modal.Footer>

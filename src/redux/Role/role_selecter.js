@@ -1,2 +1,2 @@
-export const selectListCate = (state) => state.Roles.roles
-export const selectStatusCate = (state) => state.Roles.isLoading
+export const selectListRole = (state) => state.Roles.listRoles
+export const selectStatusRole = (state) => state.Roles.isLoading

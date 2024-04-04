@@ -7,7 +7,7 @@ import { validate } from 'validate.js';
 
 import { successPhone } from '../../../../redux/Booking/booking_page_reducer';
 import { errorPhone } from '../../../../redux/Booking/booking_page_reducer';
-import { BookingPagevalidate } from '../../../../utils/validate';
+import { BookingPageValidate } from '../../../../utils/validate';
 
 const BookingPhone = () => {
     const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const BookingPhone = () => {
         isvalid: false,
     });
     useEffect(() => {
-        const errors = validate.validate({ phone: phone }, BookingPagevalidate);
+        const errors = validate.validate({ phone: phone }, BookingPageValidate);
         setValidation((pre) => ({
             ...pre,
             isvalid: errors ? false : true,
@@ -40,7 +40,7 @@ const BookingPhone = () => {
                 [e.target.name]: true,
             },
         }));
-        const check = validate.validate({ phone: phone }, BookingPagevalidate)? true : false;
+        const check = validate.validate({ phone: phone }, BookingPageValidate)? true : false;
         if(check === true){
             dispatch(successPhone());
         }else{

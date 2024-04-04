@@ -11,7 +11,7 @@ import EditCategory from "./component/category_edit";
 import DeleteCategory from "./component/category_delete";
 
 
-const CategoryPage = () => {
+const CategoryPage = (props) => {
   const dispatch = useDispatch();
   const [dataListCate, setDataListCate] = useState([]);
   const [dataListSearch, setDataListSearch] = useState([]);
@@ -22,17 +22,19 @@ const CategoryPage = () => {
   const [idDel, setIdDel] = useState(0);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsPerPage,] = useState(10);
+  const [rowsPerPage,] = useState(20);
 
   useEffect(() => {
     dispatch(get__all_categories()).then((res) => {
-      setDataListCate(res.payload.responseData?.filter((cate) => cate?.isDelete === false));
-      setDataListSearch(res.payload.responseData?.filter((cate) => cate?.isDelete === false));
+        if(!res.error){
+          setDataListCate(res.payload.responseData);
+          setDataListSearch(res.payload.responseData);
+        }
     });
-  }, [dispatch, createShow, editShow,deleteshow]);
+  }, [dispatch, createShow, editShow, deleteshow]);
 
   useEffect(() => {
-    if (search !== null) {
+    if (search !== "") {
       setDataListSearch(dataListCate?.filter((cate) => (cate?.cateName.toLowerCase()).includes(search.toLowerCase())));
     } else {
       setDataListSearch(dataListCate);
@@ -79,7 +81,7 @@ const CategoryPage = () => {
       rows.push(<Pagination.Item key={i} onClick={() => ClickPage(i)}>{i}</Pagination.Item>);
     }
   };
-  
+
   return (
     <>
       <div className="container-fluid">
@@ -88,9 +90,14 @@ const CategoryPage = () => {
         </div>
         <Row>
           <Col lg={4} xs={12}>
-            <div className="button">
-              <Button variant="success" className="btn-add" onClick={() => setCreateShow(true)}>Add Category</Button>
-            </div>
+            {props.dodertor ?
+              <div className="button">
+                <Button variant="success" className="btn-add" onClick={() => setCreateShow(true)}>Add Category</Button>
+              </div>
+              :
+              null
+            }
+
           </Col>
           <Col lg={8} xs={12}>
             <div className="input-group">
@@ -108,41 +115,6 @@ const CategoryPage = () => {
                 </Button>
               </div>
             </div>
-            <li className="nav-item dropdown no-arrow d-sm-none">
-              <a
-                className="nav-link dropdown-toggle"
-                href="!#"
-                id="searchDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <FontAwesomeIcon icon={["fas", "search"]} size="lg" />
-              </a>
-              {/* Dropdown - Messages */}
-              <div
-                className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                aria-labelledby="searchDropdown"
-              >
-                <form className="form-inline mr-auto w-100 navbar-search">
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      className="form-control bg-light border-0 small"
-                      placeholder="Search for..."
-                      aria-label="Search"
-                      aria-describedby="basic-addon2"
-                    />
-                    <div className="input-group-append">
-                      <button className="btn btn-primary" type="button">
-                        <FontAwesomeIcon icon={["fas", "search"]} size="lg" />
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </li>
           </Col>
         </Row>
         <Row>
@@ -181,8 +153,14 @@ const CategoryPage = () => {
                             <td>{data.cateName}</td>
                             <td>{convertCateParent(data.cateIdParent)}</td>
                             <td>
-                              <Button className='btn-action' variant="primary" onClick={() => hanldeClickEdit(data)}>Edit</Button>
-                              <Button className='btn-action' variant="danger" onClick={() => hanldeDelete(data.cateId)}>Delete</Button>
+                              {props.dodertor ?
+                                <>
+                                  <Button className='btn-action' variant="primary" onClick={() => hanldeClickEdit(data)}>Edit</Button>
+                                  <Button className='btn-action' variant="danger" onClick={() => hanldeDelete(data.cateId)}>Delete</Button>
+                                </>
+                                :
+                                null
+                              }
                             </td>
                           </tr>
                         )
@@ -197,7 +175,7 @@ const CategoryPage = () => {
         </Row>
         <Row className='category-bottom'>
           {Math.floor(dataListSearch?.length / rowsPerPage) !== 0 ?
-            <Col md={{ span: 10, offset: 10 }}>
+            <Col md={4}>
               <Pagination>
                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                 {rows}

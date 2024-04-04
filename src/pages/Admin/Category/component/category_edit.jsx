@@ -1,14 +1,14 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { CategoriesPageValidate } from '../../../../utils/validate';
-import { selectStatusCate } from '../../../../redux/Category/category_page_selecter';
+import { selectListCate, selectStatusCate } from '../../../../redux/Category/category_page_selecter';
 import { validate } from 'validate.js';
 import { toast } from 'react-toastify';
-import { get__all_categories, put_category } from '../../../../redux/Category/category_page_thunk';
+import { put_category } from '../../../../redux/Category/category_page_thunk';
 import { Button, Form, Modal, Spinner, } from "react-bootstrap";
 import { useEffect, useState } from 'react';
 const EditCategory = (props) => {
-    const [dataListCate, setDataListCate] = useState([]);
+    const dataListCate = useSelector(selectListCate);
     const isLoading = useSelector(selectStatusCate);
     const dispatch = useDispatch();
     const [dataPut, setDataPut] = useState({
@@ -29,12 +29,6 @@ const EditCategory = (props) => {
     }, [props])
 
     useEffect(() => {
-        dispatch(get__all_categories()).then((res) => {
-            setDataListCate(res.payload.responseData?.filter((cate) => cate?.isDelete === false));
-        });
-    }, [dispatch,props]);
-
-    useEffect(() => {
         const errors = validate.validate(dataPut, CategoriesPageValidate);
         setValidationPut((pre) => ({
             ...pre,
@@ -44,16 +38,16 @@ const EditCategory = (props) => {
     }, [dataPut]);
 
     useEffect(() => {
-        if (dataPut.cateName !== undefined) {
+       if(dataListCate.responseData?.length > 0){
             if (
-                dataListCate?.some((cate) => cate?.cateId !== dataPut?.cateId && cate?.cateName === dataPut?.cateName.trim() && cate?.cateIdParent === dataPut?.cateIdParent) ===
-                true || dataListCate?.some((cate) => cate?.cateId !== dataPut?.cateId && cate?.cateName === dataPut?.cateName.trim() && cate?.cateIdParent === 0) === true
+                dataListCate.responseData?.some((cate) => cate?.cateId !== dataPut?.cateId && cate?.cateName === dataPut.cateName?.trim() && cate?.cateIdParent === dataPut?.cateIdParent) ===
+                true || dataListCate.responseData?.some((cate) => cate?.cateId !== dataPut?.cateId && cate?.cateName === dataPut.cateName?.trim() && cate?.cateIdParent === 0) === true
             ) {
                 setCheckDuplicatePut(true);
             } else {
                 setCheckDuplicatePut(false);
             }
-        }
+       }
     }, [dataListCate, dataPut?.cateName, dataPut?.cateIdParent, dataPut?.cateId]);
 
     const hasErrorPut = (field) => {
@@ -92,17 +86,17 @@ const EditCategory = (props) => {
                     cateName: false,
                 },
             }));
-            dispatch(put_category(dataPut)).then((res1) => {
-                if (res1.payload === 200) {
+            dispatch(put_category(dataPut)).then((res) => {
+                if (res.payload) {
                     toast.success('Update category success !', {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 600
                     });
                     props.onHide();
                 } else {
-                    toast.error('Update category fail !', {
+                    toast.error(res.payload, {
                         position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 600
+                        autoClose: 1000
                     });
                     props.onHide();
                 }
@@ -141,7 +135,7 @@ const EditCategory = (props) => {
                         <Form.Group className="mb-3">
                             <Form.Select onChange={hanldeSelectPut} defaultValue={props?.cate.cateIdParent}>
                                 <option value={0} >Not selected</option>
-                                {React.Children.toArray(dataListCate?.map((item) => {
+                                {React.Children.toArray(dataListCate.responseData?.map((item) => {
                                     let id = 0;
                                     if (item.cateIdParent === 0) {
                                         id = item.cateId;
@@ -149,7 +143,7 @@ const EditCategory = (props) => {
                                             <>
                                                 <option value={item.cateId}>{item.cateName}</option>
                                                 {
-                                                    React.Children.toArray(dataListCate.map((chilItem) => {
+                                                    React.Children.toArray(dataListCate.responseData?.map((chilItem) => {
                                                         if (chilItem.cateIdParent === id) {
                                                             return <option value={chilItem.cateId} disabled>--{chilItem.cateName}</option>;
                                                         }

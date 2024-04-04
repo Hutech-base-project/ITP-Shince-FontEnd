@@ -7,8 +7,8 @@ export const get_all_services = createAsyncThunk(
         try {
             const response = await api.get("/api/Serce", data)
             return response.data
-        } catch (error) {
-            return rejectWithValue(error.message);
+        } catch (err) {
+            return rejectWithValue(err.response.data.responseMessage);
         }
     }
 )
@@ -41,7 +41,7 @@ export const post_services = createAsyncThunk(
       const response = await api.post("/api/Serce", formData, config)
       return response.status
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -99,7 +99,7 @@ export const put_services = createAsyncThunk(
       );
       return response.status;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -111,7 +111,7 @@ export const delete_services = createAsyncThunk(
       const response = await api.delete(`/api/Serce/${data}`)
       return response.status
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -144,7 +144,7 @@ export const block_services = createAsyncThunk(
       );
       return response.status;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );

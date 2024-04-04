@@ -1,0 +1,50 @@
+.modal-detail{
+    .modal-content{
+        .modal-detail-body{
+            .row{
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                .col-3{
+                    display: flex;
+                    align-items: center;
+                    height: 38px;
+                }
+                .col-9{
+                    align-items: center;
+                    height: 38px;
+                }
+
+                .modal-detail-select{
+                    display: block;
+                    margin-bottom: 20px;
+
+                    .emp-avatar,.emp-name{
+                        align-items: center;
+                        display: flex;
+                    }
+                }
+            }
+        }
+        .modal-detail-footer{
+            .btn-update, .btn-closes{
+                display: flex;
+                margin: 0 auto;
+            }
+        }
+    }
+   
+}
+
+.btn-select{
+    margin-right: 10%;
+    margin-bottom: 20px;
+    .btn-select-price{
+        width: 70px;   
+    }
+
+    .price-active{
+        background-color: #f6931d;
+        border-color: #f6931d;
+    }
+}

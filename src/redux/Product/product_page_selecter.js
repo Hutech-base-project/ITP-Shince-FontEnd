@@ -1,2 +1,2 @@
-export const selectListPro = (state) => state.ProductPage.products
+export const selectListPro = (state) => state.ProductPage.listProducts
 export const selectStatusPro = (state) => state.ProductPage.isLoading

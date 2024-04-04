@@ -16,8 +16,10 @@ function User(props) {
 
     useEffect(() => {
         dispatch(get_all_user()).then((res) => {
-            setDataListUser(res.payload.responseData?.filter((user) => user?.isDelete === false && user?.isAdmin === false));
-            setDataListSearch(res.payload.responseData?.filter((user) => user?.isDelete === false && user?.isAdmin === false));
+            if(!res.error){
+                setDataListUser(res.payload.responseData?.filter((user) => user?.isAdmin === false));
+                setDataListSearch(res.payload.responseData?.filter((user) => user?.isAdmin === false));
+            }
         });
     }, [dispatch]);
 
@@ -37,18 +39,17 @@ function User(props) {
 
     const hanldeStatus = (user) => {
         dispatch(block_user(user)).then((res1) => {
-            console.log(res1.payload)
             if (res1.payload === 200) {
                 dispatch(get_all_user()).then((res) => {
-                    setDataListUser(res.payload.responseData?.filter((user) => user?.isDelete === false && user?.isAdmin === false));
-                    setDataListSearch(res.payload.responseData?.filter((user) => user?.isDelete === false && user?.isAdmin === false));
+                    setDataListUser(res.payload.responseData?.filter((user) => user?.isAdmin === false));
+                    setDataListSearch(res.payload.responseData?.filter((user) => user?.isAdmin === false));
                 });
                 toast.success('Block user success !', {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 600
                 });
             } else {
-                toast.error('Block user fail !', {
+                toast.error(res1.payload, {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 600
                 });
@@ -113,9 +114,9 @@ function User(props) {
                 </div>
             </div>
 
-            <Row className='user-bottom'>
+            <Row className='category-bottom'>
                 {Math.floor(dataListSearch?.length / rowsPerPage) !== 0 ?
-                    <Col md={{ span: 10, offset: 10 }}>
+                    <Col md={4}>
                         <Pagination>
                             {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                             {rows}

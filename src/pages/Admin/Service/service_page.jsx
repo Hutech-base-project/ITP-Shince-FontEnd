@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
-import { Button, Col, Pagination, Row  } from 'react-bootstrap'
-import "../../../assets/scss/Admin/Service/ServicePage.scss"
+import { Button, Col, Pagination, Row } from 'react-bootstrap'
 import { block_services, get_all_services } from '../../../redux/Service/service_page_thunk'
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -9,10 +8,10 @@ import { useDispatch } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
 import ServiceAdd from './components/service_add'
 import ServiceEdit from './components/service_edit'
-import ServiceDelete from './components/service_delete' 
+import ServiceDelete from './components/service_delete'
 
 
-const ServicePage = () => {
+const ServicePage = (props) => {
     const [createShow, setCreateShow] = useState(false);
     const [deleteshow, setDeleteShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
@@ -21,20 +20,22 @@ const ServicePage = () => {
     const [dataListService, setDataListService] = useState([]);
     const [dataListSearch, setDataListSearch] = useState([]);
     const [page, setPage] = useState(0);
-    const [rowsPerPage,] = useState(10);
+    const [rowsPerPage,] = useState(20);
     const [search, setSearch] = useState("");
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(get_all_services()).then((res) => {
-            setDataListService(res.payload.responseData?.filter((ser) => ser?.isDelete === false));
-            setDataListSearch(res.payload.responseData?.filter((ser) => ser?.isDelete === false));
+            if (!res.error){
+                setDataListService(res.payload.responseData);
+                setDataListSearch(res.payload.responseData);
+            }
         });
     }, [createShow, editShow, deleteshow, dispatch])
 
 
     useEffect(() => {
-        if (search !== null) {
+        if (search !== "") {
             setDataListSearch(dataListService?.filter((ser) => (ser?.seName.toLowerCase()).includes(search.trim().toLowerCase())));
         } else {
             setDataListSearch(dataListService);
@@ -59,17 +60,17 @@ const ServicePage = () => {
 
     const hanldeStatus = (ser) => {
         dispatch(block_services(ser)).then((res1) => {
-            if (res1.payload === 200) {
+            if (!res1.error) {
                 dispatch(get_all_services()).then((res) => {
-                    setDataListService(res.payload.responseData?.filter((ser) => ser?.isDelete === false));
-                    setDataListSearch(res.payload.responseData?.filter((ser) => ser?.isDelete === false));
+                    setDataListService(res.payload.responseData);
+                    setDataListSearch(res.payload.responseData);
                 });
                 toast.success('Change status Service success !', {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 600
                 });
             } else {
-                toast.error('Change status Service fail !', {
+                toast.error(res1.payload, {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 600
                 });
@@ -98,9 +99,14 @@ const ServicePage = () => {
                 </div>
                 <Row>
                     <Col lg={4} xs={12}>
-                        <div className="button">
-                            <Button variant="success" className="btn-add" onClick={() => setCreateShow(true)}>Add Service</Button>
-                        </div>
+                        {props.dodertor ?
+                            <div className="button">
+                                <Button variant="success" className="btn-add" onClick={() => setCreateShow(true)}>Add Service</Button>
+                            </div>
+                            :
+                            null
+                        }
+
                     </Col>
                     <Col lg={8} xs={12}>
                         <div className="input-group">
@@ -166,7 +172,7 @@ const ServicePage = () => {
                             onHide={() => setEditShow(false)}
                             ser={dataEdit}
                         />
-                         <  ServiceDelete
+                        <  ServiceDelete
                             show={deleteshow}
                             onHide={() => setDeleteShow(false)}
                             seid={idDel}
@@ -210,8 +216,14 @@ const ServicePage = () => {
                                                             data.seTurnOn === true ? <Button variant="success" onClick={() => hanldeStatus(data)}>On</Button> : <Button variant="danger" onClick={() => hanldeStatus(data)}>Off</Button>
                                                         }</td>
                                                         <td >
-                                                            <Button className='btn-action' variant="primary" onClick={() => hanldeClickEdit(data)} >Edit</Button>
-                                                            <Button className='btn-action' variant="danger" onClick={() => hanldeDelete(data.seId)}>Delete</Button>
+                                                            {props.dodertor ?
+                                                                <>
+                                                                    <Button className='btn-action' variant="primary" onClick={() => hanldeClickEdit(data)} >Edit</Button>
+                                                                    <Button className='btn-action' variant="danger" onClick={() => hanldeDelete(data.seId)}>Delete</Button>
+                                                                </>
+                                                                :
+                                                                null
+                                                            }
                                                         </td>
                                                     </tr>
                                                 )
@@ -226,7 +238,7 @@ const ServicePage = () => {
                 </Row>
                 <Row className='category-bottom'>
                     {Math.floor(dataListService?.length / rowsPerPage) !== 0 ?
-                        <Col md={{ span: 10, offset: 10 }}>
+                        <Col md={4}>
                             <Pagination>
                                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                                 {rows}

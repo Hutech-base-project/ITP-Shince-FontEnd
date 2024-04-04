@@ -6,18 +6,7 @@ import HomeBody from './Components/Home_body'
 
 function HomeIndex() {
   return (
-    <>
-        {/* <-- Preloader --> */}
-	{/* <div className="preloader">
-		<div className="preloader-inner">
-			<div className="preloader-icon">
-				<span></span>
-				<span></span>
-			</div>
-		</div>
-	</div> */}
-	{/* <!-- End Preloader --> */}
-	
+    <>	
 	<CustomerHeader/>
 	<CustomerCarousel/>
 	<HomeBody/>

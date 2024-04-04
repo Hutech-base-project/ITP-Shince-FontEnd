@@ -23,6 +23,25 @@ const CartShoppingCart = () => {
     });
   }, [dispatch]);
 
+  useEffect(() => {
+    dataListPro.forEach(pro => {
+      cartList.forEach(cart => {
+          if(pro?.proId === cart?.productId && cart.proQuantity > pro.proQuantity){
+            dispatch(removeCart(cart));
+            let cartAdd = {
+              proProductName: pro.proName,
+              proProductPrice: pro.proPrice,
+              proQuantity: pro.proQuantity,
+              proTurnOn: pro.proTurnOn,
+              proStatus: pro.proStatus,
+              productId: pro.proId,
+            }
+            dispatch(addToCart({ ...cartAdd }));
+          }
+      });
+    });
+  }, [dispatch,dataListPro,cartList]);
+
   const convertCate = (e) => {
     let name = "";
     dataListCate.forEach((item) => {
@@ -33,42 +52,50 @@ const CartShoppingCart = () => {
     return name;
   }
 
-  const hanldeMinus = (e) =>{
+  const hanldeMinus = (e) => {
     let quantity = 1;
-      let cart = {
-        proProductName: e.proName,
-        proProductPrice: e.proPrice,
-        proQuantity: quantity,
-        productId: e.productId,
-      }
-    
+    let cart = {
+      proProductName: e.proName,
+      proProductPrice: e.proPrice,
+      proQuantity: quantity,
+      productId: e.productId,
+    }
+
     const quantityOnCart = cartList?.find((item) => item?.productId === e.productId);
-    if(quantityOnCart !== undefined){
+    if (quantityOnCart !== undefined) {
       if (quantityOnCart?.proQuantity > 1) {
         quantity = quantityOnCart?.proQuantity - 1;
-        cart.proQuantity  = quantity;
-        dispatch(addToCart({ ...cart}));
+        cart.proQuantity = quantity;
+        dispatch(addToCart({ ...cart }));
       }
     }
   }
 
-  const hanldePlus = (e) =>{
+  const hanldePlus = (e,quantityPro) => {
     let quantity = 1;
-      let cart = {
-        proProductName: e.proName,
-        proProductPrice: e.proPrice,
-        proQuantity: quantity,
-        productId: e.productId,
-      }
-    
+    let cart = {
+      proProductName: e.proName,
+      proProductPrice: e.proPrice,
+      proQuantity: quantity,
+      productId: e.productId,
+    }
+
     const quantityOnCart = cartList?.find((item) => item?.productId === e.productId);
-    
-    if(quantityOnCart !== undefined){
-      if (quantityOnCart?.proQuantity < 10) {
-        quantity = quantityOnCart?.proQuantity + 1;
-        cart.proQuantity  = quantity;
-        dispatch(addToCart({ ...cart}));
-      }else{
+
+    if (quantityOnCart !== undefined) {
+      if (quantityOnCart?.proQuantity < 10 ) {
+        if(quantityOnCart?.proQuantity + 1 < quantityPro + 1){
+          quantity = quantityOnCart?.proQuantity + 1;
+          cart.proQuantity = quantity;
+          dispatch(addToCart({ ...cart }));
+        }else{
+          toast.error('Cannot add products because there are only '+quantityPro+' products left!', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 600
+          });
+        }
+       
+      } else {
         toast.error('The number of products has passed 10 !', {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 600
@@ -77,7 +104,7 @@ const CartShoppingCart = () => {
     }
   }
 
-  const hanldeRemoveItem = (e) =>{
+  const hanldeRemoveItem = (e) => {
     dispatch(removeCart(e));
   }
 
@@ -86,63 +113,75 @@ const CartShoppingCart = () => {
       <div className="title">
         <Row>
           <Col><h4><b>Shopping Cart</b></h4></Col>
-          {cartList.length > 0?
+          {cartList.length > 0 ?
             <Col className="align-self-center text-right text-muted">{cartList.length} items</Col>
             :
             null
           }
         </Row>
       </div>
-      {cartList.length > 0?
-      React.Children.toArray(dataListPro?.map((item) => {
-        return (
-          React.Children.toArray(cartList?.map((cart) => {
-            if (cart?.productId === item?.proId) {
-              return (
-                <>
-                  <Row className="border-top border-bottom">
-                    <Row className="main align-items-center">
-                      <Col>
-                        <img
-                          className="img-fluid"
-                          src={process.env.REACT_APP_API_URL + "/image/product/" + item.featureImgPath
-                          } alt='' />
-                      </Col>
-                      <Col>
-                        <Row className="text-muted">{convertCate(item.category_id)}</Row>
-                        <Row>{item.proName}</Row>
-                      </Col>
-                      <Col>
-                        <Row>
-                          <Col>
-                            <a href="#!" className="minus" onClick={()=>hanldeMinus(cart)}><FontAwesomeIcon icon={['fa', 'minus']} /></a>
+      {cartList.length > 0 ?
+        React.Children.toArray(dataListPro?.map((item) => {
+          return (
+            React.Children.toArray(cartList?.map((cart) => {
+              if (cart?.productId === item?.proId) {
+                return (
+                  <>
+                    <Row className="border-top border-bottom">
+                      <Row className="main align-items-center">
+                        <Col xs={12} sm={2}>
+                          <img
+                            className="img-fluid"
+                            src={process.env.REACT_APP_API_URL + "/image/product/" + item.featureImgPath
+                            } alt='' />
+                        </Col>
+                        <Col xs={12} sm={3}>
+                          <Row className="text-muted">{convertCate(item.category_id)}</Row>
+                          <Row>{item.proName}</Row>
+                        </Col>
+
+                        {(item.proTurnOn === true && item.proStatus !== "Out Of Stock") ?
+                          <>
+                            <Col xs={12} sm={4}>
+                              <Row>
+                                <Col>
+                                  <a href="#!" className="minus" onClick={() => hanldeMinus(cart)}><FontAwesomeIcon icon={['fa', 'minus']} /></a>
+                                </Col>
+                                <Col className="border">{cart.proQuantity}</Col>
+                                <Col>
+                                  <a href="#!" className="plus" onClick={() => hanldePlus(cart,item.proQuantity)}><FontAwesomeIcon icon={['fa', 'plus']} /></a>
+                                </Col>
+                              </Row>
+                            </Col>
+                            <Col xs={12} sm={3}>
+                              <Row>
+                                <Col>{item.proPrice}</Col>
+                                <Col><FontAwesomeIcon icon={['far', 'trash-alt']} onClick={() => hanldeRemoveItem(cart.productId)} /></Col>
+                              </Row>
+                            </Col>
+                          </> :
+                          <Col xs={12} sm={6}>
+                            <Row>
+                              <Col style={{color:'red'}}>Out Of Stock</Col>
+                              <Col><FontAwesomeIcon icon={['far', 'trash-alt']} onClick={() => hanldeRemoveItem(cart.productId)} /></Col>
+                            </Row>
                           </Col>
-                          <Col className="border">{cart.proQuantity}</Col>
-                          <Col>
-                            <a href="#!" className="plus" onClick={()=>hanldePlus(cart)}><FontAwesomeIcon icon={['fa', 'plus']} /></a>
-                          </Col>
-                        </Row>
-                      </Col>
-                      <Col>
-                          <Row>
-                            <Col>{item.proPrice}</Col>
-                            <Col><FontAwesomeIcon icon={['far', 'trash-alt']} onClick={()=>hanldeRemoveItem(cart.productId)}/></Col>
-                          </Row>
-                      </Col>
-                     
+                        }
+
+
+                      </Row>
                     </Row>
-                  </Row>
-                </>
-              )
-            }
-            return null;
-          }))
-        )
-      }))
-      :
-      <Col className='mess'>
-        <span >You have no products in your cart</span>
-      </Col>
+                  </>
+                )
+              }
+              return null;
+            }))
+          )
+        }))
+        :
+        <Col className='mess'>
+          <span >You have no products in your cart</span>
+        </Col>
       }
       <div className="back-to-shop"> <a href="/product"><FontAwesomeIcon icon={['fa', 'arrow-left']} /><span className="text-muted"> Back to shop</span></a> </div>
       <ToastContainer />

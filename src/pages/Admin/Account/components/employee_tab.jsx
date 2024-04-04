@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, Modal, Pagination, Row } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { get_all_user, get_user_by_id } from '../../../../redux/Account/account_page_thunk'
+import { block_user, get_all_user, get_user_by_id } from '../../../../redux/Account/account_page_thunk'
 import { useEffect } from 'react'
-import AddEmployee from './add_Employee'
-import EditEmployee from './edit_Employee'
+import EmployeeAdd from './employee_add'
+import EmployeeEdit from './empoyee_edit'
+import { toast } from 'react-toastify'
+import { get_session } from '../../../../redux/Auth/auth_page_thunk'
 
 const Employee = (props) => {
     const dispatch = useDispatch();
@@ -15,11 +17,25 @@ const Employee = (props) => {
     const [createShow, setCreateShow] = useState(false);
     const [detailsShow, setDetailsShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
-    const [dataUser, setDataUser] = useState(null)
+    const [dataUser, setDataUser] = useState(null);
+    const [userId,setUserId] = useState(null);
     useEffect(() => {
+        let user_id;
+        if (sessionStorage.getItem("id") != null) {
+            let id = sessionStorage.getItem("id");
+            dispatch(get_session(id)).then((res) => {
+                if (!res.error) {
+                    user_id = res.payload.responseData.id;
+                    setUserId(res.payload.responseData.id)
+                }
+            });
+
+        }
         dispatch(get_all_user()).then((res) => {
-            setDataListUser(res.payload.responseData?.filter((user) => user?.isDelete === false && user?.isAdmin === true));
-            setDataListSearch(res.payload.responseData?.filter((user) => user?.isDelete === false && user?.isAdmin === true));
+            if (!res.error) {
+                setDataListUser(res.payload.responseData?.filter((user) => user?.usId !== user_id && user?.isAdmin === true));
+                setDataListSearch(res.payload.responseData?.filter((user) => user?.usId !== user_id && user?.isAdmin === true));
+            }
         });
     }, [dispatch, createShow]);
 
@@ -38,6 +54,25 @@ const Employee = (props) => {
         setEditShow(true);
         setDataUser(data);
     }
+    const hanldeStatus = (user) => {
+        dispatch(block_user(user)).then((res1) => {
+            if (!res1.error) {
+                dispatch(get_all_user()).then((res) => {
+                    setDataListUser(res.payload.responseData?.filter((user) => user?.usId !== userId && user?.isAdmin === true));
+                    setDataListSearch(res.payload.responseData?.filter((user) => user?.usId !== userId && user?.isAdmin === true));
+                });
+                toast.success('Block user success !', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 600
+                });
+            } else {
+                toast.error(res1.payload, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 600
+                });
+            }
+        });
+    }
     const NextPage = () => setPage(page + 1);
     const PrevPage = () => setPage(page - 1);
     const ClickPage = (e) => setPage(e - 1);
@@ -53,14 +88,19 @@ const Employee = (props) => {
     };
     return (
         <div className="container-fluid">
-            <div className="button">
-                <Button variant="success" className="btn-add"><span className='text-em' onClick={() => setCreateShow(true)}>Add Employee</span></Button>
-            </div>
+            {props.dodertor ?
+                <div className="button">
+                    <Button variant="success" className="btn-add"><span className='text-em' onClick={() => setCreateShow(true)}>Add Employee</span></Button>
+                </div>
+                :
+                null
+            }
+
             <div className="card shadow mb-4">
                 <div className="card-body">
                     <div className="table-responsive">
                         <table className="table table-bordered" id="dataTable" width="100%" >
-                            <AddEmployee
+                            <EmployeeAdd
                                 show={createShow}
                                 onHide={() => setCreateShow(false)}
                             />
@@ -69,7 +109,7 @@ const Employee = (props) => {
                                 data={dataUser}
                                 onHide={() => setDetailsShow(false)}
                             />
-                            <EditEmployee
+                            <EmployeeEdit
                                 show={editShow}
                                 data={dataUser}
                                 onHide={() => setEditShow(false)}
@@ -80,6 +120,7 @@ const Employee = (props) => {
                                     <th>User Name</th>
                                     <th>Email</th>
                                     <th>Note</th>
+                                    <th>Block</th>
                                     <th>Function</th>
                                 </tr>
                             </thead>
@@ -91,8 +132,15 @@ const Employee = (props) => {
                                             <td>{data.usUserName}</td>
                                             <td>{data.usEmailNo}</td>
                                             <td>{data.usNote}</td>
+                                            <td>{
+                                                data.isBlock === true ? <Button variant="success" onClick={() => hanldeStatus(data)}>On</Button> : <Button variant="danger" onClick={() => hanldeStatus(data)}>Off</Button>
+                                            }</td>
                                             <td>
-                                                <Button className='btn-action' variant="primary" onClick={() => hanldeClickEdit(data)} style={{marginRight:10}}>Edit</Button>
+                                                {props.dodertor ?
+                                                    <Button className='btn-action' variant="primary" onClick={() => hanldeClickEdit(data)} style={{ marginRight: 10 }}>Edit</Button>
+                                                    :
+                                                    null
+                                                }
                                                 <Button className='btn-action' variant="primary" onClick={() => hanldeClickDetails(data)}>Details</Button>
                                             </td>
                                         </tr>
@@ -104,9 +152,9 @@ const Employee = (props) => {
                 </div>
             </div>
 
-            <Row className='user-bottom'>
+            <Row className='category-bottom'>
                 {Math.floor(dataListSearch?.length / rowsPerPage) !== 0 ?
-                    <Col md={{ span: 10, offset: 10 }}>
+                    <Col md={4}>
                         <Pagination>
                             {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                             {rows}

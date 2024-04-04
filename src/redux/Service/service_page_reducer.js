@@ -3,7 +3,7 @@ import { get_all_services, post_services, put_services, delete_services, block_s
 
 
 const initialState = {
-    services: [],
+    listServices: [],
     isLoading: false,
     error: ""
 }
@@ -17,7 +17,7 @@ const ServicesPage = createSlice({
     extraReducers: (builder) => {
         builder.addCase(get_all_services.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.services = action.payload
+            state.listServices = action.listServices
         })
         builder.addMatcher(
             isAnyOf(

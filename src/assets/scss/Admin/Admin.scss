@@ -33,6 +33,11 @@
       }
     }
   }
+
+  canvas {
+    width: 99% !important;
+    height:auto !important;
+  }
 }
 table {
     width: 100%;
@@ -59,3 +64,9 @@ table {
       }
     }
   }
+
+.category-bottom{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { selectStatusSer } from '../../../../redux/Service/service_page_selecter';
+import { selectListSer, selectStatusSer } from '../../../../redux/Service/service_page_selecter';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 
 const ServiceAdd = (props) => {
     const [checkDupliSerPost, setCheckDupliSerPost] = useState(false);
-    const [dataListSer, setDataListSer] = useState([]);
+    const dataListSer = useSelector(selectListSer);
     const isLoading = useSelector(selectStatusSer);
     const [dataPost, setDataPost] = useState({
         seName: "",
@@ -59,9 +59,9 @@ const ServiceAdd = (props) => {
     }, [props]);
 
     useEffect(() => {
-        if (dataListSer.length !== 0) {
+        if (dataListSer?.length !== 0) {
             if (
-                dataListSer.responseData.some((ser) => ser?.seName === dataPost?.seName.trim() && ser?.isDelete === false) === true
+                dataListSer?.responseData.some((ser) => ser?.seName === dataPost?.seName.trim()) === true
             ) {
                 setCheckDupliSerPost(true);
             } else {
@@ -98,7 +98,7 @@ const ServiceAdd = (props) => {
         }));
     };
 
-    const hanldePostSer = (e) => {
+    const hanldePostSer = () => {
         setValidationPost((pre) => ({
             ...pre,
             touched: {
@@ -124,17 +124,17 @@ const ServiceAdd = (props) => {
                     seImage: false,
                 },
             }));
-            dispatch(post_services(dataPost)).then((res1) => {
-                if (res1.payload === 201) {
+            dispatch(post_services(dataPost)).then((res) => {
+                if (!res.error) {
                     toast.success('Create service success !', {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 600
                     });
                     props.onHide();
                 } else {
-                    toast.error('Create service fail !', {
+                    toast.error(res.payload, {
                         position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 600
+                        autoClose: 1000
                     });
                     props.onHide();
                 }

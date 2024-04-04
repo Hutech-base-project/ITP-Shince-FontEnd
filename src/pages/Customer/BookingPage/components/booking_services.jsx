@@ -16,7 +16,7 @@ const BookingServices = (props) => {
 
     useEffect(() => {
         dispatch(get_all_services()).then((res) => {
-            setServices(res.payload.responseData?.filter((ser) => ser?.isDelete === false && ser?.seTurnOn === true));
+            setServices(res.payload.responseData?.filter((ser) => ser?.seTurnOn === true));
         });
       }, [dispatch])
 

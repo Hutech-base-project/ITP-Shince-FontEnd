@@ -3,7 +3,7 @@ import { get_all_products, get_product_by_id, post_product, put_product, delete_
 
 
 const initialState = {
-    products: [],
+    listProducts: [],
     isLoading: false,
     error: ""
 }
@@ -15,12 +15,13 @@ const ProductPage = createSlice({
 
     },
     extraReducers: (builder) => {
-        builder.addCase(get_all_products.fulfilled,get_product_by_id.fulfilled, (state, action) => {
+        builder.addCase(get_all_products.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.products = action.payload
+            state.listProducts = action.payload
         })
         builder.addMatcher(
             isAnyOf(
+                get_product_by_id.fulfilled,
                 post_product.fulfilled,
                 put_product.fulfilled,
                 block_product.fulfilled

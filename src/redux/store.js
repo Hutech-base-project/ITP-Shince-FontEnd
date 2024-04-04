@@ -13,6 +13,8 @@ import ServicesPage from './Service/service_page_reducer';
 import CartPage  from './Cart/cart_page_reducer';
 import StoragePage from './Storage/storage_page_reducer';
 import BookingPage from './Booking/booking_page_reducer';
+import VoucherPage from './Voucher/voucher_page_reducer';
+import WhishList from './WhishList/whish_list_page_reducer';
 const rootReducer = combineReducers({
     AuthPage,
     CategoriesPage,
@@ -24,6 +26,8 @@ const rootReducer = combineReducers({
     CartPage,
     StoragePage,
     BookingPage,
+    VoucherPage,
+    WhishList,
 });
 
 

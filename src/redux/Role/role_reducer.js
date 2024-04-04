@@ -3,7 +3,7 @@ import { get_all_roles } from "./role_thunk";
 
 
 const initialState = {
-    roles: [],
+    listRoles: [],
     isLoading: false,
     error: ""
 }
@@ -17,7 +17,7 @@ const Roles = createSlice({
     extraReducers: (builder) => {
         builder.addCase(get_all_roles.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.categories = action.payload
+            state.listRoles = action.payload
         })
         builder.addMatcher(isAnyOf(get_all_roles.pending, ), (state,) => {
             state.isLoading = true;

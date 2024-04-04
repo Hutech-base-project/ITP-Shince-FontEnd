@@ -52,16 +52,16 @@ const ServiceEdit = (props) => {
     };
 
     useEffect(() => {
-        if (dataListSer.length !== 0) {
+        if (dataListSer?.length !== 0) {
             if (
-                dataListSer.responseData.some((ser) => ser.seId !== dataPut?.seId && ser?.seName === dataPut?.seName) === true
+                dataListSer?.responseData.some((ser) => ser.seId !== dataPut?.seId && ser?.seName === dataPut?.seName) === true
             ) {
                 setCheckDupliSerPost(true);
             } else {
                 setCheckDupliSerPost(false);
             }
         }
-    }, [dataListSer, dataPut?.seName]);
+    }, [dataListSer, dataPut?.seName,dataPut?.seId]);
 
     const hanldeChangePut = (e) => {
         setDataPut((preState) => ({
@@ -85,18 +85,6 @@ const ServiceEdit = (props) => {
         }));
     };
 
-    const hanldeSelectPut = (e) => {
-        if (parseInt(e.target.value) === 0) {
-            setDataPut((preState) => ({
-                ...preState,
-            }));
-        } else {
-            setDataPut((preState) => ({
-                ...preState,
-            }));
-        }
-    }
-
     const hanldeSerPut = (e) => {
         setValidationPut((pre) => ({
             ...pre,
@@ -117,17 +105,17 @@ const ServiceEdit = (props) => {
                     sePrice: false,
                 },
             }));
-            dispatch(put_services(dataPut)).then((res1) => {
-                if (res1.payload === 200) {
+            dispatch(put_services(dataPut)).then((res) => {
+                if (!res.error) {
                     toast.success('Update service success !', {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 600
                     });
                     props.onHide();
                 } else {
-                    toast.error('Update service fail !', {
+                    toast.error(res.payload, {
                         position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 600
+                        autoClose: 1000
                     });
                     props.onHide();
                 }

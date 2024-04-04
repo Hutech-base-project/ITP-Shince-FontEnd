@@ -8,7 +8,7 @@ export const generate_otp = createAsyncThunk(
             const response_auth = await api.post('/auth/generateOTP/'+ data.phoneNumber);
             return response_auth.data;
         }catch (err){
-            return rejectWithValue(err.message); 
+            return rejectWithValue(err.response.data.responseMessage); 
         }    
     }
 )
@@ -20,7 +20,7 @@ export const validate_otp = createAsyncThunk(
             const response_auth = await api.post('/auth/validateOtp', data.dataOtp);
             return response_auth.status;
         }catch (err){
-            return rejectWithValue(err.message); 
+            return rejectWithValue(err.response.data.responseMessage); 
         }    
     }
 )

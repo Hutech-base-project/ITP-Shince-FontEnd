@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Carousel } from 'react-bootstrap'
-import '../../assets/scss/Customer/Carousel_customer.scss'
 
-const CustomerCarousel= () => {
+
+const CustomerCarousel = () => {
     const [index, setIndex] = useState(0);
 
     const handleSelect = (selectedIndex) => {
@@ -12,7 +12,7 @@ const CustomerCarousel= () => {
     return (
         <>
             <div className="carousel-cus">
-                <Carousel activeIndex={index} onSelect={handleSelect}>
+                {/* <Carousel activeIndex={index} onSelect={handleSelect}>
                     <Carousel.Item>
                         <img src={require("../../assets/template/images/slider1.jpg")} alt="logo" width={1903} />
                         <Carousel.Caption>
@@ -35,6 +35,18 @@ const CustomerCarousel= () => {
                                 Praesent commodo cursus magna, vel scelerisque nisl consectetur.
                             </p>
                         </Carousel.Caption>
+                    </Carousel.Item>
+                </Carousel> */}
+
+                <Carousel fade>
+                    <Carousel.Item>
+                        <img src={require("../../assets/images/slider1.jpg")} alt="logo" />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <img src={require("../../assets/images/slider2.jpg")} alt="logo" />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <img src={require("../../assets/images/slider3.jpg")} alt="logo" />
                     </Carousel.Item>
                 </Carousel>
             </div>

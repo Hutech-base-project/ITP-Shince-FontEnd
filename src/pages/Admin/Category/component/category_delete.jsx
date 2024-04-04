@@ -9,17 +9,17 @@ const DeleteCategory = (props) =>{
     const dispatch = useDispatch();
     const isLoading = useSelector(selectStatusCate);
     const hanldeDel = () => {
-      dispatch(delete_category(props.cateid)).then((res1) => {
-        if (res1.payload === 200) {
+      dispatch(delete_category(props.cateid)).then((res) => {
+        if (!res.error) {
           toast.success('Delete category success !', {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 600
           });
           props.onHide();
         } else {
-          toast.error('Delete category fail !', {
+          toast.error(res.payload, {
             position: toast.POSITION.TOP_RIGHT,
-            autoClose: 600
+            autoClose: 1000
           });
           props.onHide();
         }
@@ -28,9 +28,9 @@ const DeleteCategory = (props) =>{
     return (
       <Modal {...props}>
         <Modal.Header closeButton>
-          <Modal.Title className='title-modal'> <FontAwesomeIcon icon={['fa', 'exclamation-triangle']} /> Warning !!!!</Modal.Title>
+          <Modal.Title className='title-modal' style={{color:'red'}}> <FontAwesomeIcon icon={['fa', 'exclamation-triangle']} /> Warning !!!!</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+        <Modal.Body>Are you sure you want to delete this category?!</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>
             Close

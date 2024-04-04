@@ -25,6 +25,7 @@ const AddProduct = (props) => {
         proContent: "",
         proBrand: "",
         proTurnOn: true,
+        proQuantity: 0,
         isDelete: false,
     });
     const dispatch = useDispatch();
@@ -54,6 +55,7 @@ const AddProduct = (props) => {
                 proContent: false,
                 proBrand: false,
                 proPrice: false,
+                proQuantity: false,
                 featureImgPath: false,
                 category_id: false,
             },
@@ -71,7 +73,7 @@ const AddProduct = (props) => {
     useEffect(() => {
         if (dataListProduct?.length !== 0) {
             if (
-                dataListProduct?.responseData.some((pro) => pro?.proName === dataPost?.proName.trim() && pro?.category_id === dataPost?.category_id && pro?.isDelete === false) === true
+                dataListProduct?.responseData.some((pro) => pro?.proName === dataPost?.proName.trim() && pro?.category_id === dataPost?.category_id) === true
             ) {
                 setCheckDuplicatePost(true);
             } else {
@@ -130,6 +132,7 @@ const AddProduct = (props) => {
                 proContent: true,
                 proBrand: true,
                 proPrice: true,
+                proQuantity: true,
                 featureImgPath: true,
                 img1:true,
                 img2:true,
@@ -147,21 +150,22 @@ const AddProduct = (props) => {
                     proContent: false,
                     proBrand: false,
                     proPrice: false,
+                    proQuantity: false,
                     featureImgPath: false,
                     category_id: false,
                 },
             }));
-            dispatch(post_product(dataPost)).then((res1) => {
-                if (res1.payload === 201) {
+            dispatch(post_product(dataPost)).then((res) => {
+                if (!res.error) {
                     toast.success('Create product success !', {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 600
                     });
                     props.onHide();
                 } else {
-                    toast.error('Create product fail !', {
+                    toast.error(res.payload, {
                         position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 600
+                        autoClose: 1000
                     });
                     props.onHide();
                 }
@@ -207,6 +211,19 @@ const AddProduct = (props) => {
                         />
                         <Form.Control.Feedback type="invalid">
                             {hasErrorPost("proPrice") ? validationPost.errors.proPrice?.[0] : null}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicProPrice">
+                        <Form.Label>Product Quantity</Form.Label>
+                        <Form.Control
+                            type="number"
+                            placeholder="Enter Product Quantity"
+                            name="proQuantity"
+                            onChange={hanldeChangePost}
+                            isInvalid={hasErrorPost("proQuantity")}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {hasErrorPost("proQuantity") ? validationPost.errors.proQuantity?.[0] : null}
                         </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group controlId="formBasicProImg" className="mb-3">

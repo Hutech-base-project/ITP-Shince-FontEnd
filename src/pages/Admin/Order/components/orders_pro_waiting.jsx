@@ -20,13 +20,17 @@ const OrdersProWaiting = (props) => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(get_all_orders()).then((res) => {
-            setDataListOrderProduct(res.payload.responseData?.filter((ord) => ord.orProStatus !== "Delivered" && ord.orProStatus !== "Cancelled"));
-            setDataListSearch(res.payload.responseData?.filter((ord) => ord.orProStatus !== "Delivered" && ord.orProStatus !== "Cancelled"));
+            if(!res.error){
+                setDataListOrderProduct(res.payload.responseData?.filter((ord) => ord.orProStatus !== "Delivered" && ord.orProStatus !== "Cancelled"));
+                setDataListSearch(res.payload.responseData?.filter((ord) => ord.orProStatus !== "Delivered" && ord.orProStatus !== "Cancelled"));
+            }
+  
         });
-    }, [dispatch,manageShow,props.status]);
+    }, [dispatch, manageShow, props.status]);
+    
 
     useEffect(() => {
-        if (props.search !== null) {
+        if (props.search !== "") {
             setDataListSearch(dataListOrderProduct?.filter((ord) => (ord?.orProId.toLowerCase()).includes(props.search.toLowerCase())));
         } else {
             setDataListSearch(dataListOrderProduct);
@@ -98,11 +102,11 @@ const OrdersProWaiting = (props) => {
                                         <td>{data.orProStatus}</td>
                                         <td>{moment(new Date(data?.createdAt)).format("DD/MM/YYYY HH:mm:ss")}</td>
                                         <td className='d-flex justify-content-center'>
-                                            <Button className='btn-action' variant="success" onClick={() => hanldeClickManage(data)}>Manage</Button>
-                                            {/* <EditOrder
-                                                show={editShow}
-                                                onHide={() => setEditShow(false)}
-                                            /> */}
+                                            {props.dodertor ?
+                                                <Button className='btn-action' variant="success" onClick={() => hanldeClickManage(data)}>Manage</Button>
+                                                :
+                                                null
+                                            }
                                             <Button className='btn-action' variant="primary" onClick={() => hanldeClickDetails(data)}>Detail</Button>
                                         </td>
                                     </tr>
@@ -114,7 +118,7 @@ const OrdersProWaiting = (props) => {
                 <ToastContainer />
                 <Row className='category-bottom'>
                     {Math.floor(dataListOrderProduct?.length / rowsPerPage) !== 0 ?
-                        <Col md={{ span: 10, offset: 10 }}>
+                        <Col md={4}>
                             <Pagination>
                                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                                 {rows}
@@ -129,6 +133,7 @@ const OrdersProWaiting = (props) => {
 }
 
 function OrdersDetail(props) {
+
     return (
         <Modal
             {...props}
@@ -137,7 +142,7 @@ function OrdersDetail(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Edit Product
+                     Order details
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="card-order">
@@ -193,6 +198,14 @@ function OrdersDetail(props) {
                             <span id="price" style={{ marginRight: 6 }}>{props.order.orProShip}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
                         </Col>
                     </Row>
+                    <Row>
+                      <Col xs={9}>
+                          <span id="name" >Promotion</span>
+                      </Col>
+                      <Col xs={3}>
+                          <span id="price" style={{ marginRight: 6 }}>{props.order.orProPromotion}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
+                      </Col>
+                  </Row>
                 </div>
                 <div className="total">
                     <div className="row">
@@ -205,9 +218,6 @@ function OrdersDetail(props) {
                 <Button variant="secondary" onClick={props.onHide}>
                     Close
                 </Button>
-                <Button variant="primary" >
-                    Save Changes
-                </Button>
             </Modal.Footer>
         </Modal>
     );
@@ -215,7 +225,7 @@ function OrdersDetail(props) {
 
 function OrdersManage(props) {
     const dispatch = useDispatch();
-    const [dataPut,setDataPut] = useState([]);
+    const [dataPut, setDataPut] = useState([]);
     useEffect(() => {
         setDataPut(props.order);
         setDataPut((preState) => ({
@@ -223,17 +233,17 @@ function OrdersManage(props) {
             orProStatus: "Confirm",
         }));
     }, [props]);
-    
-    const hanldeChange = (e) =>{
+
+    const hanldeChange = (e) => {
         setDataPut((preState) => ({
             ...preState,
             orProStatus: e.target.value,
         }));
     }
 
-    const hanldePutStatus = () =>{
-        dispatch(put_order(dataPut)).then((res1) => {
-            if (res1.payload === 200) {
+    const hanldePutStatus = () => {
+        dispatch(put_order(dataPut)).then((res) => {
+            if (!res.error) {
                 dispatch(get_all_orders());
                 toast.success('Update status success !', {
                     position: toast.POSITION.TOP_RIGHT,
@@ -241,9 +251,9 @@ function OrdersManage(props) {
                 });
                 props.onHide();
             } else {
-                toast.error('Update status fail !', {
+                toast.error(res.payload, {
                     position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 600
+                    autoClose: 1000
                 });
                 props.onHide();
             }

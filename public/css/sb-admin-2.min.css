@@ -9015,7 +9015,8 @@ a:focus {
   display: flex;
 }
 #wrapper .side{
-  width: 100%;
+  background-color: black;
+  width: auto;
   max-width: 224px;
 }
 

@@ -29,4 +29,20 @@
         border: 1px solid #fd3d9b;
     }
     
+    .select-stylist{
+        margin-top: 20px !important;
+        ul { 
+            height: 30px;
+            width: 150px;
+            border: 1px #000 solid;
+        }
+        ul li { padding: 5px 10px; z-index: 2; }
+        ul li:not(.init) { float: left; width: 130px; display: none; background: #ddd; }
+        ul li:not(.init):hover, ul li.selected:not(.init) { background: #09f; }
+        li.init { cursor: pointer; }
+        
+        a#submit { z-index: 1; }
+    }
+
 }
+

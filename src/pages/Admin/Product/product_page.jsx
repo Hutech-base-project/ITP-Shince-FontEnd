@@ -8,7 +8,7 @@ import { get_all_products, block_product } from '../../../redux/Product/product_
 import EditProduct from './Component/product_edit'
 import DeleteProduct from './Component/product_delete'
 
-const ProductPage = () => {
+const ProductPage = (props) => {
     const [createShow, setCreateShow] = useState(false);
     const [deleteshow, setDeleteShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
@@ -17,24 +17,26 @@ const ProductPage = () => {
     const [dataListProduct, setDataListProduct] = useState([]);
     const [dataListSearch, setDataListSearch] = useState([]);
     const [page, setPage] = useState(0);
-    const [rowsPerPage,] = useState(10);
+    const [rowsPerPage,] = useState(20);
     const [search, setSearch] = useState("");
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(get_all_products()).then((res) => {
-            setDataListProduct(res.payload.responseData?.filter((pro) => pro?.isDelete === false));
-            setDataListSearch(res.payload.responseData?.filter((pro) => pro?.isDelete === false));
+            if (!res.error){
+                setDataListProduct(res.payload.responseData?.filter((pro) => (pro?.isDelete === false )))
+                setDataListSearch(res.payload.responseData?.filter((pro) => (pro?.isDelete === false)))
+            }    
         });
     }, [createShow, editShow, deleteshow, dispatch])
     useEffect(() => {
-        if (search !== null) {
+        if (search !== "") {
             setDataListSearch(dataListProduct?.filter((pro) => (pro?.proName.toLowerCase()).includes(search.trim().toLowerCase())));
         } else {
             setDataListSearch(dataListProduct);
         }
     }, [search, dataListProduct])
 
-   
+
 
     const hanldeSearch = (e) => {
         setSearch(e.target.value);
@@ -52,17 +54,17 @@ const ProductPage = () => {
 
     const hanldeStatus = (pro) => {
         dispatch(block_product(pro)).then((res1) => {
-            if (res1.payload === 200) {
+            if (!res1.error) {
                 dispatch(get_all_products()).then((res) => {
-                    setDataListProduct(res.payload.responseData.filter((pro) => pro?.isDelete === false));
-                    setDataListSearch(res.payload.responseData.filter((pro) => pro?.isDelete === false));
+                    setDataListProduct(res.payload.responseData);
+                    setDataListSearch(res.payload.responseData);
                 });
                 toast.success('Create product success !', {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 600
                 });
             } else {
-                toast.error('Create product fail !', {
+                toast.error(res1.payload, {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 600
                 });
@@ -90,9 +92,14 @@ const ProductPage = () => {
                 </div>
                 <Row>
                     <Col lg={4} xs={12}>
-                        <div className="button">
-                            <Button variant="success" onClick={() => setCreateShow(true)}>Add Product</Button>
-                        </div>
+                        {props.dodertor ?
+                            <div className="button">
+                                <Button variant="success" onClick={() => setCreateShow(true)}>Add Product</Button>
+                            </div>
+                            :
+                            null
+                        }
+
                     </Col>
                     <Col lg={8} xs={12}>
                         <div className="input-group">
@@ -139,6 +146,7 @@ const ProductPage = () => {
                                                 <th>Price</th>
                                                 <th>Content</th>
                                                 <th>Brand</th>
+                                                <th>Quantity</th>
                                                 <th>Image</th>
                                                 <th>Status</th>
                                                 <th>Function</th>
@@ -153,6 +161,7 @@ const ProductPage = () => {
                                                         <td>{parseFloat(data.proPrice).toFixed(2)} <FontAwesomeIcon icon={['fas', 'dollar-sign']} /></td>
                                                         <td >{data.proContent}</td>
                                                         <td>{data.proBrand}</td>
+                                                        <td>{data.proQuantity}</td>
                                                         <td><img src={
                                                             process.env.REACT_APP_API_URL +
                                                             "/image/product/" +
@@ -170,8 +179,15 @@ const ProductPage = () => {
                                                             data.proTurnOn === true ? <Button variant="success" onClick={() => hanldeStatus(data)}>On</Button> : <Button variant="danger" onClick={() => hanldeStatus(data)}>Off</Button>
                                                         }</td>
                                                         <td >
-                                                            <Button className='btn-action' variant="primary" onClick={() => hanldeClickEdit(data)}>Edit</Button>
-                                                            <Button className='btn-action' variant="danger" onClick={() => hanldeDelete(data.proId)}>Delete</Button>
+                                                            {props.dodertor ?
+                                                                <>
+                                                                    <Button className='btn-action' variant="primary" onClick={() => hanldeClickEdit(data)}>Edit</Button>
+                                                                    <Button className='btn-action' variant="danger" onClick={() => hanldeDelete(data.proId)}>Delete</Button>
+                                                                </>
+                                                                :
+                                                                null
+                                                            }
+
                                                         </td>
                                                     </tr>
                                                 )
@@ -186,7 +202,7 @@ const ProductPage = () => {
                 </Row>
                 <Row className='category-bottom'>
                     {Math.floor(dataListProduct?.length / rowsPerPage) !== 0 ?
-                        <Col md={{ span: 10, offset: 10 }}>
+                        <Col md={4}>
                             <Pagination>
                                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                                 {rows}

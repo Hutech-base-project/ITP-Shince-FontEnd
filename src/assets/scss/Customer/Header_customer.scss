@@ -1,5 +1,4 @@
 .header{
-
     .middle-inner{
         padding-top: 10px;
        padding-bottom: 35px;
@@ -467,6 +466,12 @@
                 
             }  
         }
+    }
+} 
+
+@media (max-width: 500px) {
+    .header{
+        margin-bottom: 100px;
     }
 }
 

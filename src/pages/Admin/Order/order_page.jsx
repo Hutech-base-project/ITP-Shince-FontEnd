@@ -7,7 +7,7 @@ import OrdersProWaiting from './components/orders_pro_waiting'
 import OrdersProDelivered from './components/orders_pro_delivered'
 import OrdersProCancelled from './components/orders_pro_cancelled'
 
-const OrderPage = () => {
+const OrderPage = (props) => {
     const [search, setSearch] = useState("");
     const [watiting,setWaiting] = useState(true);
     const [delivered,setDelivered] = useState(false);
@@ -70,7 +70,7 @@ const OrderPage = () => {
                         fill
                     >
                         <Tab eventKey="Waiting" title="Waiting" >
-                            <OrdersProWaiting search={search} status={watiting}/>
+                            <OrdersProWaiting dodertor={props.dodertor} search={search} status={watiting}/>
                         </Tab>
                         <Tab eventKey="Delivered" title="Delivered" >
                             <OrdersProDelivered search={search} status={delivered}/>

@@ -7,6 +7,7 @@
     .function-btn{
         margin-left: 25px;
         .btn-next{
+            border: 1px solid #212529;
             background-color: #212529;
             color: #ffffff;
         }
@@ -17,7 +18,21 @@
     
         .btn-back{
             margin-left: 10px;
-            color: #212529;
+            border: 1px solid #212529;
+            background-color: #212529;
+            color: #ffffff;
+        }
+        .btn-back:hover{
+            margin-left: 10px;
+            border: 1px solid #F7941D;
+            background-color: #F7941D;
+            color: #ffffff;
+        }
+        .btn-back:disabled{
+            margin-left: 10px;
+            border: 1px solid #212529;
+            background-color: #212529;
+            color: #ffffff;
         }
     }
 }

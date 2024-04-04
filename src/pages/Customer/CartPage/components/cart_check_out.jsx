@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Col, Container, Form, Row } from 'react-bootstrap'
+import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap'
 import "../../../../assets/scss/Customer/Checkout/Checkout_customer.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import { useRef } from 'react';
 import { validate } from 'validate.js';
 import { OrderPage } from '../../../../utils/validate';
 import { post_order } from '../../../../redux/OrderPro/order_page_thunk';
+import { get__vouchers_by_id, post_check_voucher, put_use_voucher } from '../../../../redux/Voucher/voucher_page_thunk';
 import { toast } from 'react-toastify';
 import { date } from "../../../../utils/custom";
 import { selectCartPro } from '../../../../redux/Cart/cart_page_selecter';
@@ -18,7 +19,7 @@ import { OffChekOut } from '../../../../redux/Storage/storage_page_reducer';
 import { clearCart } from '../../../../redux/Cart/cart_page_reducer';
 import { PayPalButton } from 'react-paypal-button-v2';
 
-
+/* eslint-disable */ 
 const delay = ms => new Promise(
 	resolve => setTimeout(resolve, ms)
 );
@@ -29,10 +30,17 @@ const CartCheckOut = () => {
 	const [totalPro, setTotalPro] = useState(0.0);
 	const cartList = useSelector(selectCartPro);
 	const [address, setAddress] = useState(user?.usAddress === undefined ? "" : user?.usAddress);
-	const [ship, setShip] = useState(0)
-	const [valueAdd, setValueAddd] = useState("");
+	const [ship, setShip] = useState(0.0)
+	const [promotion, setPromotion] = useState(0.0)
+	const [valueAdd, setValueAdd] = useState("");
+	const [codeVoucher, setCodeVoucher] = useState(sessionStorage.getItem('voucher-code'));
+	const [errorVoucher, setErrorVoucher] = useState(false);
+	const [addVoucher, setAddVoucher] = useState(false);
+	const [messageVoucher, setMessageVoucher] = useState("");
 	const autoCompleteRef = useRef();
 	const valueDirection = useRef();
+
+
 	const [map, setMap] = useState({
 		distance: "0 km",
 	});
@@ -52,11 +60,12 @@ const CartCheckOut = () => {
 		orProPayment: "Payment on delivery",
 		orProPhoneNo: user ? user.usPhoneNo : "",
 		orProStatus: "Wait for confirmation",
+		orProPromotion: 0.0,
 		orProTotal: 0.0,
 		orProShip: 0.0,
 		orProUserId: user ? user.usId : null,
 		orProUserName: user ? user.usUserName : "",
-		listProId: [
+		listPro: [
 			{
 				proProductName: "",
 				proProductPrice: 0,
@@ -90,14 +99,25 @@ const CartCheckOut = () => {
 		cartList?.forEach((cart) => {
 			total = total + (cart.proProductPrice * cart.proQuantity)
 		})
+		total = parseFloat(total) + parseFloat(order.orProShip) - parseFloat(order.orProPromotion)	
+		if(total  <= 0){
+			setOrder((preState) => ({
+				...preState,
+				listPro: list,
+				orProTotal: 0.0,
+			}));
+			setTotalPro(0.0);
+		}else{
+			setOrder((preState) => ({
+				...preState,
+				listPro: list,
+				orProTotal: parseFloat(total).toFixed(2),
+			}));;
+			setTotalPro(total.toFixed(2));
+			
+		}
 		total = parseFloat(total) + parseFloat(order.orProShip)
-		setOrder((preState) => ({
-			...preState,
-			listProId: list,
-			orProTotal: total.toFixed(2),
-		}));
-		setTotalPro(total.toFixed(2));
-	}, [cartList, order.orProPayment, order.orProShip]);
+	}, [cartList, order.orProPayment, order.orProShip, order.orProPromotion,totalPro,ship]);
 
 	useEffect(() => {
 		const options = {
@@ -116,6 +136,7 @@ const CartCheckOut = () => {
 			...preState,
 			orProAddress: address,
 		}));
+		calculateRoute();
 	}, [address]);
 
 	useEffect(() => {
@@ -124,6 +145,13 @@ const CartCheckOut = () => {
 			orProShip: parseFloat(ship),
 		}));
 	}, [ship]);
+
+	useEffect(() => {
+		setOrder((preState) => ({
+			...preState,
+			orProPromotion: parseFloat(promotion),
+		}));
+	}, [promotion]);
 
 	const hasError = (field) => {
 		return validation.touched[field] && validation.errors[field] ? true : false;
@@ -141,6 +169,42 @@ const CartCheckOut = () => {
 				[event.target.name]: true,
 			},
 		}));
+	};
+
+
+
+	const handleAddVoucher = () => {
+		setValidation((pre) => ({
+			...pre,
+			touched: {
+				...pre.touched,
+				orProPhoneNo: true,
+			},
+		}));
+		if(hasError("orProPhoneNo") === true || order.orProPhoneNo === ""){
+			setErrorVoucher(true);
+			setMessageVoucher("No phone number or wrong phone number");
+		}else{
+			setErrorVoucher(false);
+			setMessageVoucher("");
+			dispatch(post_check_voucher({codeVoucher:codeVoucher, phoneNumber:order.orProPhoneNo})).then(async (res) => {
+				if (!res.error) {
+					dispatch(get__vouchers_by_id(codeVoucher)).then(async (ress) => {
+						if (!ress.error) {
+							setPromotion(ress.payload.responseData.voPrice)
+							setAddVoucher(true);
+							toast.success('Add voucher success !', {
+								position: toast.POSITION.TOP_RIGHT,
+								autoClose: 600
+							});
+						}
+					})
+				} else {
+					setErrorVoucher(true);
+					setMessageVoucher(res.payload);
+				}
+			});
+		}	
 	};
 
 	const calculateRoute = async (e) => {
@@ -167,7 +231,6 @@ const CartCheckOut = () => {
 	};
 
 	const hanldeLeaveMouse = () => {
-
 		var place;
 		autoCompleteRef.current.addListener("place_changed", async function () {
 			place = await autoCompleteRef.current.getPlace();
@@ -197,9 +260,7 @@ const CartCheckOut = () => {
 		}
 	}
 
-	const hanldeAddress = (e) => {
-		setValueAddd(e.target.value);
-	}
+	const hanldeAddress = (e) => setValueAdd(e.target.value);
 
 	const hanldeBack = () => {
 		dispatch(OffChekOut());
@@ -227,39 +288,66 @@ const CartCheckOut = () => {
 				orProUserName: true,
 			},
 		}));
-
 		if (validation.isvalid === true) {
-			dispatch(post_order(order)).then(async (res) => {
-				if (res.payload === 201) {
-					toast.success('Place Order success !', {
-						position: toast.POSITION.TOP_RIGHT,
-						autoClose: 600
-					});
-					await delay(700);
-					dispatch(clearCart());
-					navigate("/product");
-				} else {
-					toast.error('Place Order fail !', {
-						position: toast.POSITION.TOP_RIGHT,
-						autoClose: 600
-					});
-				}
-			});
+			if(codeVoucher !== null && addVoucher === true){
+				dispatch(put_use_voucher({codeVoucher:codeVoucher, phoneNumber:order.orProPhoneNo})).then(async (res) => {
+					if(!res.error){
+
+						dispatch(post_order(order)).then(async (res) => {
+							if (!res.error) {
+								toast.success('Place Order success !', {
+									position: toast.POSITION.TOP_RIGHT,
+									autoClose: 600
+								});
+								await delay(700);
+								dispatch(clearCart());
+								navigate("/product");
+							} else {
+								toast.error('Place Order fail !', {
+									position: toast.POSITION.TOP_RIGHT,
+									autoClose: 600
+								});
+							}
+						});
+					}else{
+						toast.error('Place Order fail !', {
+							position: toast.POSITION.TOP_RIGHT,
+							autoClose: 600
+						});
+					}
+				});
+			}else{
+				dispatch(post_order(order)).then(async (res) => {
+					if (!res.error) {
+						toast.success('Place Order success !', {
+							position: toast.POSITION.TOP_RIGHT,
+							autoClose: 600
+						});
+						await delay(700);
+						dispatch(clearCart());
+						navigate("/product");
+					} else {
+						toast.error('Place Order fail !', {
+							position: toast.POSITION.TOP_RIGHT,
+							autoClose: 600
+						});
+					}
+				});
+			}
+			
 		}
 	}
 
 	return (
 		<>
 			<div className="checkout-body">
-				{/* Start Checkout  */}
-				<section id="checkout" class="shop checkout section">
+				<section id="checkout" className="shop checkout section">
 					<Container>
 						<Row>
-							<Col lg={8} Col xs={12}>
-								<div class="checkout-form">
+							<Col lg={8} xs={12}>
+								<div className="checkout-form">
 									<h2>Make Your Checkout Here</h2>
 									<p>Please register in order to checkout more quickly</p>
-									{/* Form  */}
 									<Form className="needs-validation" as={Col}>
 										<Form.Group className="mb-3" >
 											<Form.Label>User name</Form.Label>
@@ -332,15 +420,13 @@ const CartCheckOut = () => {
 											</div>
 										</div>
 									</Form>
-									{/* End Form  */}
 								</div>
 							</Col>
 							<Col lg={4} xs={12}>
-								<div class="order-details">
-									{/* Order Widget  */}
-									<div class="single-widget">
+								<div className="order-details">
+									<div className="single-widget">
 										<h2>CART  TOTALS</h2>
-										<div class="content">
+										<div className="content">
 											<ul>
 												{React.Children.toArray(cartList?.map((cart) => {
 													return (
@@ -349,31 +435,71 @@ const CartCheckOut = () => {
 																<div>
 																	<h6 className="my-0">{cart.proProductName}</h6>
 																</div>
-																<span className="text-muted">${(cart.proProductPrice * cart.proQuantity).toFixed(2)}</span>
+																<span className="text-muted">{(cart.proProductPrice * cart.proQuantity).toFixed(2)}$</span>
 															</li>
 														</>
 													)
 												}))}
 												<li className="list-group-item d-flex justify-content-between bg-light">
 													<div className="text-success">
+														<h6 className="my-0">Promotion</h6>
+													</div>
+													<span className="text-success">{promotion}$</span>
+												</li>
+												<li className="list-group-item d-flex justify-content-between bg-light">
+													<div className="text-success">
 														<h6 className="my-0">Transport fee</h6>
 														<small>{map.distance}</small>
 													</div>
-													<span className="text-success">$ {ship}</span>
+													<span className="text-success">{ship}$</span>
 												</li>
 												<li className="list-group-item d-flex justify-content-between">
 													<span>Total (USD)</span>
-													<strong>$ {totalPro}</strong>
+													<strong> {totalPro} $</strong>
 												</li>
 											</ul>
 										</div>
 									</div>
-									{/* End Order Widget  */}
-									{/* Order Widget  */}
-									<div class="single-widget">
+									<div className="single-widget">
+										<h2>Voucher</h2>
+										<div className="content" style={{ marginLeft: 30, marginRight: 30 }}>
+											<Row>
+												<Col xs={9}>
+													<Form as={Col}>
+														<Form.Group className="mb-3">
+															<Form.Control
+																placeholder="Voucher code"
+																name="orProPromotion"
+																onChange={event=>{
+																	if(sessionStorage.getItem('voucher-code') !== null){
+																		sessionStorage.removeItem('voucher-code')
+																	}
+																	if(event.target.value !== ""){
+																		setCodeVoucher(event.target.value)
+																	}else{
+																		setCodeVoucher(null)
+																	}
+																}}
+																defaultValue={codeVoucher}
+																type="text"
+																isInvalid={errorVoucher}
+															/>
+															<Form.Control.Feedback type="invalid">
+																{messageVoucher}
+															</Form.Control.Feedback>
+														</Form.Group>
+													</Form>
+												</Col>
+												<Col xs={3} style={{ padding: 0 }}>
+													<Button variant="dark" onClick={handleAddVoucher}>Add</Button>
+												</Col>
+											</Row>
+										</div>
+									</div>
+									<div className="single-widget">
 										<h2>Payments</h2>
-										<div class="content">
-											<div class="checkbox">
+										<div className="content">
+											<div className="checkbox">
 												{order?.orProPayment === "Paypal" ?
 													validation.isvalid === true ? (
 														<div style={{ marginLeft: 100, marginRight: 100 }}>
@@ -397,42 +523,31 @@ const CartCheckOut = () => {
 															Please enter all information before ordering
 														</Alert>
 													: (
-														<button className="btn btn-dark px-4 rounded-pill" type="button" onClick={hanldeOrder}>Place Order</button>
+														<div className="single-widget get-button">
+															<div className="content">
+																<div className="button">
+																	<button onClick={hanldeOrder} className="btn">Order</button>
+																</div>
+															</div>
+														</div>
 													)}
 											</div>
 										</div>
 									</div>
-									{/* End Order Widget  */}
-									{/* Payment Method Widget  */}
-									<div class="single-widget payement">
-										<div class="content">
-											<img src={require("../../../../assets/template/images/payment-method.png")} alt="logo" />
-										</div>
-									</div>
-									{/* End Payment Method Widget  */}
-									{/* Button Widget  */}
-									<div class="single-widget get-button">
-										<div class="content">
-											<div class="button">
-												<button onClick={hanldeOrder} class="btn">proceed to checkout</button>
-											</div>
-										</div>
-									</div>
-									{/* End Button Widget  */}
 								</div>
 							</Col>
 						</Row>
+						<div className="back-to-shop"> <a hrefLang="#!" type='button' onClick={hanldeBack}><FontAwesomeIcon icon={['fa', 'arrow-left']} /><span className="text-muted"> Back to shop</span></a> </div>
 					</Container>
 				</section>
-				{/* End Checkout  */}
 
 
-				<section id="shop-service" class="shop-services section home">
+				<section id="shop-service" className="shop-services section home">
 					<Container>
 						<Row>
 							<Col lg={3} md={6} xs={12}>
 								{/* <!-- Start Single Service --> */}
-								<div class="single-service">
+								<div className="single-service">
 									<FontAwesomeIcon icon={['fas', 'rocket']} />
 									<h4>Free shiping</h4>
 									<p>Orders over $100</p>
@@ -441,7 +556,7 @@ const CartCheckOut = () => {
 							</Col>
 							<Col lg={3} md={6} xs={12}>
 								{/* <!-- Start Single Service --> */}
-								<div class="single-service">
+								<div className="single-service">
 									<FontAwesomeIcon icon={['fas', 'rotate']} />
 									<h4>Free Return</h4>
 									<p>Within 30 days returns</p>
@@ -450,7 +565,7 @@ const CartCheckOut = () => {
 							</Col>
 							<Col lg={3} md={6} xs={12}>
 								{/* <!-- Start Single Service --> */}
-								<div class="single-service">
+								<div className="single-service">
 									<FontAwesomeIcon icon={['fas', 'lock']} />
 									<h4>Secure Payment</h4>
 									<p>100% secure payment</p>
@@ -459,7 +574,7 @@ const CartCheckOut = () => {
 							</Col>
 							<Col lg={3} md={6} xs={12}>
 								{/* <!-- Start Single Service --> */}
-								<div class="single-service">
+								<div className="single-service">
 									<FontAwesomeIcon icon={['fas', 'tag']} />
 									<h4>Best Price</h4>
 									<p>Guaranteed price</p>
@@ -469,30 +584,6 @@ const CartCheckOut = () => {
 						</Row>
 					</Container>
 				</section>
-				{/* <!-- End Shop Services --> */}
-
-				{/* <!-- Start Shop Newsletter  --> */}
-				<section class="shop-newsletter section">
-					<Container>
-						<div class="inner-top">
-							<Row>
-								<Col xs={12} md={{ offset: 2 }} lg={8}>
-									{/* <!-- Start Newsletter Inner --> */}
-									<div class="inner">
-										<h4>Newsletter</h4>
-										<p> Subscribe to our newsletter and get <span>10%</span> off your first purchase</p>
-										<form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
-											<input name="EMAIL" placeholder="Your email address" required="" type="email" />
-											<button class="btn">Subscribe</button>
-										</form>
-									</div>
-									{/* <!-- End Newsletter Inner --> */}
-								</Col>
-							</Row>
-						</div>
-					</Container>
-				</section>
-				{/* <!-- End Shop Newsletter --> */}
 			</div>
 		</>
 	)

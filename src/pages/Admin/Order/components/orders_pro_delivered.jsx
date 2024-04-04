@@ -13,17 +13,19 @@ const OrdersProDelivered = (props) => {
     const [detailShow, setDetailShow] = useState(false);
     const [dataOrder, setDataOrder] = useState("");
     const [page, setPage] = useState(0);
-    const [rowsPerPage,] = useState(10);
+    const [rowsPerPage,] = useState(20);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(get_all_orders()).then((res) => {
-            setDataListOrderProduct(res.payload.responseData?.filter((ord) => ord.orProStatus === "Delivered"));
-            setDataListSearch(res.payload.responseData?.filter((ord) => ord.orProStatus === "Delivered"));
+            if(!res.error){
+                setDataListOrderProduct(res.payload.responseData?.filter((ord) => ord.orProStatus === "Delivered"));
+                setDataListSearch(res.payload.responseData?.filter((ord) => ord.orProStatus === "Delivered"));
+            }
         });
     }, [dispatch,props.status]);
 
     useEffect(() => {
-        if (props.search !== null) {
+        if (props.search !== "") {
             setDataListSearch(dataListOrderProduct?.filter((ord) => (ord?.orProId.toLowerCase()).includes(props.search.toLowerCase())));
         } else {
             setDataListSearch(dataListOrderProduct);
@@ -96,7 +98,7 @@ const OrdersProDelivered = (props) => {
                 </Col>
                 <Row className='category-bottom'>
                     {Math.floor(dataListOrderProduct?.length / rowsPerPage) !== 0 ?
-                        <Col md={{ span: 10, offset: 10 }}>
+                        <Col md={4}>
                             <Pagination>
                                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                                 {rows}
@@ -111,8 +113,6 @@ const OrdersProDelivered = (props) => {
 }
 
 function OrdersDetail(props) {
-    const [dataListOrderProDel, setDataListProDel] = useState([]);
-    const dispatch = useDispatch();
     return (
         <Modal
             {...props}
@@ -121,7 +121,7 @@ function OrdersDetail(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Edit Product
+                    Order details
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="card-order">
@@ -177,6 +177,14 @@ function OrdersDetail(props) {
                             <span id="price" style={{ marginRight: 6 }}>{props.order.orProShip}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
                         </Col>
                     </Row>
+                    <Row>
+                      <Col xs={9}>
+                          <span id="name" >Promotion</span>
+                      </Col>
+                      <Col xs={3}>
+                          <span id="price" style={{ marginRight: 6 }}>{props.order.orProPromotion}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
+                      </Col>
+                  </Row>
                 </div>
                 <div className="total">
                     <div className="row">

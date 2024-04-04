@@ -17,13 +17,15 @@ const OrdersProCancelled = (props) => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(get_all_orders()).then((res) => {
-            setDataListOrderProduct(res.payload.responseData?.filter((ord) =>ord.orProStatus === "Cancelled"));
-            setDataListSearch(res.payload.responseData?.filter((ord) =>ord.orProStatus === "Cancelled"));
+            if(!res.error){
+                setDataListOrderProduct(res.payload.responseData?.filter((ord) =>ord.orProStatus === "Cancelled"));
+                setDataListSearch(res.payload.responseData?.filter((ord) =>ord.orProStatus === "Cancelled"));
+            }
         });
-    }, [dispatch,,props.status]);
+    }, [dispatch,props.status]);
 
     useEffect(() => {
-        if (props.search !== null) {
+        if (props.search !== "") {
             setDataListSearch(dataListOrderProduct?.filter((ord) => (ord?.orProId.toLowerCase()).includes(props.search.toLowerCase())));
         } else {
             setDataListSearch(dataListOrderProduct);
@@ -95,7 +97,7 @@ const OrdersProCancelled = (props) => {
                 </Col>
                 <Row className='category-bottom'>
                     {Math.floor(dataListOrderProduct?.length / rowsPerPage) !== 0 ?
-                        <Col md={{ span: 10, offset: 10 }}>
+                        <Col md={4}>
                             <Pagination>
                                 {page === 0 ? <Pagination.Prev onClick={PrevPage} disabled /> : <Pagination.Prev onClick={PrevPage} />}
                                 {rows}
@@ -118,7 +120,7 @@ function OrdersDetail(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Edit Product
+                    Order details
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="card">
@@ -174,6 +176,14 @@ function OrdersDetail(props) {
                             <span id="price" style={{ marginRight: 6 }}>{props.order.orProShip}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
                         </Col>
                     </Row>
+                    <Row>
+                      <Col xs={9}>
+                          <span id="name" >Promotion</span>
+                      </Col>
+                      <Col xs={3}>
+                          <span id="price" style={{ marginRight: 6 }}>{props.order.orProPromotion}</span><FontAwesomeIcon icon={['fas', 'dollar-sign']} />
+                      </Col>
+                  </Row>
                 </div>
                 <div className="total">
                     <div className="row">

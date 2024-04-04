@@ -10,17 +10,17 @@ const ServiceDelete = (props) => {
     const dispatch = useDispatch();
     const isLoading = useSelector(selectStatusSer);
     const hanldeDel = () => {
-        dispatch(delete_services(props.seid)).then((res1) => {
-            if (res1.payload === 200) {
+        dispatch(delete_services(props.seid)).then((res) => {
+            if (!res.error) {
                 toast.success('Delete Services success !', {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 600
                 });
                 props.onHide();
             } else {
-                toast.error('Delete Service fail!!!! this service is on booking by customer or does not turn off yet', {
+                toast.error(res.payload, {
                     position: toast.POSITION.TOP_RIGHT,
-                    utoClose: 600
+                    utoClose: 1000
                 });
                 props.onHide();
             }
@@ -30,7 +30,7 @@ const ServiceDelete = (props) => {
         <>
             <Modal {...props}>
                 <Modal.Header closeButton>
-                    <Modal.Title className='title-modal'> <FontAwesomeIcon icon={['fa', 'exclamation-triangle']} /> Warning !!!!</Modal.Title>
+                    <Modal.Title className='title-modal' style={{color:'red'}}> <FontAwesomeIcon icon={['fa', 'exclamation-triangle']} /> Warning !!!!</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Are you sure you want to delete this service?!</Modal.Body>
                 <Modal.Footer>

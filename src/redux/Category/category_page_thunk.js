@@ -7,8 +7,8 @@ export const get__all_categories = createAsyncThunk(
     try {
       const response = await api.get("/api/Category", data)
       return response.data
-    } catch (error) {
-      return rejectWithValue(error.message);
+    } catch (err) {
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 )
@@ -20,7 +20,7 @@ export const post_category = createAsyncThunk(
       const response = await api.post("/api/Category", data)
       return response.status
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -32,7 +32,7 @@ export const put_category = createAsyncThunk(
 
       return response.status
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -44,7 +44,7 @@ export const delete_category = createAsyncThunk(
       const response = await api.delete(`/api/Category/${data}`)
       return response.status
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );

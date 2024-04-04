@@ -7,8 +7,8 @@ export const get_all_roles = createAsyncThunk(
         try {
             const response = await api.get("/api/Role", data)
             return response.data
-        } catch (error) {
-            return rejectWithValue(error.message);
+        } catch (err) {
+            return rejectWithValue(err.response.data.responseMessage);
         }
     }
 )

@@ -1,7 +1,7 @@
 //Khởi tạo thư viện icon của riêng bạn
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFacebook, faGoogle, faInstagram, faTwitter } from "@fortawesome/free-brands-svg-icons";
-import {  faBell, faCalendarAlt, faEnvelope, faEyeSlash, faStarHalfAlt, faTrashAlt  } from "@fortawesome/free-regular-svg-icons";
+import {  faBell, faCalendarAlt, faCheckCircle, faEnvelope, faEyeSlash, faStarHalfAlt, faTrashAlt  } from "@fortawesome/free-regular-svg-icons";
 
 //Import các icon mà bạn muốn sử dụng trong từng 
 
@@ -13,7 +13,10 @@ import {
   faCartShopping,
   faChartLine,
   faChartSimple,
+  faCheck,
   faChevronDown,
+  faChevronLeft,
+  faChevronRight,
   faChevronUp,
   faDollarSign,
   faExclamationTriangle,
@@ -85,5 +88,10 @@ library.add(
     faMinus,
     faTrashAlt,
     faPlus,
-    faArrowLeft
+    faArrowLeft,
+    faStar,
+    faCheckCircle,
+    faChevronLeft,
+    faChevronRight,
+    faCheck
 );

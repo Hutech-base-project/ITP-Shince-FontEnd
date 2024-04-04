@@ -7,8 +7,8 @@ export const get_all_orders = createAsyncThunk(
     try {
       const response = await api.get("/api/OrdersPro", data)
       return response.data
-    } catch (error) {
-      return rejectWithValue(error.message);
+    } catch (err) {
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -20,7 +20,7 @@ export const get_order_by_user_id = createAsyncThunk(
       const response = await api.get(`/api/OrdersPro/User/${data}`);
       return response.data;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -29,10 +29,11 @@ export const post_order = createAsyncThunk(
   "post/orderPro",
   async (data, { rejectWithValue }) => {
     try {
+      console.log(data)
       const response = await api.post("/api/OrdersPro", data);
       return response.status;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );
@@ -44,7 +45,7 @@ export const put_order = createAsyncThunk(
       const response = await api.put(`/api/OrdersPro/${data.orProId}`, data);
       return response.status;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response.data.responseMessage);
     }
   }
 );

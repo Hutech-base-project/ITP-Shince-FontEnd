@@ -10,7 +10,7 @@ export const login = createAsyncThunk(
             const response_auth = await api.post('/auth/signin', data.data);
             return response_auth.data;
         }catch (err){
-            return rejectWithValue(err.message); 
+            return rejectWithValue(err.response.data.responseMessage); 
         }    
     }
 )
@@ -23,7 +23,7 @@ export const register = createAsyncThunk(
             const response_auth = await api.post('/auth/signup', data.data);
             return response_auth.status;
         }catch (err){
-            return rejectWithValue(err.message); 
+            return rejectWithValue(err.response.data.responseMessage); 
         }    
     }
 )
@@ -47,7 +47,7 @@ export const check_register = createAsyncThunk(
             const response_auth = await api.post('/auth/checkRegister/' + data.phoneNumber);
             return response_auth.data;
         }catch (err){
-            return rejectWithValue(err.message); 
+            return rejectWithValue(err.response.data.responseMessage); 
         }    
     }
 )
@@ -58,10 +58,23 @@ export const get_session = createAsyncThunk(
     async (data, {rejectWithValue})=>{
         try{
          
-            const response_auth = await api.get('/auth/Session/'+  data.id);
+            const response_auth = await api.get(`/auth/Session/${data}`);
             return response_auth.data;
         }catch (err){
-            return rejectWithValue(err.message); 
+            return rejectWithValue(err.response.data.responseMessage); 
+        }    
+    }
+)
+
+export const logout = createAsyncThunk(
+    "auth/logout",
+    async (data, {rejectWithValue})=>{
+        try{
+         
+            const response_auth = await api.post(`/auth/logout/${data}`);
+            return response_auth.data;
+        }catch (err){
+            return rejectWithValue(err.response.data.responseMessage); 
         }    
     }
 )
